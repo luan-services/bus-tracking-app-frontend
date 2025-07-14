@@ -1,29 +1,81 @@
 // use client define que esse componente seja dinamico com csr.
 "use client";
-
-import { useState, FormEvent, useEffect } from 'react';
+// importando useState, useEffect e os types (<T> do typescript) 'FormEvent', 'ChangeEvent'
+import { useState, useEffect, FormEvent, ChangeEvent } from 'react';
+// importando use router, para enviar o usuário para o url da dashboard do motorista após login
 import { useRouter } from 'next/navigation';
-
 // importamos nosso componente de notificação de erro.
 import NotificationToast from './NotificationToast';
 
-// definimos o tipo para o estado da nossa notificação.
+// como o componente NotificationToast recebe 2 parametros (mensagem e tipo) precisamos definir o type do nosso useState que vai receber esses dois objetos e repassar pro NotificationToast
 type NotificationState = {
 	message: string;
 	type: 'success' | 'error';
 } | null;
 
+// função básica para validar os campos de email e password, recebe fieldName e value, retorna uma string (texto dizendo o erro) ou undefined (caso não haja erro)
+function validateField(fieldName: 'email' | 'password', value: string): string | undefined {
+	switch (fieldName) {
+		case 'email':
+			if (!value || !/\S+@\S+\.\S+/.test(value)) {
+				return 'Por favor, insira um email válido.';
+			}
+			return undefined;
+		case 'password':
+			if (!value || value.length < 8 || value.length > 60) {
+				return 'A senha deve ter entre 8 e 60 caracteres.';
+			}
+			return undefined;
+		default:
+			return undefined;
+	}
+}
+
+// componente loginForm
 export default function LoginForm() {
+	// estados para os inputs do email, password e rememberMe
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
 	const [rememberMe, setRememberMe] = useState(false);
+	// estado tipo obj com campos email e password para guardar 'string' dos erros caso acontecam
 	const [errors, setErrors] = useState<{ email?: string; password?: string }>({});
+	// estado para definir se o fetch está carregando ou está completo.
 	const [isLoading, setIsLoading] = useState(false);
 	
 	// NOVO: Estado para controlar nossa notificação.
 	const [notification, setNotification] = useState<NotificationState>(null);
 	
 	const router = useRouter();
+
+	const handleEmailChange = (e: ChangeEvent<HTMLInputElement>) => {
+		const newEmail = e.target.value;
+		setEmail(newEmail); // 1. Atualiza o estado do email
+
+		// 2. Valida o novo valor em tempo real
+		const emailError = validateField('email', newEmail);
+
+		// 3. Atualiza o estado de erros
+		// Usamos a forma de callback (prevErrors => ...) para garantir que não
+		// vamos apagar o erro do campo de senha que possa já existir.
+		setErrors(prevErrors => ({
+		...prevErrors,
+		email: emailError,
+		}));
+	};
+
+	const handlePasswordChange = (e: ChangeEvent<HTMLInputElement>) => {
+		const newPassword = e.target.value;
+		setPassword(newPassword); // 1. Atualiza o estado da senha
+
+		// 2. Valida o novo valor em tempo real
+		const passwordError = validateField('password', newPassword);
+		
+		// 3. Atualiza o estado de erros
+		setErrors(prevErrors => ({
+		...prevErrors,
+		password: passwordError,
+		}));
+  	};
 
 	// NOVO: useEffect para fazer a notificação desaparecer sozinha.
 	useEffect(() => {
@@ -32,7 +84,7 @@ export default function LoginForm() {
 
 		// Cria um timer para limpar a notificação após 3 segundos (3000 ms).
 		const timer = setTimeout(() => {
-		setNotification(null);
+			setNotification(null);
 		}, 5000);
 
 		// Função de limpeza: se o componente for desmontado, o timer é cancelado.
@@ -40,22 +92,17 @@ export default function LoginForm() {
 		return () => clearTimeout(timer);
 	}, [notification]); // Este efeito roda toda vez que a 'notification' muda.
 
-	const validateForm = () => { /* ... (nenhuma mudança aqui) ... */
-		const newErrors: { email?: string; password?: string } = {};
-		if (!email || !/\S+@\S+\.\S+/.test(email)) newErrors.email = 'Por favor, insira um email válido.';
-		if (!password || password.length < 8) newErrors.password = 'A senha deve ter no mínimo 8 caracteres.';
-		return newErrors;
-	};
-
 	const handleSubmit = async (event: FormEvent) => {
 		event.preventDefault();
 		setIsLoading(true);
 		setErrors({});
 		setNotification(null); // Limpa notificações antigas no início
 
-		const validationErrors = validateForm();
-		if (Object.keys(validationErrors).length > 0) {
-			setErrors(validationErrors);
+		const emailError = validateField('email', email);
+    	const passwordError = validateField('password', password);
+    
+		if (emailError || passwordError) {
+			setErrors({ email: emailError, password: passwordError });
 			setIsLoading(false);
 			return;
 		}
@@ -104,7 +151,7 @@ export default function LoginForm() {
 	return (
 		<> 
 
-		<form onSubmit={handleSubmit} noValidate className="p-8 flex flex-col items-center gap-4 bg-white rounded-lg shadow-lg w-full max-w-96">
+		<form onSubmit={handleSubmit} noValidate className="p-8 flex flex-col items-center gap-4 bg-white border-1 border-gray-200 rounded-lg shadow-md w-full max-w-96">
 
 				{/* Usamos um Fragment (<>) para agrupar o formulário e a notificação */}
 			{/* NOVO: Renderiza a notificação condicionalmente. */}
@@ -121,27 +168,27 @@ export default function LoginForm() {
 			<div className="flex flex-col w-full">
 				<label className="flex text-gray-700 py-1" htmlFor="email">Email</label>
 
-				<input type="email" id="email" value={email} onChange={(e) => setEmail(e.target.value)} 
+				<input type="email" id="email" value={email} onChange={(e) => handleEmailChange(e)} 
 					className={`w-full flex p-2 border-1 border-gray-500 rounded-xs focus:outline-none ${errors.email ? 'border-red-500' : 'focus:border-blue-500'}`}/>
 
-				{errors.email ? <p className="text-red-500 text-xs h-1 py-1 px-1 w-full">{errors.email}</p> : <p className="py-1 px-1 h-1"></p>}
+				<p className="text-red-500 text-xs h-1 py-1 px-1 w-full">{errors.email ? errors.email : ''}</p>
 			</div>
 
 			<div className="flex flex-col w-full">
 				<label className="block text-gray-700 py-1" htmlFor="password">Senha</label>
-				<input type="password" id="password" value={password} onChange={(e) => setPassword(e.target.value)}
+				<input type="password" id="password" value={password} onChange={(e) => handlePasswordChange(e)}
 					className={`w-full flex p-2 border-1 border-gray-500 rounded-xs focus:outline-none ${errors.password ? 'border-red-500' : 'focus:border-blue-500'}`}/>
 
-				{errors.password ? <p className="text-red-500 text-xs h-1 py-1 px-1 w-full">{errors.password}</p> : <p className="py-1 px-1 h-1"></p>}
+				<p className="text-red-500 text-xs h-1 py-1 px-1 w-full">{errors.password ? errors.password : ''}</p>
 			</div>
 			
 			<div className="flex w-full py-4 px-1 gap-2">
-				<input type="checkbox" id="rememberMe" checked={rememberMe} onChange={(e) => setRememberMe(e.target.checked)} className="flex"/>
-				<label className="flex text-gray-700" htmlFor="rememberMe">Lembrar de mim</label>
+				<input type="checkbox" id="rememberMe" checked={rememberMe} onChange={(e) => setRememberMe(e.target.checked)} className="flex w-3.75 accent-green-700 cursor-pointer"/>
+				<label className="flex text-gray-700 cursor-pointer" htmlFor="rememberMe">Mantenha-me conectado</label>
 			</div>
 			
 			<button type="submit" disabled={isLoading}
-				className="w-full flex justify-center bg-green-700 text-white py-2 rounded-lg cursor-pointer hover:bg-green-800 disabled:bg-green-500 disabled:cursor-default transition active:scale-95">
+				className="w-full flex justify-center bg-green-700 text-white py-2 rounded-lg cursor-pointer hover:bg-green-800 disabled:bg-green-500 disabled:cursor-default transition disabled:scale-100 active:scale-95">
 				{isLoading ? 'Entrando...' : 'Entrar'}
 			</button>
 
