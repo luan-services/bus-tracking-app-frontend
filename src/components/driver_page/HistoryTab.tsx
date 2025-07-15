@@ -1,4 +1,4 @@
-// src/app/driver/_components/HistoryTab.tsx
+// src/components/driver_page/HistoryTab.tsx
 
 "use client"; // Precisa buscar dados no navegador e ter estado.
 

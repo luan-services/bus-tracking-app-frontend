@@ -1,4 +1,4 @@
-// src/app/driver/_components/DashboardTabs.tsx
+// src/components/driver_page/DashboardTabs.tsx
 
 "use client"; // ESSENCIAL: Este componente precisa de interatividade no navegador.
 

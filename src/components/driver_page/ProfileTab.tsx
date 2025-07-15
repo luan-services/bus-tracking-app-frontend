@@ -1,4 +1,4 @@
-// src/app/driver/_components/ProfileTab.tsx
+// src/components/driver_page/ProfileTab.tsx
 
 import LogoutButton from './LogoutButton';
 

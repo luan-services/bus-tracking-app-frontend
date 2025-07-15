@@ -44,8 +44,40 @@ export default function LoginForm() {
 	
 	// NOVO: Estado para controlar nossa notificação.
 	const [notification, setNotification] = useState<NotificationState>(null);
+
+	// estado para checar se o usuário está logado
+	const [isCheckingAuth, setIsCheckingAuth] = useState(true);
 	
 	const router = useRouter();
+
+	useEffect(() => {
+		const checkSession = async () => {
+		try {
+			// Tentamos chamar o endpoint de refresh. O navegador enviará os cookies
+			// automaticamente se 'credentials: include' for usado.
+			const response = await fetch('http://localhost:5001/api/users/refresh', {
+			method: 'POST',
+			credentials: 'include', 
+			});
+
+			if (response.ok) {
+			// Se a resposta for OK, o usuário tem uma sessão válida.
+			// Redirecionamos para o dashboard.
+				router.push('/driver');
+			} else {
+			// Se falhar, o usuário não está logado. Liberamos a exibição do formulário.
+			setIsCheckingAuth(false);
+			}
+		} catch (error) {
+			// Em caso de erro de rede, também liberamos o formulário.
+			console.error("Falha ao verificar sessão:", error);
+			setIsCheckingAuth(false);
+		}
+		};
+
+		checkSession();
+	}, [router]); // O array de dependências com 'router' garante que isso rode apenas uma vez.
+
 
 	const handleEmailChange = (e: ChangeEvent<HTMLInputElement>) => {
 		const newEmail = e.target.value;
@@ -122,7 +154,7 @@ export default function LoginForm() {
 			
 			// Espera um pouco para o usuário ver a mensagem de sucesso antes de redirecionar
 			setTimeout(() => {
-				router.push('/driver/dashboard');
+				router.push('/driver');
 			}, 1000); // 1 segundo
 
 		} catch (err: any) {
@@ -147,6 +179,15 @@ export default function LoginForm() {
 			setIsLoading(false);
 		}
 	};
+
+	  // NOVO: Enquanto a verificação acontece, mostramos um loader.
+	if (isCheckingAuth) {
+		return (
+		<div className="flex items-center justify-center min-h-screen bg-gray-100">
+			<p className="text-lg animate-pulse">Verificando sessão...</p>
+		</div>
+		);
+	}
 
 	return (
 		<> 

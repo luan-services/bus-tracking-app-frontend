@@ -9,7 +9,7 @@ import { UserProfile } from '@/types';
 // essa função e componente não roda client-side (no navegador), portanto ela pode 'abrir' nosso cookie mesmo que ele seja read-only para browser, isso é seguro, pois de novo, ela não roda no navegador.
 async function getUserProfile(token: string): Promise<UserProfile | null> {
 	try {
-		const res = await fetch('http://localhost:3001/api/auth/me', { // SUA URL DE BACKEND AQUI
+		const res = await fetch('http://localhost:5001/api/users/me', { // SUA URL DE BACKEND AQUI
 			headers: { 'Authorization': `Bearer ${token}` },
 			cache: 'no-store',
 		});
@@ -40,5 +40,7 @@ export default async function DriverPage() {
   }
 
   // 3. TAREFA FINAL: Entregar os dados para o decorador interativo
-  return <DashboardTabs user={user} />;
+  return <p>{JSON.stringify(user)}</p>
+
+  //return <DashboardTabs user={user} />; // CARREGAR ISSO AQUI DPS
 }
