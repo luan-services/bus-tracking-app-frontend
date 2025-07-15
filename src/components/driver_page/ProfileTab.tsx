@@ -2,12 +2,9 @@
 
 import LogoutButton from './LogoutButton';
 
-// Tipagem dos dados que ele recebe
-interface UserProfile {
-  username: string;
-  email: string;
-  role: 'admin' | 'driver' | 'user';
-}
+
+// importando o type criado (UserProfile)
+import { UserProfile } from '@/types';
 
 // Não precisa de "use client" porque ele só exibe dados. A interatividade está no LogoutButton.
 export default function ProfileTab({ user }: { user: UserProfile }) {

@@ -6,13 +6,10 @@ import { useState } from 'react';
 import ProfileTab from './ProfileTab';
 import HistoryTab from './HistoryTab';
 
-// Tipagem para os dados que ele recebe do Server Component
-interface UserProfile {
-  id: string;
-  username: string;
-  email: string;
-  role: 'admin' | 'driver' | 'user';
-}
+// importando o type criado (UserProfile)
+import { UserProfile } from '@/types';
+
+
 
 export default function DashboardTabs({ user }: { user: UserProfile }) {
   // useState: A "memória" do decorador para saber qual aba está acesa.

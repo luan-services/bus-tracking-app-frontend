@@ -1,30 +1,24 @@
 // src/app/driver/page.tsx
-
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 import DashboardTabs from '../../components/driver_page/DashboardTabs';
+// importando o type criado (UserProfile)
+import { UserProfile } from '@/types';
 
-// ---- TIPOS DE DADOS ----
-interface UserProfile {
-  id: string;
-  username: string;
-  email: string;
-  role: 'admin' | 'driver' | 'user';
-}
-
-// ---- FUNÇÃO AUXILIAR QUE RODA NO SERVIDOR ----
+// ---- FUNÇÃO AUXILIAR QUE RODA NO SERVIDOR ---
+// essa função e componente não roda client-side (no navegador), portanto ela pode 'abrir' nosso cookie mesmo que ele seja read-only para browser, isso é seguro, pois de novo, ela não roda no navegador.
 async function getUserProfile(token: string): Promise<UserProfile | null> {
-  try {
-    const res = await fetch('http://localhost:3001/api/auth/me', { // SUA URL DE BACKEND AQUI
-      headers: { 'Authorization': `Bearer ${token}` },
-      cache: 'no-store',
-    });
-    if (!res.ok) return null;
-    return res.json();
-  } catch (error) {
-    console.error("Fetch user profile error:", error);
-    return null;
-  }
+	try {
+		const res = await fetch('http://localhost:3001/api/auth/me', { // SUA URL DE BACKEND AQUI
+			headers: { 'Authorization': `Bearer ${token}` },
+			cache: 'no-store',
+		});
+		if (!res.ok) return null;
+		return res.json();
+	} catch (error) {
+		console.error("Fetch user profile error:", error);
+		return null;
+	}
 }
 
 // ---- O COMPONENTE DA PÁGINA (SSR) ----
