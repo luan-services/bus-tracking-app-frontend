@@ -5,13 +5,10 @@ import { useState, useEffect, FormEvent, ChangeEvent } from 'react';
 // importando use router, para enviar o usuário para o url da dashboard do motorista após login
 import { useRouter } from 'next/navigation';
 // importamos nosso componente de notificação de erro.
-import NotificationToast from './NotificationToast';
+import NotificationToast from '../NotificationToast';
+// como o componente NotificationToast recebe 2 parametros (mensagem e tipo) precisamos improtar o type dele para definir um useState (notification) que vai ser as props dele
+import {NotificationToastPropsState } from '@/types'
 
-// como o componente NotificationToast recebe 2 parametros (mensagem e tipo) precisamos definir o type do nosso useState que vai receber esses dois objetos e repassar pro NotificationToast
-type NotificationState = {
-	message: string;
-	type: 'success' | 'error';
-} | null;
 
 // função básica para validar os campos de email e password, recebe fieldName e value, retorna uma string (texto dizendo o erro) ou undefined (caso não haja erro)
 function validateField(fieldName: 'email' | 'password', value: string): string | undefined {
@@ -43,13 +40,15 @@ export default function LoginForm() {
 	const [isLoading, setIsLoading] = useState(false);
 	
 	// NOVO: Estado para controlar nossa notificação.
-	const [notification, setNotification] = useState<NotificationState>(null);
+	const [notification, setNotification] = useState<NotificationToastPropsState>(null);
 
-	// estado para checar se o usuário está logado
+	// estado para definir se está checando o login do usuário, enquanto for true, não mostra nada na página de login.
 	const [isCheckingAuth, setIsCheckingAuth] = useState(true);
 	
+	// cria um router para redirecionar o usuário após um login bem sucedido.
 	const router = useRouter();
 
+	// função para redirecionar o usuário para a dashboard caso ele tente acessar login já estando logado
 	useEffect(() => {
 		const checkSession = async () => {
 		try {
@@ -78,7 +77,7 @@ export default function LoginForm() {
 		checkSession();
 	}, [router]); // O array de dependências com 'router' garante que isso rode apenas uma vez.
 
-
+	// função que é chamada para validar o campo e-mail, é chamada a cada vez que o usuário digita algo.
 	const handleEmailChange = (e: ChangeEvent<HTMLInputElement>) => {
 		const newEmail = e.target.value;
 		setEmail(newEmail); // 1. Atualiza o estado do email
@@ -95,6 +94,7 @@ export default function LoginForm() {
 		}));
 	};
 
+	// função que é chamada para validar o campo e-mail, é chamada a cada vez que o usuário digita algo.
 	const handlePasswordChange = (e: ChangeEvent<HTMLInputElement>) => {
 		const newPassword = e.target.value;
 		setPassword(newPassword); // 1. Atualiza o estado da senha
@@ -109,12 +109,12 @@ export default function LoginForm() {
 		}));
   	};
 
-	// NOVO: useEffect para fazer a notificação desaparecer sozinha.
+	// useEffect para fazer a notificação desaparecer sozinha.
 	useEffect(() => {
 		// Se não houver notificação, não faz nada.
 		if (!notification) return;
 
-		// Cria um timer para limpar a notificação após 3 segundos (3000 ms).
+		// Cria um timer para limpar a notificação após 5 segundos (5000 ms).
 		const timer = setTimeout(() => {
 			setNotification(null);
 		}, 5000);
@@ -124,15 +124,18 @@ export default function LoginForm() {
 		return () => clearTimeout(timer);
 	}, [notification]); // Este efeito roda toda vez que a 'notification' muda.
 
+	// função principal, responsável por enviar o request do form ao clicar em login.
 	const handleSubmit = async (event: FormEvent) => {
-		event.preventDefault();
-		setIsLoading(true);
-		setErrors({});
-		setNotification(null); // Limpa notificações antigas no início
+		event.preventDefault(); // previne o reload da página
 
-		const emailError = validateField('email', email);
-    	const passwordError = validateField('password', password);
-    
+		setIsLoading(true); // useState que quando é true muda o texto do botão para 'carregando' e desativa ele
+		setErrors({}); // limpa o campo de erros.
+		setNotification(null); // limpa notificações antigas no início
+
+		const emailError = validateField('email', email); // valida uma última vez os campos
+    	const passwordError = validateField('password', password); // valida uma última vez os campos
+		
+		// caso haja algum erro, mostra nos campos e termina a função
 		if (emailError || passwordError) {
 			setErrors({ email: emailError, password: passwordError });
 			setIsLoading(false);
@@ -146,10 +149,12 @@ export default function LoginForm() {
 				body: JSON.stringify({ email, password, rememberMe }),
 				credentials: 'include',
 			});
+			// salva a resposta
 			const data = await response.json();
+			// se não for uma response 'ok', lança um erro e termina a função
 			if (!response.ok) throw new Error(data.message || 'Credenciais inválidas.');
 
-			// ALTERADO: Em vez de toast, definimos nosso estado de notificação para sucesso.
+			// definimos nosso estado de notificação para sucesso, isso vai renderizar o Toast na tela
 			setNotification({ message: 'Login realizado com sucesso!', type: 'success' });
 			
 			// Espera um pouco para o usuário ver a mensagem de sucesso antes de redirecionar
@@ -157,8 +162,8 @@ export default function LoginForm() {
 				router.push('/driver');
 			}, 1000); // 1 segundo
 
-		} catch (err: any) {
-		// ALTERADO: Em vez de toast, definimos nosso estado de notificação para erro.
+		} catch (err: any) { 
+
 			let error_message:string = ''
 				
 			// tratando as possíveis mensagens de erro enviadas pelo bd (foram definidas lá), não é necessário tratar mais nada além disso, 
@@ -174,13 +179,13 @@ export default function LoginForm() {
 				error_message = err.message
 			}
 			
-			setNotification({ message: error_message, type: 'error' });
+			setNotification({ message: error_message, type: 'error' }); // muda o estado que tem as propriedades do toast, renderizando ele na tela pq deixa de ser null
 		} finally {
 			setIsLoading(false);
 		}
 	};
 
-	  // NOVO: Enquanto a verificação acontece, mostramos um loader.
+	  // se ainda estiver verifcando se o usuário está logado, mostra esse html
 	if (isCheckingAuth) {
 		return (
 		<div className="flex items-center justify-center min-h-screen bg-gray-100">
@@ -189,6 +194,7 @@ export default function LoginForm() {
 		);
 	}
 
+	// se o usuário não estiver logado, mostra esse
 	return (
 		<> 
 

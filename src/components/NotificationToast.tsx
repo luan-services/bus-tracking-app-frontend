@@ -1,11 +1,7 @@
 // src/components/Notification.tsx
 
-// Definimos os tipos das propriedades que nosso componente vai receber.
-type NotificationToastProps = {
-  message: string;
-  type: 'success' | 'error';
-  onClick: () => void; // Uma função que será chamada quando o usuário clicar para fechar.
-};
+// importamos esse type que define quais propriedades o componente (funcao) vai receber. (e retornar)
+import { NotificationToastProps } from "@/types";
 
 export default function NotificationToast({ message, type, onClick }: NotificationToastProps) {
   // Define a cor de fundo com base no tipo da notificação.
