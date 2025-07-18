@@ -4,7 +4,7 @@
 
 import { useState } from 'react';
 import ProfileTab from './ProfileTab';
-import HistoryTab from './HistoryTab';
+import TripsTab from './TripsTab';
 
 // importando o type criado (UserProfile)
 import { UserProfile } from '@/types';
@@ -13,7 +13,7 @@ import { UserProfile } from '@/types';
 
 export default function DashboardTabs({ user }: { user: UserProfile }) {
   // useState: A "memória" do decorador para saber qual aba está acesa.
-  const [activeTab, setActiveTab] = useState<'profile' | 'history'>('profile');
+  const [activeTab, setActiveTab] = useState<'profile' | 'trips'>('profile');
 
   // Estilos para os botões das abas
   const tabStyles = "px-4 py-2 font-semibold rounded-t-lg transition-colors duration-200";
@@ -32,8 +32,8 @@ export default function DashboardTabs({ user }: { user: UserProfile }) {
             Perfil
           </button>
           <button
-            onClick={() => setActiveTab('history')}
-            className={`${tabStyles} ${activeTab === 'history' ? activeTabStyles : inactiveTabStyles}`}
+            onClick={() => setActiveTab('trips')}
+            className={`${tabStyles} ${activeTab === 'trips' ? activeTabStyles : inactiveTabStyles}`}
           >
             Histórico
           </button>
@@ -43,7 +43,7 @@ export default function DashboardTabs({ user }: { user: UserProfile }) {
       {/* A área onde o conteúdo da aba selecionada aparece */}
       <div className="mt-6">
         {activeTab === 'profile' && <ProfileTab user={user} />}
-        {activeTab === 'history' && <HistoryTab />}
+        {activeTab === 'trips' && <TripsTab />}
       </div>
     </div>
   );

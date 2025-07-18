@@ -20,6 +20,7 @@ export type NotificationToastPropsState = {
   type: 'success' | 'error';
 } | null;
 
+// At components/login_page/NotificationToast.tsx
 export type NotificationToastProps = {
   message: string;
   type: 'success' | 'error';

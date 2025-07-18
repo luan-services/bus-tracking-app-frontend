@@ -5,13 +5,21 @@
 import { useState, useEffect } from 'react';
 
 interface Trip {
-  id: string;
-  lineName: string; // Ajuste conforme seu backend
+  _id: string;
+  updatedAt: string;
   startTime: string;
-  endTime: string;
+  line: {
+    _id: string;
+    lineNumber: string;
+    name: string;
+  };
+  driver: {
+    _id: string;
+  };
 }
 
-export default function HistoryTab() {
+
+export default function TripsTab() {
   const [trips, setTrips] = useState<Trip[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -20,11 +28,12 @@ export default function HistoryTab() {
   useEffect(() => {
     async function fetchHistory() {
       try {
-        const res = await fetch('/api/driver/history'); // Chama a API segura do Next.js
+        const res = await fetch('/driver/trips'); // Chama a API segura do Next.js (manda requisição pro frontend)
         if (!res.ok) throw new Error('Falha ao buscar o histórico.');
         const data = await res.json();
         setTrips(data);
       } catch (err: any) {
+        console.log(err)
         setError(err.message);
       } finally {
         setLoading(false);
@@ -43,11 +52,19 @@ export default function HistoryTab() {
         <p>Nenhuma viagem encontrada.</p>
       ) : (
         <ul className="space-y-4">
+          {/* RENDERIZAÇÃO ATUALIZADA: Exibindo os novos campos */}
           {trips.map((trip) => (
-            <li key={trip.id} className="p-4 border rounded-lg bg-gray-50">
-              <p className="font-bold">Linha: {trip.lineName}</p>
-              <p className="text-sm text-gray-600">Início: {new Date(trip.startTime).toLocaleString('pt-BR')}</p>
-              <p className="text-sm text-gray-600">Fim: {new Date(trip.endTime).toLocaleString('pt-BR')}</p>
+            <li key={trip._id} className="p-4 border rounded-lg bg-gray-50 shadow-sm">
+              <p><span className="font-bold">ID da Viagem:</span> {trip._id}</p>
+              <p><span className="font-bold">Linha:</span> {trip.line.lineNumber} - {trip.line.name}</p>
+              <p><span className="font-bold">ID da Linha:</span> {trip.line._id}</p>
+              <p><span className="font-bold">ID do Motorista:</span> {trip.driver._id}</p>
+              <p className="text-sm text-gray-600 mt-2">
+                Início: {new Date(trip.startTime).toLocaleString('pt-BR')}
+              </p>
+              <p className="text-sm text-gray-600">
+                Última Atualização: {new Date(trip.updatedAt).toLocaleString('pt-BR')}
+              </p>
             </li>
           ))}
         </ul>

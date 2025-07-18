@@ -54,7 +54,7 @@ export default function LoginForm() {
 		try {
 			// Tentamos chamar o endpoint de refresh. O navegador enviará os cookies
 			// automaticamente se 'credentials: include' for usado.
-			const response = await fetch('http://localhost:5001/api/users/refresh', {
+			const response = await fetch('http://localhost:5001/api/auth/refresh', {
 			method: 'POST',
 			credentials: 'include', 
 			});
@@ -143,7 +143,7 @@ export default function LoginForm() {
 		}
 
 		try {
-			const response = await fetch('http://localhost:5001/api/users/login', { /* ... */
+			const response = await fetch('http://localhost:5001/api/auth/login', { /* ... */
 				method: 'POST',
 				headers: { 'Content-Type': 'application/json' },
 				body: JSON.stringify({ email, password, rememberMe }),
@@ -206,9 +206,6 @@ export default function LoginForm() {
 				<NotificationToast message={notification.message} type={notification.type} onClick={() => setNotification(null)}/> // passando as props pro component notification
 			}
 
-
-
-
 			{/* ... O resto do formulário permanece exatamente igual ... */}
 			<h2 className="text-2xl font-bold">Acesso Restrito</h2>
 		
@@ -238,9 +235,6 @@ export default function LoginForm() {
 				className="w-full flex justify-center bg-green-700 text-white py-2 rounded-lg cursor-pointer hover:bg-green-800 disabled:bg-green-500 disabled:cursor-default transition disabled:scale-100 active:scale-95">
 				{isLoading ? 'Entrando...' : 'Entrar'}
 			</button>
-
-
-	
 
 		</form>
 
