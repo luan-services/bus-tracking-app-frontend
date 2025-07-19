@@ -54,7 +54,7 @@ export default function LoginForm() {
 		try {
 			// Tentamos chamar o endpoint de refresh. O navegador enviará os cookies
 			// automaticamente se 'credentials: include' for usado.
-			const response = await fetch('http://localhost:5001/api/auth/refresh', {
+			const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/auth/refresh`, {
 			method: 'POST',
 			credentials: 'include', 
 			});
@@ -62,7 +62,7 @@ export default function LoginForm() {
 			if (response.ok) {
 			// Se a resposta for OK, o usuário tem uma sessão válida.
 			// Redirecionamos para o dashboard.
-				router.push('/driver');
+				router.push('/dashboard/profile');
 			} else {
 			// Se falhar, o usuário não está logado. Liberamos a exibição do formulário.
 			setIsCheckingAuth(false);
@@ -143,7 +143,7 @@ export default function LoginForm() {
 		}
 
 		try {
-			const response = await fetch('http://localhost:5001/api/auth/login', { /* ... */
+			const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/auth/login`, { /* ... */
 				method: 'POST',
 				headers: { 'Content-Type': 'application/json' },
 				body: JSON.stringify({ email, password, rememberMe }),
@@ -159,7 +159,7 @@ export default function LoginForm() {
 			
 			// Espera um pouco para o usuário ver a mensagem de sucesso antes de redirecionar
 			setTimeout(() => {
-				router.push('/driver');
+				router.push('/dashboard/profile');
 			}, 1000); // 1 segundo
 
 		} catch (err: any) { 
@@ -188,9 +188,9 @@ export default function LoginForm() {
 	  // se ainda estiver verifcando se o usuário está logado, mostra esse html
 	if (isCheckingAuth) {
 		return (
-		<div className="flex items-center justify-center min-h-screen bg-gray-100">
-			<p className="text-lg animate-pulse">Verificando sessão...</p>
-		</div>
+			<div className="flex items-center justify-center min-h-screen bg-gray-100">
+				<p className="text-lg animate-pulse">Verificando sessão...</p>
+			</div>
 		);
 	}
 

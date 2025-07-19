@@ -1,8 +1,8 @@
-// src/app/api/logout/route.ts
-
 import { cookies } from 'next/headers';
 import { NextResponse } from 'next/server';
 
+// para invalidar uma sessão, é mais seguro fazer server-side, para isso criamos uma função post dentro de um route.ts que faz isso, e é chamada
+// pelo botão logout
 export async function POST() {
   const cookieStore = await cookies();
 
