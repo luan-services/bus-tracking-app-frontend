@@ -17,9 +17,9 @@ export function DashboardNav({ user }: { user: User }) {
   ];
 
   return (
-    <aside className="w-64 flex-shrink-0 bg-gray-800 text-white flex flex-col">
+    <section className="w-64 flex-shrink-0 bg-gray-800 text-white flex flex-col">
       <div className="h-16 flex items-center justify-center text-xl font-bold border-b border-gray-700">
-        Bus Tracking
+        Painel do Motorista
       </div>
       <nav className="flex-1 px-4 py-6">
         <ul>
@@ -43,6 +43,6 @@ export function DashboardNav({ user }: { user: User }) {
           )}
         </ul>
       </nav>
-    </aside>
+    </section>
   );
 }

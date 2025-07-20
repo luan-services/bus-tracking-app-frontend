@@ -5,9 +5,10 @@ import { useState, useEffect, FormEvent, ChangeEvent } from 'react';
 // importando use router, para enviar o usuário para o url da dashboard do motorista após login
 import { useRouter } from 'next/navigation';
 // importamos nosso componente de notificação de erro.
-import NotificationToast from '../NotificationToast';
+import NotificationToast from '../general_components/NotificationToast';
 // como o componente NotificationToast recebe 2 parametros (mensagem e tipo) precisamos improtar o type dele para definir um useState (notification) que vai ser as props dele
 import {NotificationToastPropsState } from '@/types'
+import { LoginButton } from './LoginButton';
 
 
 // função básica para validar os campos de email e password, recebe fieldName e value, retorna uma string (texto dizendo o erro) ou undefined (caso não haja erro)
@@ -64,8 +65,8 @@ export default function LoginForm() {
 			// Redirecionamos para o dashboard.
 				router.push('/dashboard/profile');
 			} else {
-			// Se falhar, o usuário não está logado. Liberamos a exibição do formulário.
-			setIsCheckingAuth(false);
+				// Se falhar, o usuário não está logado. Liberamos a exibição do formulário.
+				setIsCheckingAuth(false);
 			}
 		} catch (error) {
 			// Em caso de erro de rede, também liberamos o formulário.
@@ -130,7 +131,7 @@ export default function LoginForm() {
 
 		setIsLoading(true); // useState que quando é true muda o texto do botão para 'carregando' e desativa ele
 		setErrors({}); // limpa o campo de erros.
-		setNotification(null); // limpa notificações antigas no início
+		//setNotification(null); // limpa notificações antigas no início // não precisa limpar pois está causando um efeito de blink com requests muito rapoidos, e ela sai sozinha
 
 		const emailError = validateField('email', email); // valida uma última vez os campos
     	const passwordError = validateField('password', password); // valida uma última vez os campos
@@ -160,7 +161,7 @@ export default function LoginForm() {
 			// Espera um pouco para o usuário ver a mensagem de sucesso antes de redirecionar
 			setTimeout(() => {
 				router.push('/dashboard/profile');
-			}, 1000); // 1 segundo
+			}, 500); // 1 segundo
 
 		} catch (err: any) { 
 
@@ -169,7 +170,7 @@ export default function LoginForm() {
 			// tratando as possíveis mensagens de erro enviadas pelo bd (foram definidas lá), não é necessário tratar mais nada além disso, 
 			// pois só faltam as regras do joi, e o form trata elas e também só envia o submit se respeitá-las, o único jeito de chegar aqui 
 			// com credenciais invalidas para o joi é editando o html do form ou enviando request por fora (já não é problema do front, ele não tem que tratar)
-			if (err.message == 'email or password invalid') {
+			if (err.message == 'email or password not valid') {
 				error_message = 'Erro: Email ou senha inválidos.'
 			}
 			else if (err.message == 'Failed to fetch')  {
@@ -231,11 +232,9 @@ export default function LoginForm() {
 				<label className="flex text-gray-700 cursor-pointer" htmlFor="rememberMe">Mantenha-me conectado</label>
 			</div>
 			
-			<button type="submit" disabled={isLoading}
-				className="w-full flex justify-center bg-green-700 text-white py-2 rounded-lg cursor-pointer hover:bg-green-800 disabled:bg-green-500 disabled:cursor-default transition disabled:scale-100 active:scale-95">
+			<LoginButton type="submit" disabled={isLoading}>
 				{isLoading ? 'Entrando...' : 'Entrar'}
-			</button>
-
+			</LoginButton>
 		</form>
 
 

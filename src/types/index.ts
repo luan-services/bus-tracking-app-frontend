@@ -26,14 +26,12 @@ export type NotificationToastProps = {
 	onClick: () => void; // Uma função que será chamada quando o usuário clicar para fechar.
 };
 
-
-
 export interface User {
-	_id: string;
-	name: string;
-	last_name: string;
+	id?: string;
+	name?: string;
+	last_name?: string;
 	role: 'user' | 'driver' | 'admin';
-	code: string;
-	email: string;
-	cpf: string;
+	code?: string;
+	email?: string;
+	cpf?: string;
 }
