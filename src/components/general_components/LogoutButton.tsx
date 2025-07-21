@@ -8,24 +8,18 @@ import { LogOut } from 'lucide-react'; // Ícone opcional para estilo
 // como estou usando a versão nova sem react.fc, preciso definir children na interface
 interface LogoutButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
 	children?: React.ReactNode,
-	useConfirmScreen?: boolean
+	useConfirmScreen?: boolean,
+	activeText?: string,
 }
 
 // export function LogoutButton({ children, className, useConfirmScreen = true }: LogoutButtonProps) << forma mais 'moderna' de fazer (ambas iguais)
-export const LogoutButton = ({ children, className, useConfirmScreen = true }: LogoutButtonProps) => {	
+export const LogoutButton = ({ children, className, useConfirmScreen = true, activeText = "Saindo..." }: LogoutButtonProps) => {	
 	// estado para definir se o fetch está carregando ou está completo.
 	const [isLoading, setIsLoading] = useState(false);
 
 	// router para redicionamento
 	const router = useRouter();
 
-	/**
-	 * Função que coordena o processo de logout.
-	 * 1. Chama nosso endpoint de API seguro no Next.js.
-	 * 2. O endpoint no servidor limpa os cookies HttpOnly.
-	 * 3. Redireciona o usuário para a página de login.
-	 * 4. Faz um refresh do roteador para garantir que o estado do servidor seja limpo.
-	 */
 	const handleLogout = async () => {
 
 
@@ -57,20 +51,18 @@ export const LogoutButton = ({ children, className, useConfirmScreen = true }: L
 			console.error("Falha ao tentar fazer logout:", error);
 			// pode adicionar uma notificação de erro para o usuário aqui, por enquanto não é necessário
 			alert("Ocorreu um erro ao sair. Por favor, tente novamente.");
-		} finally {
-			setIsLoading(false);
-		}
+		} 
 
 	};
 
 	// define as classes OU classes extras vindas do pai
-	const ClassName = `${className} || w-5/10 flex items-center gap-4 justify-center bg-red-500 text-white py-2 rounded-lg cursor-pointer hover:bg-red-800 disabled:bg-red-300 disabled:cursor-default transition active:scale-95`;
+	const ClassName = className || `min-w-32 flex items-center gap-4 justify-center bg-red-500 text-white py-2 rounded-lg cursor-pointer hover:bg-red-800 disabled:bg-red-300 disabled:cursor-default transition active:scale-95`;
 
 
 	return (
-		<button onClick={handleLogout} className={ClassName} disabled={isLoading}>
-			<LogOut size={16}/>
-			{isLoading?  "Saindo..." : children}
+		<button onClick={() => handleLogout()} className={ClassName} disabled={isLoading}>
+			<LogOut size={20}/>
+			{isLoading?  activeText : children}
 		</button>
 	);
 }

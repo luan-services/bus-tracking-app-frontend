@@ -9,7 +9,7 @@ export default function LoginPage() {
   // client componente ("use-client" é renderizado no client depois que a página carrega), mesmo que o filho use comandos fetch, o pai continua SSG.
 
   return (
-    <div className="flex min-h-screen w-full font-roboto items-center justify-center  bg-gray-100">
+    <div className="flex min-h-screen w-full font-roboto items-center justify-center bg-white sm:bg-gray-100">
       {/* Aqui, o Server Component renderiza o Client Component, o HTML inicial do LoginForm será incluído na página estática, e o JavaScript necessário para torná-lo interativo será enviado para o navegador. */}
       <LoginForm />
     </div>

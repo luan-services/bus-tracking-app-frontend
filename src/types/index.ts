@@ -4,12 +4,15 @@
 
 
 // se essa interface for definido à um atributo, o atributo em questão só podera ser o objeto descrito.
-// At driver/page.tsx , components/driver_page/DashboardTabs.tsx, components/driver_page/ProfileTab.tsx, components/driver_page/HistoryTab.tsx
-export interface UserProfile {
-	id: string;
-	username: string;
-	email: string;
-	role: 'admin' | 'driver' | 'user';
+// At dashboard/layout.tsx , dashboard/profile/page.tsx, dashboard/driver_page/ProfileTab.tsx, components/dashboard/DashBoardNav.tsx
+export interface User {
+	id?: string;
+	name?: string;
+	last_name?: string;
+	role: 'user' | 'driver' | 'admin';
+	code?: string;
+	email?: string;
+	cpf?: string;
 }
 
 // se esse type for definido à um atributo, o atributo em questão só podera ser um objeto OU null
@@ -26,12 +29,3 @@ export type NotificationToastProps = {
 	onClick: () => void; // Uma função que será chamada quando o usuário clicar para fechar.
 };
 
-export interface User {
-	id?: string;
-	name?: string;
-	last_name?: string;
-	role: 'user' | 'driver' | 'admin';
-	code?: string;
-	email?: string;
-	cpf?: string;
-}

@@ -181,15 +181,13 @@ export default function LoginForm() {
 			}
 			
 			setNotification({ message: error_message, type: 'error' }); // muda o estado que tem as propriedades do toast, renderizando ele na tela pq deixa de ser null
-		} finally {
-			setIsLoading(false);
-		}
+		} 
 	};
 
 	  // se ainda estiver verifcando se o usuário está logado, mostra esse html
 	if (isCheckingAuth) {
 		return (
-			<div className="flex items-center justify-center min-h-screen bg-gray-100">
+			<div className="flex w-ful items-center justify-center min-h-screen bg-gray-100">
 				<p className="text-lg animate-pulse">Verificando sessão...</p>
 			</div>
 		);
@@ -199,7 +197,7 @@ export default function LoginForm() {
 	return (
 		<> 
 
-		<form onSubmit={handleSubmit} noValidate className="p-8 flex flex-col items-center gap-4 bg-white border-1 border-gray-200 rounded-lg shadow-md w-full max-w-96">
+		<form onSubmit={handleSubmit} noValidate className="p-8 flex flex-col items-center gap-4 bg-white sm:border-1 border-gray-200 sm:rounded-lg sm:shadow-md w-full max-w-96">
 
 				{/* Usamos um Fragment (<>) para agrupar o formulário e a notificação */}
 			{/* NOVO: Renderiza a notificação condicionalmente. */}
