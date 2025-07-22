@@ -10,10 +10,11 @@ interface LogoutButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement
 	children?: React.ReactNode,
 	useConfirmScreen?: boolean,
 	activeText?: string,
+	buttonColor?: string,
 }
 
 // export function LogoutButton({ children, className, useConfirmScreen = true }: LogoutButtonProps) << forma mais 'moderna' de fazer (ambas iguais)
-export const LogoutButton = ({ children, className, useConfirmScreen = true, activeText = "Saindo..." }: LogoutButtonProps) => {	
+export const LogoutButton = ({ children, className, useConfirmScreen = true, activeText = "Saindo...", buttonColor = "white" }: LogoutButtonProps) => {	
 	// estado para definir se o fetch está carregando ou está completo.
 	const [isLoading, setIsLoading] = useState(false);
 
@@ -61,7 +62,7 @@ export const LogoutButton = ({ children, className, useConfirmScreen = true, act
 
 	return (
 		<button onClick={() => handleLogout()} className={ClassName} disabled={isLoading}>
-			<LogOut size={20}/>
+			<LogOut size={20} color={buttonColor}/>
 			{isLoading?  activeText : children}
 		</button>
 	);

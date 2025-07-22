@@ -37,7 +37,7 @@ export function DashboardNav({ user }: { user: User }) {
 				</ul>
 			</nav>
 			<div className="flex md:flex-1 md:items-end">
-				<LogoutButton useConfirmScreen={true} activeText="" className={" bg-red-800 items-center justify-center gap-3 p-2 rounded-md active:scale-95 transition cursor-pointer"}></LogoutButton>	
+				<LogoutButton useConfirmScreen={true} activeText="" buttonColor="red" className={" hover:bg-red-800 items-center justify-center gap-3 p-2 rounded-md active:scale-95 transition cursor-pointer"}></LogoutButton>	
 			</div>
 
 		</section>
