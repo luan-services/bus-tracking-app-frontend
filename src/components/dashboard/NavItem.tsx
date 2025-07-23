@@ -7,7 +7,7 @@ interface LogoutButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement
 export const NavItem = ({ children, className, ...props}: LogoutButtonProps) => {	
 
 	// define as classes OU classes extras vindas do pai
-	const ClassName = `${className} w-full flex items-center gap-3 p-2 rounded-md active:scale-95 transition cursor-pointer`
+	const ClassName = `${className} flex w-full p-2 rounded-md active:scale-95 transition cursor-pointer`
 
 	return (
 		<button className={ClassName} {...props}>

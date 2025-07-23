@@ -12,7 +12,7 @@ export default async function ProfilePage() {
 
 	return (
 		<div className="flex flex-col w-full">
-			<div className="flex flex-col bg-white p-4 md:p-8 gap-4 md:max-w-120 h-full md:shadow-md">
+			<div className="flex flex-col bg-white p-4 md:p-8 gap-4 md:max-w-120 md:shadow-md">
 				<h2 className="font-bold text-3xl">Olá, {user.name}.</h2>
 				<hr className="h-px bg-gray-300 border-0"></hr>
 
