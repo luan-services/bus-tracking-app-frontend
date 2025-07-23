@@ -3,33 +3,29 @@
 import { useRouter} from "next/navigation";
 import { useState } from "react";
 import { LogOut } from 'lucide-react'; // Ícone opcional para estilo
+import { ConfirmationModal } from "./ConfirmationModal";
 
 // extends React.ButtonHTMLAttributes<HTMLButtonElement>  importa todas as props basicas do elemento button (className, type, disabled, onClick, id, name, etc...) para o buttonProps
 // como estou usando a versão nova sem react.fc, preciso definir children na interface
 interface LogoutButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
 	children?: React.ReactNode,
 	useConfirmScreen?: boolean,
+	setIsExpanded?: () => void; // função unica pro botão de logout do dashboard, em outros lugares não faz nada
 	activeText?: string,
 	buttonColor?: string,
 }
 
 // export function LogoutButton({ children, className, useConfirmScreen = true }: LogoutButtonProps) << forma mais 'moderna' de fazer (ambas iguais)
-export const LogoutButton = ({ children, className, useConfirmScreen = true, activeText = "Saindo...", buttonColor = "white" }: LogoutButtonProps) => {	
+export const LogoutButton = ({ children, className, useConfirmScreen = true, activeText = "Saindo...", buttonColor = "white", setIsExpanded = () => ''}: LogoutButtonProps) => {	
 	// estado para definir se o fetch está carregando ou está completo.
 	const [isLoading, setIsLoading] = useState(false);
+	const [isModalOpen, setIsModalOpen] = useState(false);
+
 
 	// router para redicionamento
 	const router = useRouter();
 
 	const handleLogout = async () => {
-
-
-		if (useConfirmScreen) {
-			const confirmed = window.confirm("Você tem certeza que deseja sair?"); // refatorar isso para um componente modal de confimação
-			if (!confirmed) {
-				return;
-			}
-		}
 	
 		setIsLoading(true); // useState que quando é true muda o texto do botão para 'carregando' e desativa ele
 
@@ -54,16 +50,33 @@ export const LogoutButton = ({ children, className, useConfirmScreen = true, act
 			alert("Ocorreu um erro ao sair. Por favor, tente novamente.");
 		} 
 
+		// desativa o modal
+		setIsModalOpen(false)
+		// setIsExpanded é uma prop criada apenas para dashboard, por causa do bug do elemento filho dar trigger no group-hover
+		setIsExpanded();
 	};
+	
+	const handleClick = () => {
+        if (useConfirmScreen) {
+            setIsModalOpen(true);
+			setIsExpanded();
+        } else {
+            handleLogout();
+        }
+    };
 
 	// define as classes OU classes extras vindas do pai
 	const ClassName = className || `min-w-32 flex items-center gap-4 justify-center bg-red-500 text-white py-2 rounded-lg cursor-pointer hover:bg-red-800 disabled:bg-red-300 disabled:cursor-default transition active:scale-95`;
 
 
 	return (
-		<button onClick={() => handleLogout()} className={ClassName} disabled={isLoading}>
-			<LogOut size={20} color={buttonColor}/>
-			{isLoading?  activeText : children}
-		</button>
+		<>
+			<button onClick={() => handleClick()} className={ClassName} disabled={isLoading}>
+				<LogOut size={20} color={buttonColor}/>
+				{isLoading?  activeText : children}
+			</button>
+
+			<ConfirmationModal isOpen={isModalOpen} onConfirm={() => handleLogout()} onClose={() => {setIsModalOpen(false), setIsExpanded()}}></ConfirmationModal>
+		</>
 	);
 }

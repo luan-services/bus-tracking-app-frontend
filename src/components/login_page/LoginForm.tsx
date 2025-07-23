@@ -181,13 +181,14 @@ export default function LoginForm() {
 			}
 			
 			setNotification({ message: error_message, type: 'error' }); // muda o estado que tem as propriedades do toast, renderizando ele na tela pq deixa de ser null
+			setIsLoading(false)
 		} 
 	};
 
 	  // se ainda estiver verifcando se o usuário está logado, mostra esse html
 	if (isCheckingAuth) {
 		return (
-			<div className="flex w-ful items-center justify-center min-h-screen bg-gray-100">
+			<div className="flex w-full items-center justify-center min-h-screen bg-gray-100">
 				<p className="text-lg animate-pulse">Verificando sessão...</p>
 			</div>
 		);
