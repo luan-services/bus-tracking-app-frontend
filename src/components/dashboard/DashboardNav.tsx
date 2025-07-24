@@ -23,7 +23,7 @@ export function DashboardNav({ user }: { user: User }) {
 	];
 
 	return (
-		<section className={`${isExpanded ? 'md:w-64' : 'hover:md:w-64'} group bottom-0 fixed md:static w-full md:w-15 px-2 md:px-3 md:py-6 justify-center md:justify-start flex flex-row md:flex-col gap-4 bg-gray-800 text-white duration-300 ease-in-out`}>
+		<section className={`${isExpanded ? 'md:w-64' : 'hover:md:w-64 md:w-15'} group bottom-0 flex-shrink-0 fixed z-20 md:static w-full py-1 md:px-3 md:py-6 justify-center md:justify-start flex flex-row md:flex-col gap-4 bg-gray-800 rounded-t-xl md:rounded-none text-white duration-300 ease-in-out`}>
 			
 			{/* desktop pin */}
 			<div className="hidden md:flex w-full">
@@ -63,18 +63,17 @@ export function DashboardNav({ user }: { user: User }) {
 
 			{/* mobile nav */}
 			<nav className="flex md:hidden gap-2">
-				<ul className="flex flex-row md:flex-col w-full gap-2">
+				<ul className="flex flex-row w-full gap-2">
 					{navItems.filter(item => item.roles.includes(user.role)).map(item => (
 							<li key={item.href}>
 								<NavItem className={pathname.startsWith(item.href) ? 'bg-gray-700' : 'hover:bg-gray-900'} onClick={() => router.push(item.href)}>
 									<item.icon strokeWidth={2.5} size={20} />
-									<span className="hidden md:inline text-sm">{item.label}</span>
 								</NavItem>
 							</li>
 						)
 					)}
 				</ul>
-				<div className="flex md:h-full md:justify-center md:items-center">
+				<div className="flex">
 					<LogoutButton useConfirmScreen={true} activeText="" buttonColor="red" className={"p-2 active:scale-95 transition cursor-pointer"}></LogoutButton>	
 				</div>
 			</nav>

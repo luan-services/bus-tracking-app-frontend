@@ -8,6 +8,7 @@ import { useRouter } from 'next/navigation';
 import NotificationToast from '../general_components/NotificationToast';
 // como o componente NotificationToast recebe 2 parametros (mensagem e tipo) precisamos improtar o type dele para definir um useState (notification) que vai ser as props dele
 import {NotificationToastPropsState } from '@/types'
+
 import { LoginButton } from './LoginButton';
 
 
