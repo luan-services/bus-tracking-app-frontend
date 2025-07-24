@@ -30,10 +30,10 @@ export default async function DashboardLayout({ children }: { children: React.Re
 
 	// se passou nas verificações, renderiza a estrutura da dashboard.
 	return (
-		<div className="flex md:flex-row min-h-screen w-full font-roboto bg-white md:bg-gray-100 pb-[44px] md:pb-0"> {/* pb = tamanho do nav (serve para impedir que o txt das paginas fiquem presos atras do nav */}
+		<div className="flex md:flex-row min-h-screen w-full font-roboto bg-gray-100 pb-[44px] md:pb-0"> {/* pb = tamanho do nav (serve para impedir que o txt das paginas fiquem presos atras do nav */}
 			{/* Passa os dados do usuário para a barra de navegação para ela saber quais botões mostrar */}
 			<DashboardNav user={user} />
-			<main className="flex w-full md:p-10">{children}</main>
+			<main className="w-full md:p-10">{children}</main>
 		</div>
 	);
 }

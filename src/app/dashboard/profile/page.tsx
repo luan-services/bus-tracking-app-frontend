@@ -3,7 +3,7 @@ import { fetchFromServer } from '@/lib/api';
 import type { User } from '@/types/index.ts';
 
 export default async function ProfilePage() {
-	// A proteção já foi feita pelos layouts. Aqui só buscamos os dados para exibir.
+	// a proteção já foi feita pelos layouts. Aqui só buscamos os dados para exibir.
 	const response = await fetchFromServer('/api/users/current/me');
 	if (!response.ok) {
 		redirect('/login');
@@ -11,7 +11,7 @@ export default async function ProfilePage() {
 	const user: User = await response.json();
 
 	return (
-		<div className="flex flex-col w-full bg-white p-4 md:p-8 gap-4 md:max-w-120 md:shadow-md">
+		<div className="flex flex-col w-full bg-green-500 p-4 md:p-8 gap-4 md:max-w-120 md:shadow-md">
 			<h2 className="font-bold text-3xl">Olá, {user.name}.</h2>
 			<hr className="h-px bg-gray-300 border-0"></hr>
 

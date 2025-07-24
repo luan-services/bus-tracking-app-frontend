@@ -15,7 +15,7 @@ export function DashboardNav({ user }: { user: User }) {
 	const pathname = usePathname();
 	const router = useRouter();
 
-	// Uma lista de todos os possíveis itens de navegação, cada um com as roles permitidas
+	// uma lista de todos os possíveis itens de navegação, cada um com as roles permitidas
 	const navItems = [
 		{ href: '/dashboard/profile', label: 'Perfil', icon: UserIcon, roles: ['driver', 'admin'] },
 		{ href: '/dashboard/trip', label: 'Viagem', icon: MapPlus, roles: ['driver', 'admin'] },
