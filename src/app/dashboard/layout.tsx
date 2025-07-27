@@ -1,5 +1,5 @@
 import { redirect } from 'next/navigation';
-import { fetchFromServer } from '@/lib/api';
+import { fetchFromServer } from '@/lib/api-server';
 import type { User } from '@/types/index.ts';
 import { DashboardNav } from '@/components/dashboard/DashboardNav';
 import { LogoutButton } from '@/components/general_components/LogoutButton';
@@ -33,7 +33,7 @@ export default async function DashboardLayout({ children }: { children: React.Re
 		<div className="flex md:flex-row min-h-screen w-full font-roboto bg-gray-100 pb-[44px] md:pb-0"> {/* pb = tamanho do nav (serve para impedir que o txt das paginas fiquem presos atras do nav */}
 			{/* Passa os dados do usuário para a barra de navegação para ela saber quais botões mostrar */}
 			<DashboardNav user={user} />
-			<main className="w-full md:p-10">{children}</main>
+			<main className="w-full bg-gray-100 md:p-10">{children}</main>
 		</div>
 	);
 }

@@ -2,7 +2,7 @@
 // nesse caso, como ele está diretamente em dashboard, vai aparecer para todos os elementos de dashboard quando ocorrer troca de paginas.
 export default function DashboardLoading() {
   return ( 
-    <div className="flex w-full flex-1 items-center justify-center animate-pulse">
+    <div className="flex w-full h-full items-center justify-center animate-pulse">
       <p className="flex text-xl text-gray-500 animate-pulse">Carregando...</p>
     </div>
   );
