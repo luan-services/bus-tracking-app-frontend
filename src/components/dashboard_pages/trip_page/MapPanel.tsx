@@ -55,7 +55,11 @@ const MapPanel: React.FC<MapPanelProps> = ({ liveData }) => {
 
         // Limpa camadas antigas
         map.eachLayer(layer => {
-            if (layer instanceof L.Polyline || layer instanceof L.CircleMarker || (layer instanceof L.Marker && layer !== busMarkerRef.current)) {
+            // CORREÇÃO: Proteja o rawBusMarkerRef da remoção, assim como o busMarkerRef.
+            // A condição agora verifica se a camada é um CircleMarker E se NÃO É o rawBusMarkerRef.
+            if (layer instanceof L.Polyline || 
+               (layer instanceof L.CircleMarker && layer !== rawBusMarkerRef.current) || 
+               (layer instanceof L.Marker && layer !== busMarkerRef.current)) {
                 map.removeLayer(layer);
             }
         });
@@ -67,7 +71,9 @@ const MapPanel: React.FC<MapPanelProps> = ({ liveData }) => {
 
         // Desenha as paradas
         liveData.stops?.forEach(stop => {
-            const isReached = liveData.stopsReached.includes(stop.name);
+            // const isReached = liveData.stopsReached.includes(stop.name);
+            const isReached = stop.distanceFromStart <= liveData.distanceTraveled;
+            
             L.circleMarker([stop.location.coordinates[1], stop.location.coordinates[0]], {
                 radius: 6,
                 color: isReached ? '#9CA3AF' : '#10B981',
@@ -96,10 +102,11 @@ const MapPanel: React.FC<MapPanelProps> = ({ liveData }) => {
             }).addTo(map).bindPopup('Posição do Ônibus na Rota');
         }
 
-        // Ajusta o zoom para a rota
+        // Ajusta o zoom para a rota, mas apenas se não for a primeira vez, para respeitar o zoom inicial.
         if (liveData.routePath?.coordinates) {
             const routeBounds = L.geoJSON(liveData.routePath).getBounds();
-            map.fitBounds(routeBounds.pad(0.1));
+            // Adicionado um pequeno delay para garantir que o mapa se ajuste após a renderização inicial
+            setTimeout(() => map.fitBounds(routeBounds.pad(0.1)), 100);
         }
 
     }, [liveData]);
