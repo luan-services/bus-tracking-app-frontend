@@ -2,6 +2,7 @@
 // types são parâmetros que definem um TIPO para ser atribuído à uma função, variável, etc. Ex: string, int, são types, 
 // só que existem custom types que podem ser objetos. A maior diferença é que um type pode ser um conjunto de coisas, interface é só um, um objeto (no typescript)
 
+// Interfaces para models 
 
 // se essa interface for definido à um atributo, o atributo em questão só podera ser o objeto descrito.
 // At dashboard/layout.tsx , dashboard/profile/page.tsx, dashboard/driver_page/ProfileTab.tsx, components/dashboard/DashBoardNav.tsx
@@ -14,6 +15,9 @@ export interface User {
 	email?: string;
 	cpf?: string;
 }
+
+
+// Interfaces e Types para componentes
 
 // se esse type for definido à um atributo, o atributo em questão só podera ser um objeto OU null
 // At components/login_page/LoginForm.tsx,
