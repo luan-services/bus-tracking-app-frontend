@@ -51,19 +51,36 @@ const MapPanel: React.FC<MapPanelProps> = ({ liveData }) => {
     // Atualiza o mapa com os dados da viagem
     useEffect(() => {
         const map = mapRef.current;
-        if (!map || !liveData) return;
+        if (!map) return;
 
-        // Limpa camadas antigas
-        map.eachLayer(layer => {
-            // CORREÇÃO: Proteja o rawBusMarkerRef da remoção, assim como o busMarkerRef.
-            // A condição agora verifica se a camada é um CircleMarker E se NÃO É o rawBusMarkerRef.
-            if (layer instanceof L.Polyline || 
-               (layer instanceof L.CircleMarker && layer !== rawBusMarkerRef.current) || 
-               (layer instanceof L.Marker && layer !== busMarkerRef.current)) {
+        // Se a viagem terminou (liveData é null), executa a limpeza completa.
+        if (!liveData) {
+            // Itera por todas as camadas presentes no mapa.
+            map.eachLayer((layer) => {
+                // A condição verifica se a camada NÃO é o mapa de fundo (TileLayer).
+                // Isso garante que removeremos rotas, marcadores, círculos, etc.
+                if (!(layer instanceof L.TileLayer)) {
+                    map.removeLayer(layer);
+                }
+            });
+
+            // Zera as referências para garantir que os marcadores sejam recriados na próxima viagem.
+            busMarkerRef.current = null;
+            rawBusMarkerRef.current = null;
+
+            // Encerra a execução aqui, deixando o mapa limpo.
+            return;
+        }
+
+        // SE HOUVER UMA VIAGEM ATIVA, O CÓDIGO ABAIXO É EXECUTADO NORMALMENTE
+
+        // Limpa apenas as camadas que precisam ser redesenhadas (rota e paradas)
+        map.eachLayer((layer) => {
+            if ((layer instanceof L.Polyline || layer instanceof L.CircleMarker) && layer !== rawBusMarkerRef.current) {
                 map.removeLayer(layer);
             }
         });
-        
+
         // Desenha a rota
         if (liveData.routePath?.coordinates) {
             L.geoJSON(liveData.routePath, { style: { color: '#4f46e5', weight: 5, opacity: 0.8 } }).addTo(map);
@@ -71,9 +88,7 @@ const MapPanel: React.FC<MapPanelProps> = ({ liveData }) => {
 
         // Desenha as paradas
         liveData.stops?.forEach(stop => {
-            // const isReached = liveData.stopsReached.includes(stop.name);
-            const isReached = stop.distanceFromStart <= liveData.distanceTraveled;
-            
+            const isReached = liveData.stopsReached.includes(stop.name);
             L.circleMarker([stop.location.coordinates[1], stop.location.coordinates[0]], {
                 radius: 6,
                 color: isReached ? '#9CA3AF' : '#10B981',
@@ -102,24 +117,21 @@ const MapPanel: React.FC<MapPanelProps> = ({ liveData }) => {
             }).addTo(map).bindPopup('Posição do Ônibus na Rota');
         }
 
-        // Ajusta o zoom para a rota, mas apenas se não for a primeira vez, para respeitar o zoom inicial.
+        // Ajusta o zoom e força a invalidação
         if (liveData.routePath?.coordinates) {
             const routeBounds = L.geoJSON(liveData.routePath).getBounds();
-            // Adicionado um pequeno delay para garantir que o mapa se ajuste após a renderização inicial
-            setTimeout(() => map.fitBounds(routeBounds.pad(0.1)), 100);
+            map.fitBounds(routeBounds.pad(0.1));
+            setTimeout(() => {
+                map.invalidateSize(true);
+            }, 100);
         }
 
-    }, [liveData]);
+    }, [liveData, createBusIcon]);
 
     return (
         <div className="bg-white p-4 rounded-lg shadow-md h-full min-h-[500px]">
-            <h2 className="text-xl font-bold mb-4">Mapa da Rota</h2>
-            <div ref={mapContainerRef} className="h-[calc(100%-40px)] w-full rounded-md z-10" />
-            {!liveData && (
-                <div className="absolute inset-0 flex items-center justify-center bg-gray-200 bg-opacity-50">
-                    <p className="text-gray-500">Aguardando início da viagem para exibir o mapa.</p>
-                </div>
-            )}
+            {/* container do mapa precisa sempre estar no DOM, pois o mapa leaftlet só funciona assim */}
+            <div ref={mapContainerRef} className="h-[calc(100%-40px)] w-full rounded-md"/>
         </div>
     );
 };
