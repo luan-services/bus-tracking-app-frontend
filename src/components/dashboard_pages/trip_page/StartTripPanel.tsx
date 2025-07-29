@@ -110,7 +110,7 @@ const StartTripPanel: React.FC<StartTripPanelProps> = ({ onTripStart, disabled }
                 >
                     {isLoading ? 'Iniciando...' : 'Iniciar Viagem'}
                 </button>
-                {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
+                <div className="flex items-center text-red-500 text-sm min-h-13">{error ? error : ""}</div>
             </div>
         </div>
     );

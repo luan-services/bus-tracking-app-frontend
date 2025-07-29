@@ -23,7 +23,7 @@ export function DashboardNav({ user }: { user: User }) {
 	];
 
 	return (
-		<section className={`${isExpanded ? 'md:w-64' : 'hover:md:w-64 md:w-15'} group bottom-0 flex-shrink-0 fixed z-20 md:static w-full py-1 md:px-3 md:py-6 justify-center md:justify-start flex flex-row md:flex-col gap-4 bg-gray-800 rounded-t-xl md:rounded-none text-white duration-300 ease-in-out`}>
+		<section style={{zIndex: 2000}} className={`${isExpanded ? 'md:w-64' : 'hover:md:w-64 md:w-15'} group bottom-0 flex-shrink-0 fixed md:static w-full py-1 md:px-3 md:py-6 justify-center md:justify-start flex flex-row md:flex-col gap-4 bg-gray-800 rounded-t-xl md:rounded-none text-white duration-300 ease-in-out`}>
 			
 			{/* desktop pin */}
 			<div className="hidden md:flex w-full">

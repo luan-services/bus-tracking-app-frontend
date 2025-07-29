@@ -134,9 +134,9 @@ const MapPanel: React.FC<MapPanelProps> = ({ liveData }) => {
     }, [liveData, createBusIcon]);
 
     return (
-        <div className="bg-white p-4 rounded-lg shadow-md h-full min-h-[500px]">
+        <div className="flex bg-white p-4 rounded-lg shadow-md h-full min-h-125 max-h-140 max-w-180">
             {/* container do mapa precisa sempre estar no DOM, pois o mapa leaftlet só funciona assim */}
-            <div ref={mapContainerRef} className="h-[calc(100%-40px)] w-full rounded-md"/>
+            <div ref={mapContainerRef} className="h-[calc(100%)] w-full rounded-md"/>
         </div>
     );
 };
