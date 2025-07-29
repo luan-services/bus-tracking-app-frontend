@@ -26,6 +26,7 @@ const MapPanel: React.FC<MapPanelProps> = ({ liveData }) => {
     const busMarkerRef = useRef<L.Marker | null>(null);
     const rawBusMarkerRef = useRef<L.CircleMarker | null>(null);
     const mapContainerRef = useRef<HTMLDivElement>(null);
+    const hasZoomedRef = useRef<boolean>(false); // <-- ref de flag para impedir o zoom de ocorrer à cada atualização
 
     // Função para criar o ícone customizado do ônibus
     const createBusIcon = () => {
@@ -67,6 +68,7 @@ const MapPanel: React.FC<MapPanelProps> = ({ liveData }) => {
             // Zera as referências para garantir que os marcadores sejam recriados na próxima viagem.
             busMarkerRef.current = null;
             rawBusMarkerRef.current = null;
+            hasZoomedRef.current = false; // <-- Redefine a flag de zoom para a próxima viagem
 
             // Encerra a execução aqui, deixando o mapa limpo.
             return;
@@ -118,12 +120,15 @@ const MapPanel: React.FC<MapPanelProps> = ({ liveData }) => {
         }
 
         // Ajusta o zoom e força a invalidação
-        if (liveData.routePath?.coordinates) {
+        if (liveData.routePath?.coordinates && !hasZoomedRef.current) {
             const routeBounds = L.geoJSON(liveData.routePath).getBounds();
             map.fitBounds(routeBounds.pad(0.1));
             setTimeout(() => {
                 map.invalidateSize(true);
             }, 100);
+
+            // Define a flag para true para não executar o zoom novamente.
+            hasZoomedRef.current = true;
         }
 
     }, [liveData, createBusIcon]);

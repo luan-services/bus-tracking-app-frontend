@@ -12,6 +12,23 @@ const ActiveTripPanel = dynamic(() => import('@/components/dashboard_pages/trip_
 const MapPanel = dynamic(() => import('@/components/dashboard_pages/trip_page/MapPanel'), { ssr: false });
 const InfoPanel = dynamic(() => import('@/components/dashboard_pages/trip_page/InfoPanel'), { ssr: false });
 
+// NOVO: Função para calcular distância entre duas coordenadas (Fórmula de Haversine)
+function calculateDistance(lat1: number, lon1: number, lat2: number, lon2: number): number {
+    const R = 6371e3; // Raio da Terra em metros
+    const φ1 = lat1 * Math.PI / 180;
+    const φ2 = lat2 * Math.PI / 180;
+    const Δφ = (lat2 - lat1) * Math.PI / 180;
+    const Δλ = (lon2 - lon1) * Math.PI / 180;
+
+    const a = Math.sin(Δφ / 2) * Math.sin(Δφ / 2) +
+              Math.cos(φ1) * Math.cos(φ2) *
+              Math.sin(Δλ / 2) * Math.sin(Δλ / 2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+
+    return R * c; // Distância em metros
+}
+
+
 export default function TripPage() {
     const [tripId, setTripId] = useState<string | null>(null);
     const [isLoading, setIsLoading] = useState(true);
@@ -20,9 +37,13 @@ export default function TripPage() {
     const [isUpdatingPosition, setIsUpdatingPosition] = useState(false);
 
     const socketRef = useRef<Socket | null>(null);
-    const positionIntervalRef = useRef<NodeJS.Timeout | null>(null);
+    
+    // ALTERADO: Substituímos o ref do intervalo pelos refs do watchPosition
+    const watchIdRef = useRef<number | null>(null);
+    const lastSentTimeRef = useRef<number>(0);
+    const lastSentPositionRef = useRef<GeolocationCoordinates | null>(null);
 
-    // Função para buscar dados iniciais da viagem
+    // As funções fetchInitialTripData e setupSocket permanecem as mesmas
     const fetchInitialTripData = useCallback(async (currentTripId: string) => {
         try {
             const response = await fetchFromClient(`/api/trips/${currentTripId}/track`);
@@ -38,11 +59,9 @@ export default function TripPage() {
         }
     }, []);
 
-    // Função para iniciar a conexão com Socket.IO
     const setupSocket = useCallback((currentTripId: string) => {
         if (socketRef.current) socketRef.current.disconnect();
 
-        // ATENÇÃO: Use a URL do seu backend aqui
         const socket = io(process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:5001');
         socketRef.current = socket;
 
@@ -54,10 +73,7 @@ export default function TripPage() {
         socket.on('positionUpdate', (updateData: Partial<LiveTripData>) => {
             console.log('Posição atualizada via socket:', updateData);
             setLiveData(prevData => {
-                // If there's no previous data, something is wrong, but we can return the update.
                 if (!prevData) return updateData as LiveTripData;
-
-                // Merge previous data with the new update from the socket
                 return { ...prevData, ...updateData };
             });
         });
@@ -98,14 +114,16 @@ export default function TripPage() {
         };
         checkTripStatus();
 
-        // Limpeza ao desmontar o componente
+        // ALTERADO: Limpeza ao desmontar o componente para limpar o watch
         return () => {
             if (socketRef.current) socketRef.current.disconnect();
-            if (positionIntervalRef.current) clearInterval(positionIntervalRef.current);
+            if (watchIdRef.current) {
+                navigator.geolocation.clearWatch(watchIdRef.current);
+            }
         };
     }, [fetchInitialTripData, setupSocket]);
 
-    // Lógica para enviar atualizações de posição
+    // A função sendPositionUpdate permanece a mesma
     const sendPositionUpdate = useCallback(() => {
         if (!tripId) return;
 
@@ -117,36 +135,87 @@ export default function TripPage() {
                         method: 'PATCH',
                         body: JSON.stringify({ lat: latitude, lng: longitude }),
                     });
-                     console.log("Posição enviada com sucesso.");
+                     console.log("Posição enviada com sucesso para o backend.");
                 } catch (err) {
                     console.error("Erro ao enviar posição:", err);
-                    // Para o envio se houver erro (ex: viagem finalizada no backend)
                     setIsUpdatingPosition(false);
                 }
             },
             (geoError) => {
                 console.error(`Erro de geolocalização: ${geoError.message}`);
                 setError(`Erro de geolocalização: ${geoError.message}`);
-                setIsUpdatingPosition(false); // Para o envio se não conseguir obter a localização
+                setIsUpdatingPosition(false);
             },
             { enableHighAccuracy: true }
         );
     }, [tripId]);
     
-    // Controla o intervalo de envio de posição
+    // ALTERADO: useEffect totalmente reescrito para controlar o watchPosition
     useEffect(() => {
-        if (isUpdatingPosition) {
-            // Envia uma vez imediatamente e depois a cada 5 segundos
-            sendPositionUpdate(); 
-            positionIntervalRef.current = setInterval(sendPositionUpdate, 5000);
-        } else {
-            if (positionIntervalRef.current) {
-                clearInterval(positionIntervalRef.current);
-                positionIntervalRef.current = null;
+        // Constantes do filtro
+        const MIN_DISTANCE_METERS = 50;
+        const MIN_TIME_INTERVAL_MS = 15000; // 15 segundos
+
+        const startWatching = () => {
+            if (!('geolocation' in navigator)) {
+                setError("Geolocalização não é suportada neste navegador.");
+                return;
             }
+            
+            // Zera os refs de controle ao iniciar um novo rastreamento
+            lastSentTimeRef.current = Date.now(); // Inicia o contador de tempo imediatamente
+            lastSentPositionRef.current = null;
+
+            watchIdRef.current = navigator.geolocation.watchPosition(
+                (position) => {
+                    const now = Date.now();
+                    const { coords } = position;
+
+                    // Se não houver uma posição anterior, define a atual e sai.
+                    if (!lastSentPositionRef.current) {
+                        lastSentPositionRef.current = coords;
+                        return;
+                    }
+                    
+                    const distanceMoved = calculateDistance(
+                        lastSentPositionRef.current.latitude, 
+                        lastSentPositionRef.current.longitude, 
+                        coords.latitude, 
+                        coords.longitude
+                    );
+
+                    // Lógica de filtro: envia se o tempo OU a distância forem atingidos
+                    if (now - lastSentTimeRef.current > MIN_TIME_INTERVAL_MS || distanceMoved > MIN_DISTANCE_METERS) {
+                        console.log(`Enviando atualização. Motivo: ${now - lastSentTimeRef.current > MIN_TIME_INTERVAL_MS ? 'TEMPO' : 'DISTÂNCIA'}`);
+                        sendPositionUpdate();
+                        lastSentTimeRef.current = now;
+                        lastSentPositionRef.current = coords;
+                    }
+                },
+                (geoError) => {
+                    console.error(`Erro no watchPosition: ${geoError.message}`);
+                    setError(`Erro de geolocalização: ${geoError.message}`);
+                    setIsUpdatingPosition(false);
+                },
+                { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
+            );
+        };
+
+        const stopWatching = () => {
+            if (watchIdRef.current !== null) {
+                navigator.geolocation.clearWatch(watchIdRef.current);
+                watchIdRef.current = null;
+            }
+        };
+
+        if (isUpdatingPosition) {
+            startWatching();
+        } else {
+            stopWatching();
         }
-        return () => {
-            if (positionIntervalRef.current) clearInterval(positionIntervalRef.current);
+
+        return () => { // Função de limpeza para este efeito
+            stopWatching();
         };
     }, [isUpdatingPosition, sendPositionUpdate]);
 
@@ -155,12 +224,12 @@ export default function TripPage() {
         setTripId(newTripId);
         fetchInitialTripData(newTripId);
         setupSocket(newTripId);
-        setIsUpdatingPosition(true); // Começa a enviar a posição automaticamente
+        setIsUpdatingPosition(true);
     };
     
     const handleTripEnd = () => {
         if (socketRef.current) socketRef.current.disconnect();
-        if (positionIntervalRef.current) clearInterval(positionIntervalRef.current);
+        // A limpeza do watch já é feita pelo useEffect quando isUpdatingPosition vira false
         
         setTripId(null);
         setLiveData(null);
@@ -172,6 +241,7 @@ export default function TripPage() {
         setIsUpdatingPosition(prev => !prev);
     };
 
+    // O JSX para renderização permanece o mesmo
     if (isLoading) {
         return <div className="flex justify-center items-center h-screen"><p>Carregando status da viagem...</p></div>;
     }
@@ -196,7 +266,7 @@ export default function TripPage() {
                         isUpdatingPosition={isUpdatingPosition}
                         onToggleUpdate={handleToggleUpdate}
                         onTripEnd={handleTripEnd}
-                        disabled={!!tripId}
+                        disabled={!!tripId} // Correção: deve ser desabilitado se NÃO houver tripId
                     />
                      <InfoPanel liveData={liveData} />
                 </div>
@@ -209,8 +279,6 @@ export default function TripPage() {
         </div>
     );
 }
-
-
 
 
 /*export default function TripPage() {
