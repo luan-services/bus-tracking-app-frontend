@@ -55,9 +55,10 @@ export function DashboardNav({ user }: { user: User }) {
 				
 				<div className="flex">
 					{/* setIsExpanded é uma prop criada só pra esse elemento, por causa do bug do elemento filho dar trigger no group-hover */}
-					<LogoutButton setIsExpanded={() => setIsExpanded(!isExpanded)} useConfirmScreen={true} activeText="" buttonColor="red" className={" hover:bg-gray-900 flex w-full p-2 rounded-md active:scale-95 transition cursor-pointer"}>
+					<LogoutButton onClickParent={(isExpanded) => isExpanded ? '' : setIsExpanded(!isExpanded)} useConfirmScreen={true} activeText="" buttonColor="red" className={" hover:bg-gray-900 flex w-full p-2 rounded-md active:scale-95 transition cursor-pointer"}>
 						<span className={` ${isExpanded ? 'opacity-100 max-w-full ml-3 delay-200' : "group-hover:max-w-full group-hover:ml-3 group-hover:opacity-100 group-hover:delay-200"} text-sm max-w-0 opacity-0 duration-300`}>Sair</span>
 					</LogoutButton>	
+
 				</div>
 			</nav>
 

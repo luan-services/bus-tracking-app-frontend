@@ -30,6 +30,7 @@ export type NotificationToastPropsState = {
 export type NotificationToastProps = {
 	message: string;
 	type: 'success' | 'error';
+	className?: string;
 	onClick: () => void; // Uma função que será chamada quando o usuário clicar para fechar.
 };
 

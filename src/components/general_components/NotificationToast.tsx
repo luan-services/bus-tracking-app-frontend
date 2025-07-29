@@ -3,17 +3,14 @@
 // importamos esse type que define quais propriedades o componente (funcao) vai receber. (e retornar)
 import { NotificationToastProps } from "@/types";
 
-export default function NotificationToast({ message, type, onClick }: NotificationToastProps) {
+export default function NotificationToast({ message, type, onClick, className }: NotificationToastProps) {
   // Define a cor de fundo com base no tipo da notificação.
-  const baseClasses = "p-4 pt-2 pr-2 rounded-xs flex items-start justify-between max-w-sm";
-  const typeClasses = type === 'error' 
-    ? 'bg-red-500 text-white' 
-    : 'bg-green-500 text-white';
+  const ClassName = className || "p-4 pt-2 pr-2 rounded-xs flex items-start justify-between max-w-sm";
+  const typeClasses = type === 'error'  ? 'bg-red-500 text-white' : 'bg-green-500 text-white';
 
   return (
-    // Usamos 'fixed' para que a notificação flutue sobre o conteúdo da página.
     // As classes de transição preparam o componente para animações suaves.
-    <div className={`${baseClasses} ${typeClasses}`}>
+    <div className={`${ClassName} ${typeClasses}`}>
       <span className="pt-2">{message}</span>
       <button  onClick={onClick} className="ml-1 rounded-full" aria-label="Fechar notificação">
         {/* Um ícone 'X' simples para fechar */}

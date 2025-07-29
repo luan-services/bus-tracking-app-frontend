@@ -10,17 +10,16 @@ import { ConfirmationModal } from "./ConfirmationModal";
 interface LogoutButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
 	children?: React.ReactNode,
 	useConfirmScreen?: boolean,
-	setIsExpanded?: () => void; // função unica pro botão de logout do dashboard, em outros lugares não faz nada
+	onClickParent?: (prop?: boolean) => void; // função unica pro botão de logout do dashboard, em outros lugares não faz nada
 	activeText?: string,
 	buttonColor?: string,
 }
 
 // export function LogoutButton({ children, className, useConfirmScreen = true }: LogoutButtonProps) << forma mais 'moderna' de fazer (ambas iguais)
-export const LogoutButton = ({ children, className, useConfirmScreen = true, activeText = "Saindo...", buttonColor = "white", setIsExpanded = () => ''}: LogoutButtonProps) => {	
+export const LogoutButton = ({ children, className, useConfirmScreen = true, activeText = "Saindo...", buttonColor = "white", onClickParent = (prop: boolean = true) => ''}: LogoutButtonProps) => {	
 	// estado para definir se o fetch está carregando ou está completo.
 	const [isLoading, setIsLoading] = useState(false);
 	const [isModalOpen, setIsModalOpen] = useState(false);
-
 
 	// router para redicionamento
 	const router = useRouter();
@@ -52,14 +51,14 @@ export const LogoutButton = ({ children, className, useConfirmScreen = true, act
 
 		// desativa o modal
 		setIsModalOpen(false)
-		// setIsExpanded é uma prop criada apenas para dashboard, por causa do bug do elemento filho dar trigger no group-hover
-		setIsExpanded();
+		// onClick é uma prop criada apenas para dashboard, por causa do bug do elemento filho dar trigger no group-hover
+		onClickParent();
 	};
 	
 	const handleClick = () => {
         if (useConfirmScreen) {
             setIsModalOpen(true);
-			setIsExpanded();
+			onClickParent();
         } else {
             handleLogout();
         }
@@ -73,10 +72,10 @@ export const LogoutButton = ({ children, className, useConfirmScreen = true, act
 		<>
 			<button onClick={() => handleClick()} className={ClassName} disabled={isLoading}>
 				<LogOut size={20} color={buttonColor}/>
-				{isLoading?  activeText : children}
+				{isLoading ?  (activeText ? activeText : children) : children}
 			</button>
 
-			<ConfirmationModal isOpen={isModalOpen} onConfirm={() => handleLogout()} onClose={() => {setIsModalOpen(false), setIsExpanded()}}></ConfirmationModal>
+			<ConfirmationModal isOpen={isModalOpen} onConfirm={() => handleLogout()} onClose={() => {setIsModalOpen(false), onClickParent()}}></ConfirmationModal>
 		</>
 	);
 }
