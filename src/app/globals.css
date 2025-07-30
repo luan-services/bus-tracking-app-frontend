@@ -5,3 +5,20 @@
     --font-roboto: var(--font-roboto);
     --color-azul-personalizado: #014005;
 }
+
+/* css pro botão de pin do mapa */
+.leaflet-control-custom {
+    background-color: white;
+    transition: background-color 0.2s;
+    border-radius: 4px;
+    width: 33.5px;
+    height: 33.5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.leaflet-control-custom:hover {
+    background-color: #f3f4f6;
+    cursor: pointer;
+}

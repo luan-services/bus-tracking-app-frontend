@@ -50,8 +50,7 @@ const StartTripPanel: React.FC<StartTripPanelProps> = ({ onTripStart, disabled }
                         method: 'POST',
                         body: JSON.stringify({
                             lineId: selectedLine,
-                            lat: latitude,
-                            lng: longitude,
+                            lng: -44.31804, lat: -23.00953
                         }),
                     });
 
