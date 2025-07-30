@@ -2,11 +2,14 @@
 
 import { LiveTripData } from '@/types/trip';
 
-interface InfoPanelProps {
+interface InfoPanelProps extends React.HTMLAttributes<HTMLDivElement> {
     liveData: LiveTripData | null;
 }
 
-const InfoPanel: React.FC<InfoPanelProps> = ({ liveData }) => {
+// os exports aqui são default pq os imports no page são dinâmicos, fica mais fácil assim
+
+// const InfoPanel: React.FC<InfoPanelProps> = ({ liveData })
+const InfoPanel = ({ liveData }: InfoPanelProps) => {
     const progressPercentage = liveData ? (liveData.distanceTraveled / liveData.totalRouteLength) * 100 : 0;
     const etaMap = new Map(liveData?.stopETAs.map(eta => [eta.stopName, eta.etaMinutes]));
 

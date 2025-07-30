@@ -26,7 +26,9 @@ export interface Line {
     routePath: RoutePath;
 }
 
-// Tipagem para o status da viagem retornado pela API
+// Tipagem para o status da viagem retornado pela API (backend) que retorna { message: "Usuário possui uma trip ativa", trip_id: existingTrip.id } 
+// ou { message: "Usuário não possui trip ativa" }
+// At @/app/dashboard/trip/page.tsx
 export interface TripStatus {
     message: string;
     trip_id?: string;
