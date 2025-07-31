@@ -48,12 +48,14 @@ export default function TripPage() {
 
 
     // useRef são states que se mantém a cada renderização (os valor não é resetado), mas que mudar seus valores não causam uma nova renderização
-    // socketRef é necessário pois é uma 'caixa' onde vão ficar armazenados os dados da conexão socket (que seriam perdidos a cada renderização, se
-    // estivessem em um useState)
-    const socketRef = useRef<Socket | null>(null);
-    
     // nenhum dos valores abaixo vão ser usados no DOM, não é necessário causar re-renderizações quando eles mudam (mas é ncesário que se mantenham
     // a cada renderização), por isso são useRef ao invés de useStates
+    // para acessar os valores (e guardar) do useRef você usa .current depois do ref, isso é o padrão do react pois o objeto useRef() nunca 
+    // muda, o que muda é o valor dentro dele (.current) 
+
+    // socketRef é necessário pois é uma 'caixa' onde vão ficar armazenados os dados da conexão socket 
+    const socketRef = useRef<Socket | null>(null);
+
     const watchIdRef = useRef<number | null>(null); // guarda o ID do processo 'watchPosition', quando a função de monitorar posição é chamada 
     // em algum lugar, ela vai gerar um ID que vai ser guardado aqui
     const lastSentTimeRef = useRef<number>(0); // guarda o timestamp do último envio de posição, para enviar nova posição caso x tempo tenha passado e nenhuma tenha sido enviada
@@ -136,7 +138,7 @@ export default function TripPage() {
 
 
 
-    // efeito principal para verificar se o usuário tem uma viagem ativa ao carregar a página (roda só uma vez)
+    // 1 - efeito principal para verificar se o usuário tem uma viagem ativa ao carregar a página (roda só uma vez)
     useEffect(() => {
 
         // essa função é definida dentro desse useEffect por dois motivos: 1 - ela única e só precisa ser rodada uma vez, quando a página carrega
@@ -177,7 +179,7 @@ export default function TripPage() {
                 navigator.geolocation.clearWatch(watchIdRef.current); // interrompe o monitoramento para poupar bateria, usando o ID do watch
                 // salvo na ref watchIdRef
 
-                // watchIdRef.current = null; <- boa pratica remover o ref do ID
+                watchIdRef.current = null; // <- boa pratica remover o ref do ID
             }
         };
 
@@ -188,10 +190,27 @@ export default function TripPage() {
     // // nesse caso especifico, as funções usam o state useCallback com depêndencias vazias [], ou seja, nunca mudam, mesmo assim é uma boa 
     // prática colocá-las aqui
 
-    // A função sendPositionUpdate permanece a mesma
-    const sendPositionUpdate = useCallback(() => {
+
+    // função sendPositionUpdate para enviar atualização de posição pro backend, ela faz useCallback com dependência em tripId, para só ser
+    // recriada caso o tripId mude (caso uma viagem seja encerrada ou iniciada)  
+    const sendPositionUpdate = useCallback( async (latitude: number, longitude: number) => {
+
+        // segurança para caso essa função seja chamada sem um tripId
         if (!tripId) return;
 
+        try {
+            await fetchFromClient(`/api/trips/${tripId}/position`, {
+                method: 'PATCH',
+                body: JSON.stringify({ lat: latitude, lng: longitude }),
+            });
+                console.log("Posição enviada com sucesso para o backend.");
+        } catch (err) {
+            console.error("Erro ao enviar posição:", err);
+            setIsUpdatingPosition(false);
+        }
+
+
+        /* lógica legado
         navigator.geolocation.getCurrentPosition(
             async (position) => {
                 const { latitude, longitude } = position.coords;
@@ -212,101 +231,127 @@ export default function TripPage() {
                 setIsUpdatingPosition(false);
             },
             { enableHighAccuracy: true }
-        );
-    }, [tripId]);
-    
-    // ALTERADO: useEffect totalmente reescrito para controlar o watchPosition
-    useEffect(() => {
-        // Constantes do filtro
-        const MIN_DISTANCE_METERS = 50;
-        const MIN_TIME_INTERVAL_MS = 15000; // 15 segundos
+        ); */
 
+    }, [tripId]); // a dependência é o tripId, sempre que esse valor muda, a função é descartada e reconstruida com o valor atualizado.
+    
+
+    // useEffect para iniciar e parar o watchPosition
+    useEffect(() => {
+        
+        const MIN_DISTANCE_METERS = 30; // const para definir a distância mínima para tentar um updatePosition
+        const MIN_TIME_INTERVAL_MS = 10000; // (10s) const para definir o tempo minímo para tentar um updatePosition
+
+        // função startWatching que só é chamada se a dependência isUpdatingPosition for true
         const startWatching = () => {
+
+            // caso o navegador não possua geolocation
             if (!('geolocation' in navigator)) {
                 setError("Geolocalização não é suportada neste navegador.");
                 return;
             }
             
-            // Zera os refs de controle ao iniciar um novo rastreamento
-            lastSentTimeRef.current = Date.now(); // Inicia o contador de tempo imediatamente
-            lastSentPositionRef.current = null;
+            // zera os refs de controle de tempo e posição atual antes de iniciar.
 
+            lastSentTimeRef.current = Date.now(); // inicia o contador de tempo imediatamente
+            lastSentPositionRef.current = null; 
+
+            // a função navigator.geolocation.watchPosition vai rodar o tempo todo checando a posição do gps, ela só é desativada quando 
+            // 'stopWatching' é chamada (isso ocorre sempre que esse componente é desmontado (função de limpeza como preucaução) e também quando 
+            // isUpdatingPosition se torna false)  
             watchIdRef.current = navigator.geolocation.watchPosition(
                 (position) => {
                     const now = Date.now();
                     const { coords } = position;
+                    const { latitude, longitude } = position.coords // adicionado
 
-                    // Se não houver uma posição anterior, define a atual e sai.
+                    // se não houver uma posição anterior, define a atual e sai.
                     if (!lastSentPositionRef.current) {
                         lastSentPositionRef.current = coords;
                         return;
                     }
                     
-                    const distanceMoved = calculateDistance(
-                        lastSentPositionRef.current.latitude, 
-                        lastSentPositionRef.current.longitude, 
-                        coords.latitude, 
-                        coords.longitude
-                    );
+                    // calcula a diferença de distância entre a última posição e a atual usando a fórmula haversine
+                    const distanceMoved = calculateDistance(lastSentPositionRef.current.latitude, lastSentPositionRef.current.longitude, coords.latitude, coords.longitude);
 
-                    // Lógica de filtro: envia se o tempo OU a distância forem atingidos
+                    // envia um pedido de atualização de posição pro back se o tempo ou a distância forem atingidos
                     if (now - lastSentTimeRef.current > MIN_TIME_INTERVAL_MS || distanceMoved > MIN_DISTANCE_METERS) {
                         console.log(`Enviando atualização. Motivo: ${now - lastSentTimeRef.current > MIN_TIME_INTERVAL_MS ? 'TEMPO' : 'DISTÂNCIA'}`);
-                        sendPositionUpdate();
-                        lastSentTimeRef.current = now;
-                        lastSentPositionRef.current = coords;
+                        sendPositionUpdate(latitude, longitude); // legado sendPositionUpdate();
+                        lastSentTimeRef.current = now; // define o tempo atual como última atualização enviada
+                        lastSentPositionRef.current = coords; // muda a última coordenada enviada
                     }
                 },
-                (geoError) => {
+                (geoError) => { // caso ocorra algum erro do geolocation
                     console.error(`Erro no watchPosition: ${geoError.message}`);
-                    setError(`Erro de geolocalização: ${geoError.message}`);
-                    setIsUpdatingPosition(false);
+                    setError(`Erro de geolocalização: ${geoError.message}`); // seta a menagem do erro.
+                    setIsUpdatingPosition(false); // muda isUpdatingPosition pra false
                 },
                 { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
             );
         };
 
+        // função básica para desativar o monitoramento de posição
         const stopWatching = () => {
-            if (watchIdRef.current !== null) {
-                navigator.geolocation.clearWatch(watchIdRef.current);
-                watchIdRef.current = null;
+            if (watchIdRef.current !== null) { // se houver um monitoramento ativo
+                navigator.geolocation.clearWatch(watchIdRef.current); // desativa
+                watchIdRef.current = null; // muda a ref de monitoramento ativo para null
             }
         };
 
+        // quando isUpdatingPosition passa a ser true, começa o monitoramento.
         if (isUpdatingPosition) {
             startWatching();
-        } else {
-            stopWatching();
+        } else { // esse else é redundante, pois sempre que o componente é desmontado (estado isUpdatingPosition muda pra false/true) ele já 
+        // chama stopWatching, mas é boa mantê-lo
+            stopWatching(); 
         }
 
         return () => { // Função de limpeza para este efeito
             stopWatching();
         };
-    }, [isUpdatingPosition, sendPositionUpdate]);
+    }, [isUpdatingPosition, sendPositionUpdate]); // dependências do useEffect, sempre que isUpdatingPosition muda de true/false, reseta o 
+    // useState com os dados mais novos, sempre que sendPositionUpdate muda (só ocorre qnd o tripId muda) também faz o mesmo.
 
-    // handleTripStart é uma função passada para a view StartTripPanel.tsx, ao usar o comando fetch de iniciar trip lá, eles também chamam 
-    // handleTripStart e passando o ID da trip como parâmetro  
+
+    // handleTripStart é uma função passada para a view StartTripPanel.tsx, ao usar o comando fetch de iniciar trip lá, ele também chama 
+    // handleTripStart passando o ID da trip iniciada como parâmetro  
+    // essa função é um distribuidor de dados, ela espera o o filho chamar ela (avisando que uma trip foi iniciada) passando o tripId e trata
+    // o id enviado, setando ele no useState tripId e movimentando todo o código atual
     const handleTripStart = (newTripId: string) => {
-        setTripId(newTripId);
-        fetchInitialTripData(newTripId);
-        setupSocket(newTripId);
-        setIsUpdatingPosition(true);
+        setTripId(newTripId); // seta a trip passada pelo filho, isso recria a função sendPositionUpdate, o que também causa uma mudança no
+        // useEffect que inicia o monitoramento de posição, fazendo ele remontar. (porém ele ainda não faz nada, apenas pega os dados mais recentes
+        // da função, pois isUpdatingPosition é false)
+        fetchInitialTripData(newTripId); // chama a função fetchInitialTripData que por sua vez atualiza o useState LiveData p/ receber os dados
+        // iniciais da viagem  
+        setupSocket(newTripId); // chama a função setup socket, que entra na sala do tripId específicado, para ouvir os sockets emitidos
+        setIsUpdatingPosition(true); // aqui finalmente muda setIsUpdatingPosition para true, fazendo o useEffect que inicia o monitoramento de 
+        // posição remontar mais uma vez, só que agora que é true, ele vai começar a monitorar a posição e atualizar os dados da viagem fazendo
+        // chamadas ao bd períodicas
     };
     
+    
+    // handleTripend é uma função passada para a view ActiveTripPanel.tsx, ao usar o comando fetch de terminar trip com sucesso lá, ele 
+    // também chama handleTripEnd
+    // essa função também é um distribuidor de dados, porém ela seta todos os dados para null, reiniciando o sistema, como se não houvesse trip
+    // ativa
     const handleTripEnd = () => {
-        if (socketRef.current) socketRef.current.disconnect();
-        // A limpeza do watch já é feita pelo useEffect quando isUpdatingPosition vira false
-        
-        setTripId(null);
-        setLiveData(null);
-        setIsUpdatingPosition(false);
-        setError(null);
+        if (socketRef.current) socketRef.current.disconnect(); // desconecta do socket atual
+        setTripId(null); // remove tripId
+        setLiveData(null); // remove dados da viagem
+        setIsUpdatingPosition(false); // muda isUpdatingPosition para false
+        // A limpeza do watch já é feita pelo useEffect quando isUpdatingPosition vira false, não precisa ser feita aqui
+        setError(null); // desfaz todos os erros caso existam
     };
 
+    // handleToggleUpdate é uma função passada para a view ActiveTripPanel.tsx, ao clicar no botão de pausar/continuar viagem lá, ele dá 
+    // toggle no status isUpdatingPosition aqui (de true para false ou de false para true)
     const handleToggleUpdate = () => {
         setIsUpdatingPosition(prev => !prev);
     };
 
+
+    
     // O JSX para renderização permanece o mesmo
     if (isLoading) {
         return <div className="flex justify-center items-center h-screen"><p>Carregando status da viagem...</p></div>;
