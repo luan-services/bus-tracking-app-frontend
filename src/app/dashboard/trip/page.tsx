@@ -260,11 +260,11 @@ export default function TripPage() {
             // 'stopWatching' é chamada (isso ocorre sempre que esse componente é desmontado (função de limpeza como preucaução) e também quando 
             // isUpdatingPosition se torna false)  
             watchIdRef.current = navigator.geolocation.watchPosition(
+                
                 (position) => {
                     const now = Date.now();
                     const { coords } = position;
                     const { latitude, longitude } = position.coords // adicionado
-
                     // se não houver uma posição anterior, define a atual e sai.
                     if (!lastSentPositionRef.current) {
                         lastSentPositionRef.current = coords;
@@ -352,13 +352,22 @@ export default function TripPage() {
 
 
     
-    // O JSX para renderização permanece o mesmo
     if (isLoading) {
-        return <div className="flex justify-center items-center h-screen"><p>Carregando status da viagem...</p></div>;
+        return (
+            <div className="flex w-full h-full items-center justify-center animate-pulse">
+                <p className="flex text-xl text-gray-500 animate-pulse">Carregando...</p>
+            </div>
+        )
+            
     }
     
+    // se um error existe, re-renderiza o componente e para nesse if
     if (error) {
-         return <div className="flex justify-center items-center h-screen"><p className="text-red-500">{error}</p></div>;
+        return (
+            <div className="flex w-full h-full items-center justify-center animate-pulse">
+                <p className="flex text-xl text-red-500 animate-pulse">{error}</p>
+            </div>
+        )
     }
 
     return (
