@@ -37,7 +37,7 @@ const ActiveTripPanel: React.FC<ActiveTripPanelProps> = ({ tripId, isUpdatingPos
     };
 
     return (
-        <div className={`flex flex-col w-full bg-white p-4 rounded-lg shadow-md ${!disabled ? 'opacity-50 cursor-not-allowed' : ''}`}>
+        <div className={`flex flex-col w-full lg:max-w-[calc(50%-4px)] h-fit bg-white p-4 rounded-lg shadow-md ${!disabled ? 'opacity-50 cursor-not-allowed' : ''}`}>
             <h2 className="text-xl font-bold mb-4">Viagem em Andamento</h2>
             <div className="space-y-4">
                 <p className="text-sm text-gray-600">ID da Viagem: <span className="font-mono bg-gray-100 p-1 rounded">{tripId}</span></p>

@@ -165,7 +165,7 @@ const MapPanel: React.FC<MapPanelProps> = ({ liveData }) => {
     }, [liveData, createBusIcon, isFollowing]);
 
     return (
-        <div className="flex w-full bg-white md:p-4 md:rounded-lg md:shadow-md h-full min-h-125 max-h-140 max-w-180">
+        <div className="flex w-full bg-white md:p-4 md:rounded-lg md:shadow-md h-[calc(60vh)] md:h-140 max-w-208">
             <div ref={mapContainerRef} className="h-[calc(100%)] w-full md:rounded-md"/>
         </div>
     );

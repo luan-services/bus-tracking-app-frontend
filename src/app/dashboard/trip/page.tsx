@@ -348,14 +348,12 @@ export default function TripPage() {
     return (
         <div className="p-2 grid grid-cols-1 md:grid-cols-3 max-w-320 gap-4">
                 {/* Coluna do Mapa */}            
-                <div className="grid grid-rows-2 md:col-span-2 space-y-4">
-
-                    <div className='row-span-1 flex justify-center'>
-                        <MapPanel liveData={liveData} />
-                    </div>
+                <div className="flex flex-col md:col-span-2 gap-4">
+                    
+                    <MapPanel liveData={liveData}/>
                    
-                   <div className='row-span-2 space-y-4'>
-                        <StartTripPanel onTripStart={handleTripStart} disabled={!!tripId} />
+                   <div className="flex flex-wrap md:flex-row gap-2">
+                        <StartTripPanel onTripStart={handleTripStart} disabled={tripId ? true : false}/>
                         <ActiveTripPanel 
                             tripId={tripId || ''}
                             isUpdatingPosition={isUpdatingPosition}
@@ -364,7 +362,8 @@ export default function TripPage() {
                             disabled={!!tripId} // Correção: deve ser desabilitado se NÃO houver tripId
                         />
                    </div>
-                    
+
+                
                 </div>
 
  {/* Coluna de Controle e Informações */}
