@@ -80,24 +80,19 @@ const StartTripPanel: React.FC<StartTripPanelProps> = ({ onTripStart, disabled }
     };
 
     return (
-        <div className={`flex flex-col w-full lg:max-w-[calc(50%-4px)] bg-white border-1 border-gray-200 p-4 rounded-lg shadow-md ${disabled ? 'opacity-50 cursor-not-allowed' : ''}`}>
+        <div className={`flex flex-col w-full lg:max-w-[calc(50%-4px)] bg-white border-1 border-gray-200 gap-2 p-4 rounded-lg shadow-md ${disabled ? 'opacity-50 cursor-not-allowed' : ''}`}>
             <h2 className="text-lg md:text-xl font-bold">Iniciar Nova Viagem</h2>
-                <div className="flex flex-col py-2">
-                    <label htmlFor="line-select" className="text-sm font-medium text-gray-500">
-                        Selecione a linha:
-                    </label>
-                    <GenericDropdown 
-                        options={lines.map((line) => ({_id: line._id, optionText: `${line.lineNumber} - ${line.name}`}))} 
-                        value={selectedLine} 
-                        onChange={(e) => setSelectedLine(e.target.value)} 
-                        placeholder={lines.length === 0 ? "Carregando linhas..." : "Selecione uma linha"}
-                        disabled={disabled || lines.length === 0}
-                    />
-                </div>
-                <GenericButton onClick={handleStartTrip} disabled={disabled || isLoading || !selectedLine} className="w-full disabled:cursor-not-allowed">
-                    {isLoading ? 'Iniciando...' : 'Iniciar Viagem'}
-                </GenericButton>
-                <div className="flex items-center text-red-500 text-sm min-h-13">{error ? error : ""}</div>
+            <div className="flex flex-col py-2">
+                <GenericDropdown options={lines.map((line) => ({_id: line._id, optionText: `${line.lineNumber} - ${line.name}`}))} 
+                    value={selectedLine} onChange={(id: string) => setSelectedLine(id)} 
+                    placeholder={lines.length === 0 ? "Carregando linhas..." : "Selecione uma linha"}
+                    disabled={disabled || lines.length === 0}
+                />
+            </div>
+            <GenericButton onClick={handleStartTrip} disabled={disabled || isLoading || !selectedLine} className="w-full disabled:cursor-not-allowed">
+                {isLoading ? 'Iniciando...' : 'Iniciar Viagem'}
+            </GenericButton>
+            <div className="flex items-center text-red-500 text-sm min-h-13">{error ? error : ""}</div>
         </div>
     );
 };

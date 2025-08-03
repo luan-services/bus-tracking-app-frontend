@@ -49,6 +49,7 @@ const MapPanel: React.FC<MapPanelProps> = ({ liveData }) => {
     useEffect(() => {
         if (mapContainerRef.current && !mapRef.current) {
             const map = L.map(mapContainerRef.current, {scrollWheelZoom: false}).setView([-23.006, -44.318], 13);
+
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                 attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
             }).addTo(map);
@@ -165,7 +166,7 @@ const MapPanel: React.FC<MapPanelProps> = ({ liveData }) => {
     }, [liveData, createBusIcon, isFollowing]);
 
     return (
-        <div className="flex w-full bg-white md:p-4 md:rounded-lg md:shadow-md h-[calc(60vh)] md:h-140 max-w-208">
+        <div className="flex w-full bg-white md:p-4 md:rounded-lg md:shadow-md h-[calc(60vh)] md:h-140">
             <div ref={mapContainerRef} className="h-[calc(100%)] w-full md:rounded-md"/>
         </div>
     );
