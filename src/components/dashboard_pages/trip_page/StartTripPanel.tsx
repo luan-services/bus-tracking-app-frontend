@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { fetchFromClient } from '@/lib/api-client';
 import { Line } from '@/types/trip';
+import { GenericButton } from '@/components/general_components/GenericButton';
 
 interface StartTripPanelProps {
     onTripStart: (tripId: string) => void;
@@ -77,7 +78,7 @@ const StartTripPanel: React.FC<StartTripPanelProps> = ({ onTripStart, disabled }
     };
 
     return (
-        <div className={`bg-white p-4 rounded-lg shadow-md ${disabled ? 'opacity-50 cursor-not-allowed' : ''}`}>
+        <div className={`flex flex-col w-full bg-white p-4 rounded-lg shadow-md ${disabled ? 'opacity-50 cursor-not-allowed' : ''}`}>
             <h2 className="text-xl font-bold mb-4">Iniciar Nova Viagem</h2>
             <div className="space-y-4">
                 <div>
@@ -89,7 +90,7 @@ const StartTripPanel: React.FC<StartTripPanelProps> = ({ onTripStart, disabled }
                         value={selectedLine}
                         onChange={(e) => setSelectedLine(e.target.value)}
                         disabled={disabled || lines.length === 0}
-                        className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
+                        className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md disabled:cursor-not-allowed"
                     >
                         {lines.length > 0 ? (
                             lines.map((line) => (
@@ -102,13 +103,9 @@ const StartTripPanel: React.FC<StartTripPanelProps> = ({ onTripStart, disabled }
                         )}
                     </select>
                 </div>
-                <button
-                    onClick={handleStartTrip}
-                    disabled={disabled || isLoading || !selectedLine}
-                    className="w-full bg-green-600 text-white font-bold py-2 px-4 rounded-md hover:bg-green-700 transition-colors disabled:bg-gray-400"
-                >
+                <GenericButton onClick={handleStartTrip} disabled={disabled || isLoading || !selectedLine} className="w-full disabled:cursor-not-allowed">
                     {isLoading ? 'Iniciando...' : 'Iniciar Viagem'}
-                </button>
+                </GenericButton>
                 <div className="flex items-center text-red-500 text-sm min-h-13">{error ? error : ""}</div>
             </div>
         </div>

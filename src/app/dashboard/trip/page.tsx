@@ -209,30 +209,6 @@ export default function TripPage() {
             setIsUpdatingPosition(false);
         }
 
-
-        /* lógica legado
-        navigator.geolocation.getCurrentPosition(
-            async (position) => {
-                const { latitude, longitude } = position.coords;
-                try {
-                    await fetchFromClient(`/api/trips/${tripId}/position`, {
-                        method: 'PATCH',
-                        body: JSON.stringify({ lat: latitude, lng: longitude }),
-                    });
-                     console.log("Posição enviada com sucesso para o backend.");
-                } catch (err) {
-                    console.error("Erro ao enviar posição:", err);
-                    setIsUpdatingPosition(false);
-                }
-            },
-            (geoError) => {
-                console.error(`Erro de geolocalização: ${geoError.message}`);
-                setError(`Erro de geolocalização: ${geoError.message}`);
-                setIsUpdatingPosition(false);
-            },
-            { enableHighAccuracy: true }
-        ); */
-
     }, [tripId]); // a dependência é o tripId, sempre que esse valor muda, a função é descartada e reconstruida com o valor atualizado.
     
 
@@ -358,7 +334,6 @@ export default function TripPage() {
                 <p className="flex text-xl text-gray-500 animate-pulse">Carregando...</p>
             </div>
         )
-            
     }
     
     // se um error existe, re-renderiza o componente e para nesse if
@@ -371,31 +346,36 @@ export default function TripPage() {
     }
 
     return (
-        <div className="p-4 md:p-6 lg:p-8 space-y-6">
-            <header className="mb-6">
-                <h1 className="text-3xl font-bold text-gray-900">Gerenciamento de Viagem</h1>
-                <p className="text-gray-600">Inicie, gerencie e finalize suas viagens.</p>
-            </header>
+        <div className="p-2 grid grid-cols-1 md:grid-cols-3 max-w-320 gap-4">
+                {/* Coluna do Mapa */}            
+                <div className="grid grid-rows-2 md:col-span-2 space-y-4">
 
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                {/* Coluna de Controle e Informações */}
-                <div className="lg:col-span-1 space-y-6">
-                    <StartTripPanel onTripStart={handleTripStart} disabled={!!tripId} />
-                    <ActiveTripPanel 
-                        tripId={tripId || ''}
-                        isUpdatingPosition={isUpdatingPosition}
-                        onToggleUpdate={handleToggleUpdate}
-                        onTripEnd={handleTripEnd}
-                        disabled={!!tripId} // Correção: deve ser desabilitado se NÃO houver tripId
-                    />
-                     <InfoPanel liveData={liveData} />
+                    <div className='row-span-1 flex justify-center'>
+                        <MapPanel liveData={liveData} />
+                    </div>
+                   
+                   <div className='row-span-2 space-y-4'>
+                        <StartTripPanel onTripStart={handleTripStart} disabled={!!tripId} />
+                        <ActiveTripPanel 
+                            tripId={tripId || ''}
+                            isUpdatingPosition={isUpdatingPosition}
+                            onToggleUpdate={handleToggleUpdate}
+                            onTripEnd={handleTripEnd}
+                            disabled={!!tripId} // Correção: deve ser desabilitado se NÃO houver tripId
+                        />
+                   </div>
+                    
                 </div>
 
-                {/* Coluna do Mapa */}
-                <div className="lg:col-span-2">
-                    <MapPanel liveData={liveData} />
+ {/* Coluna de Controle e Informações */}
+                <div className="md:col-span-1">
+
+                    <InfoPanel liveData={liveData} />
                 </div>
-            </div>
+
+
+
+                
         </div>
     );
 }

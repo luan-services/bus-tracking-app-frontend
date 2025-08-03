@@ -9,7 +9,6 @@
 /* css pro botão de pin do mapa */
 .leaflet-control-custom {
     background-color: white;
-    transition: background-color 0.2s;
     border-radius: 4px;
     width: 33.5px;
     height: 33.5px;
@@ -19,6 +18,6 @@
 }
 
 .leaflet-control-custom:hover {
-    background-color: #f3f4f6;
+    background-color: #f3f4f6 !important;
     cursor: pointer;
 }
