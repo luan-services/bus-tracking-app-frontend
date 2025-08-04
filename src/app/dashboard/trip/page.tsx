@@ -352,7 +352,7 @@ export default function TripPage() {
                     
                     <MapPanel liveData={liveData}/>
                    
-                   <div className="flex flex-wrap md:flex-row gap-2 w-full">
+                   <div className="flex flex-wrap md:flex-row gap-4 w-full">
                         <StartTripPanel onTripStart={handleTripStart} disabled={tripId ? true : false}/>
                         <ActiveTripPanel 
                             tripId={tripId || ''}
@@ -366,15 +366,10 @@ export default function TripPage() {
                 
                 </div>
 
- {/* Coluna de Controle e Informações */}
+                {/* Coluna de Controle e Informações */}
                 <div className="md:col-span-1">
-
                     <InfoPanel liveData={liveData} />
                 </div>
-
-
-
-                
         </div>
     );
 }

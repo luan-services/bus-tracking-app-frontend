@@ -74,23 +74,16 @@ export const GenericDropdown = ({ options = [], value = null, onChange, placehol
 				<ChevronDown className="text-gray-500" size={20} strokeWidth={2.5} />
 			</button>
 
-			{isOpen && (
+			{isOpen && 
 				<div className="absolute w-full max-h-60 overflow-auto rounded-b-xs p-2 border-1 border-t-0 bg-white border-blue-500 text-sm shadow-lg z-10 focus:outline-none">
-					{options.length > 0 ? (
+					{options.length > 0 ? 
 						options.map((option) => (
-						<div
-							key={option._id}
-							onClick={() => handleOptionClick(option)}
-							className=" transition-colors cursor-pointer rounded-md relative py-2 px-2 text-gray-700 hover:bg-indigo-100"
-						>
-							{option ? option.optionText : ''}
-						</div>
-						))
-					) : (
-						<div className="py-2 px-4 text-gray-500">Nenhuma opção disponível</div>
-					)}
+							<div key={option._id} onClick={() => handleOptionClick(option)} className=" transition-colors cursor-pointer rounded-md relative py-2 px-2 text-gray-700 hover:bg-indigo-100">
+								{option ? option.optionText : ''}
+							</div>
+						)) : <div className="py-2 px-4 text-gray-500">Nenhuma opção disponível</div>
+					}
 				</div>
-			)
 			}
 		</div>
 	);

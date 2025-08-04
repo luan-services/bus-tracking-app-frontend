@@ -164,24 +164,26 @@ export default function LoginForm() {
 				router.push('/dashboard/profile');
 			}, 500); // 1 segundo
 
-		} catch (err: any) { 
-
-			let error_message:string = ''
-				
-			// tratando as possíveis mensagens de erro enviadas pelo bd (foram definidas lá), não é necessário tratar mais nada além disso, 
-			// pois só faltam as regras do joi, e o form trata elas e também só envia o submit se respeitá-las, o único jeito de chegar aqui 
-			// com credenciais invalidas para o joi é editando o html do form ou enviando request por fora (já não é problema do front, ele não tem que tratar)
-			if (err.message == 'email or password not valid') {
-				error_message = 'Erro: Email ou senha inválidos.'
-			}
-			else if (err.message == 'Failed to fetch')  {
-				error_message = 'Erro: Falha ao enviar, o servidor pode estar offline.'
-			}
-			else {
-				error_message = err.message
+		} catch (err) { 
+			
+			let error_message:string = 'Um erro desconhecido ocorreu.'
+			
+			// se for um erro do tipo Error, ele foi jogado pelo backend após tratar a resposta, procura tratar a mensagem de error aqui dentro
+			if (err instanceof Error) {
+				// tratando as possíveis mensagens de erro enviadas pelo bd (foram definidas lá), não é necessário tratar mais nada além disso, 
+				if (err.message == 'Email or password not valid') {
+					error_message = 'Erro: Email ou senha inválidos.'
+				}
+				else if (err.message == 'Failed to fetch')  {
+					error_message = 'Erro: Falha ao enviar, o servidor pode estar offline.'
+				}
+				else { // aqui o backend jogou um erro diferente que pode ou não possuir message, se não possuir vai ser ('Credenciais inválidas')
+					error_message = err.message
+				}
 			}
 			
-			setNotification({ message: error_message, type: 'error' }); // muda o estado que tem as propriedades do toast, renderizando ele na tela pq deixa de ser null
+			// se não for um erro do tipo Error, só coloca a mensagem padrão
+			setNotification({message: error_message, type: 'error' }); // muda o estado que tem as propriedades do toast, renderizando ele na tela pq deixa de ser null
 			setIsLoading(false)
 		} 
 	};
@@ -199,7 +201,7 @@ export default function LoginForm() {
 	return (
 		<> 
 
-		<form onSubmit={handleSubmit} noValidate className="p-8 flex flex-col items-center gap-4 bg-white sm:border-1 border-gray-200 sm:rounded-lg sm:shadow-md w-full max-w-96">
+		<form onSubmit={handleSubmit} noValidate className="p-8 flex flex-col items-center gap-4 bg-white sm:border-1 border-gray-300 sm:rounded-lg sm:shadow-md w-full max-w-96">
 
 				{/* Usamos um Fragment (<>) para agrupar o formulário e a notificação */}
 			{/* NOVO: Renderiza a notificação condicionalmente. */}

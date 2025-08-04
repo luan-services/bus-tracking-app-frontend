@@ -4,14 +4,15 @@ import React from 'react';
 // lembrando que interface só define o que o objeto pode receber
 interface GenericButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
     children?: React.ReactNode, // props que define os children do objeto
-    addClass?: string
+    colors?: string
 }
 
 // ButtonProps foram as props que definimos, como não colocamos nada dentro da interface, garante apenas as props básicas do elemento button
 // ...props são as props onCLick, type, etc passadas
-export const GenericButton = ({children, className, ...props}: GenericButtonProps) => {
+export const GenericButton = ({children, className, colors = '', ...props}: GenericButtonProps) => {
     // define as classes + classes extras vindas do pai
-    const ClassName = `${className} flex justify-center bg-green-700 text-white p-2 rounded-lg cursor-pointer hover:bg-green-800 disabled:bg-green-500 transition active:scale-95`;
+    const colorsClasses = colors || "bg-green-700 hover:bg-green-800"
+    const ClassName = `${className} ${colorsClasses} self-center flex justify-center items-center text-sm text-white p-2 rounded-lg cursor-pointer transition active:scale-95 disabled:scale-100`;
 
     return (
         // adiciona className e as outras props que não foram nomeadas (type, submit, etc)

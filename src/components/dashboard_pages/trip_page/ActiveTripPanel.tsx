@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { fetchFromClient } from '@/lib/api-client';
+import { GenericButton } from '@/components/general_components/GenericButton';
 
 interface ActiveTripPanelProps {
     tripId: string;
@@ -37,32 +38,22 @@ const ActiveTripPanel: React.FC<ActiveTripPanelProps> = ({ tripId, isUpdatingPos
     };
 
     return (
-        <div className={`flex flex-col w-full lg:max-w-[calc(50%-4px)] h-fit bg-white p-4 rounded-lg shadow-md ${!disabled ? 'opacity-50 cursor-not-allowed' : ''}`}>
-            <h2 className="text-xl font-bold mb-4">Viagem em Andamento</h2>
-            <div className="space-y-4">
-                <p className="text-sm text-gray-600">ID da Viagem: <span className="font-mono bg-gray-100 p-1 rounded">{tripId}</span></p>
-                <div className="flex space-x-4">
-                    <button
-                        onClick={onToggleUpdate}
-                        disabled={!disabled}
-                        className={`w-full font-bold py-2 px-4 rounded-md transition-colors ${
-                            isUpdatingPosition 
-                                ? 'bg-yellow-500 text-white hover:bg-yellow-600' 
-                                : 'bg-blue-600 text-white hover:bg-blue-700'
-                        }`}
-                    >
-                        {isUpdatingPosition ? 'Pausar Envio' : 'Continuar Viagem'}
-                    </button>
-                    <button
-                        onClick={handleEndTrip}
-                        disabled={!disabled || isLoading}
-                        className="w-full bg-red-600 text-white font-bold py-2 px-4 rounded-md hover:bg-red-700 transition-colors disabled:bg-gray-400"
-                    >
-                        {isLoading ? 'Encerrando...' : 'Encerrar Viagem'}
-                    </button>
-                </div>
-                {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
+        <div className={`flex flex-col w-full gap-2 lg:max-w-[calc(50%-8px)] bg-white p-4 rounded-lg border-1 border-gray-300 shadow-xs ${!disabled ? 'opacity-50 cursor-not-allowed' : ''}`}>
+            <h2 className="text-lg md:text-xl font-bold">Viagem em Andamento</h2>
+            <p className="text-sm text-gray-600 mb-2">ID da Viagem: <span className="font-mono bg-gray-100 p-1 rounded">{tripId}</span></p>
+            <div className="flex w-full justify-center flex-wrap sm:flex-nowrap gap-2">
+                <GenericButton onClick={onToggleUpdate} disabled={!disabled} className="w-full disabled:cursor-not-allowed" colors={`${isUpdatingPosition ? 'bg-yellow-500 hover:bg-yellow-600' : ''}`}>
+                    {isUpdatingPosition ? 'Pausar Envio' : 'Continuar Viagem'}
+                </GenericButton>
+
+                <GenericButton onClick={handleEndTrip} disabled={!disabled} className="w-full disabled:cursor-not-allowed" colors="bg-red-600 hover:bg-red-700 disabled:bg-gray-400">
+                    {isLoading ? 'Encerrando...' : 'Encerrar Viagem'}
+                </GenericButton>
+        
+                
             </div>
+            {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
+
         </div>
     );
 };

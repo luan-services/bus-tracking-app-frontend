@@ -14,41 +14,33 @@ const InfoPanel = ({ liveData }: InfoPanelProps) => {
     const etaMap = new Map(liveData?.stopETAs.map(eta => [eta.stopName, eta.etaMinutes]));
 
     return (
-        <div className="bg-white p-4 rounded-lg shadow-md space-y-6">
-            <div>
-                <h2 className="text-xl font-bold mb-4">Status da Viagem</h2>
-                {!liveData ? (
-                    <p className="text-gray-500">Nenhuma viagem ativa.</p>
-                ) : (
-                    <div className="space-y-4">
-                        <div>
-                            <label className="block text-sm font-medium text-gray-500">Progresso da Rota</label>
+        <div className="flex flex-col bg-white p-4 rounded-lg border-1 border-gray-300 shadow-xs gap-4">
+                <h2 className="text-lg md:text-xl font-bold">Status da Viagem</h2>
+                {!liveData ?  <p className="text-gray-500 text-center">Nenhuma viagem ativa.</p> : 
+                    <div className="flex flex-col gap-2">
+                            <label className="text-sm font-medium text-gray-500">Progresso da Rota</label>
                             <div className="w-full bg-gray-200 rounded-full h-2.5 mt-1">
-                                <div className="bg-indigo-600 h-2.5 rounded-full" style={{ width: `${Math.min(100, progressPercentage)}%` }}></div>
+                                <div className="bg-blue-600 h-2.5 rounded-full" style={{ width: `${Math.min(100, progressPercentage)}%` }}></div>
                             </div>
-                            <p className="text-xs text-right text-gray-500 mt-1">
+                            <span className="text-xs text-right text-gray-500 mt-1">
                                 {liveData.distanceTraveled.toFixed(2)} km / {liveData.totalRouteLength.toFixed(2)} km
-                            </p>
-                        </div>
-                        <table className="w-full text-sm">
-                            <tbody>
-                                <tr className="border-b">
-                                    <td className="py-2 font-medium text-gray-600">Posição Real (GPS)</td>
-                                    <td className="py-2 text-right font-mono">{liveData.rawPosition[1].toFixed(5)}, {liveData.rawPosition[0].toFixed(5)}</td>
-                                </tr>
-                                <tr>
-                                    <td className="py-2 font-medium text-gray-600">Posição na Rota</td>
-                                    <td className="py-2 text-right font-mono">{liveData.snappedPosition[1].toFixed(5)}, {liveData.snappedPosition[0].toFixed(5)}</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                )}
-            </div>
+                            </span>
 
-            <div>
-                <h2 className="text-xl font-bold mb-2">Linha do Tempo da Viagem</h2>
-                <div className="space-y-4 max-h-[55vh] overflow-y-auto pr-2">
+                            <div className="p-2 flex flex-wrap justify-between text-sm border-b border-gray-300">
+                                <span className="text-gray-500 w-40">Posição Real (GPS)</span>
+                                <span className="text-gray-500">{liveData.rawPosition[1].toFixed(5)}, {liveData.rawPosition[0].toFixed(5)}</span>
+                            </div>
+                            <div className="px-2 flex flex-wrap justify-between text-sm border-gray-300">
+                                <span className="text-gray-500 w-40">Posição na Rota</span>
+                                <span className="text-gray-500">{liveData.snappedPosition[1].toFixed(5)}, {liveData.snappedPosition[0].toFixed(5)}</span>
+                            </div>
+                    </div>
+                }
+            
+
+            <div className="flex flex-col gap-2">
+                <h2 className="text-lg md:text-xl font-bold">Linha do Tempo da Viagem</h2>
+                <div className="space-y-4 max-h-[55vh] overflow-y-auto p-3">
                     {!liveData || liveData.stops.length === 0 ? (
                         <div className="text-center py-4 text-gray-500">Nenhum dado de paradas disponível.</div>
                     ) : (
@@ -72,7 +64,7 @@ const InfoPanel = ({ liveData }: InfoPanelProps) => {
 
                             return (
                                 <div key={stop._id} className={`flex items-center gap-4 ${itemClasses}`}>
-                                    <div className={`flex-shrink-0 w-8 h-8 rounded-full ${iconBgClasses}`} dangerouslySetInnerHTML={{ __html: iconHTML }} />
+                                    <div className={`flex-shrink-0 w-6 h-6 rounded-full ${iconBgClasses}`} dangerouslySetInnerHTML={{ __html: iconHTML }} />
                                     <div className="flex-grow">
                                         <p className="font-medium">{stop.name}</p>
                                     </div>
@@ -83,6 +75,7 @@ const InfoPanel = ({ liveData }: InfoPanelProps) => {
                     )}
                 </div>
             </div>
+
         </div>
     );
 };
