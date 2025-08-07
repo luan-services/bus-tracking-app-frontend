@@ -19,7 +19,7 @@ interface InfoPanelProps extends React.HTMLAttributes<HTMLDivElement> {
 const InfoPanel = ({ liveData }: InfoPanelProps) => {
     // pega o progresso da trip em % para usar na barra de porcentagem
     const progressPercentage = liveData ? (liveData.distanceTraveled / liveData.totalRouteLength) * 100 : 0;
-    
+
     // cria um objeto Map, com key e value [eta.stopName, eta.etaMinutes] similar ao dict em python
     const etaMap = new Map(liveData?.stopETAs.map(eta => [eta.stopName, eta.etaMinutes]));
 
@@ -70,11 +70,15 @@ const InfoPanel = ({ liveData }: InfoPanelProps) => {
                                 ? `<div class="w-full h-full rounded-full flex items-center justify-center text-white font-bold text-sm">${iconCheck}</div>`
                                 : `<div class="w-full h-full rounded-full flex items-center justify-center text-white font-bold text-xs">${index + 1}</div>`;
 
-                            
+                            // faz um texto do eta
                             const etaText = (etaMinutes !== undefined && etaMinutes !== null && !isPast) 
                                 ? `<span class="font-semibold text-indigo-600">${etaMinutes === 0 ? 'Chegando' : `${etaMinutes} min`}</span>`
                                 : '';
 
+
+                            // inclui os dados
+
+                            // precisa ser modifcado, acho que removerei a const etaMinutes.
                             return (
                                 <div key={stop._id} className={`flex items-center gap-4 ${itemClasses}`}>
                                     <div className={`flex-shrink-0 w-6 h-6 rounded-full ${iconBgClasses}`} dangerouslySetInnerHTML={{ __html: iconHTML }} />
