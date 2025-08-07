@@ -241,6 +241,7 @@ export default function TripPage() {
                     const now = Date.now();
                     const { coords } = position;
                     const { latitude, longitude } = position.coords // adicionado
+                    console.log(latitude, longitude, now)
                     // se não houver uma posição anterior, define a atual e sai.
                     if (!lastSentPositionRef.current) {
                         lastSentPositionRef.current = coords;
@@ -249,7 +250,7 @@ export default function TripPage() {
                     
                     // calcula a diferença de distância entre a última posição e a atual usando a fórmula haversine
                     const distanceMoved = calculateDistance(lastSentPositionRef.current.latitude, lastSentPositionRef.current.longitude, coords.latitude, coords.longitude);
-
+                    console.log(now- lastSentTimeRef.current)
                     // envia um pedido de atualização de posição pro back se o tempo ou a distância forem atingidos
                     if (now - lastSentTimeRef.current > MIN_TIME_INTERVAL_MS || distanceMoved > MIN_DISTANCE_METERS) {
                         console.log(`Enviando atualização. Motivo: ${now - lastSentTimeRef.current > MIN_TIME_INTERVAL_MS ? 'TEMPO' : 'DISTÂNCIA'}`);

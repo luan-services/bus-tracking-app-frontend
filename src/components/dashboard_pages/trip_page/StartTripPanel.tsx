@@ -28,7 +28,7 @@ const StartTripPanel = ({ onTripStart, disabled }: StartTripPanelProps) => {
                 // error com a mensagem da resposta, caso contrário lança um erro com a mensagem 'Falha ao buscar as linhas
                 setLines(data);
                 if (data.length > 0) {
-                    setSelectedLine(data[0]._id);
+                    setSelectedLine(data[0]._id); // seta a primeira linha como selecionada
                 }
             } catch (err) {
                 if (err instanceof Error) {
@@ -44,6 +44,8 @@ const StartTripPanel = ({ onTripStart, disabled }: StartTripPanelProps) => {
 
     }, []);
 
+
+    // função para iniciar trip, pega a posição atual e faz uma chamada à startTrip.
     const handleStartTrip = async () => {
         if (!selectedLine) {
             setError('Por favor, selecione uma linha.');
@@ -72,7 +74,8 @@ const StartTripPanel = ({ onTripStart, disabled }: StartTripPanelProps) => {
                         throw new Error(data.message || 'Erro ao iniciar a viagem.');
                     }
                     
-                    onTripStart(data.trip._id);
+                    onTripStart(data.trip._id); // chama onTripStart, função do pai que pega os dados da trip baseado no id da trip passado,
+                    // conecta ao socket, e distrubui os dados entre os componentes  
 
                 } catch (err) {
                     if (err instanceof Error) {
