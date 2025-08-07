@@ -245,12 +245,13 @@ export default function TripPage() {
                     // se não houver uma posição anterior, define a atual e sai.
                     if (!lastSentPositionRef.current) {
                         lastSentPositionRef.current = coords;
+                        lastSentTimeRef.current = now;
                         return;
                     }
                     
                     // calcula a diferença de distância entre a última posição e a atual usando a fórmula haversine
                     const distanceMoved = calculateDistance(lastSentPositionRef.current.latitude, lastSentPositionRef.current.longitude, coords.latitude, coords.longitude);
-                    console.log(now- lastSentTimeRef.current)
+                    console.log("diferença de tempo: ", now - lastSentTimeRef.current)
                     // envia um pedido de atualização de posição pro back se o tempo ou a distância forem atingidos
                     if (now - lastSentTimeRef.current > MIN_TIME_INTERVAL_MS || distanceMoved > MIN_DISTANCE_METERS) {
                         console.log(`Enviando atualização. Motivo: ${now - lastSentTimeRef.current > MIN_TIME_INTERVAL_MS ? 'TEMPO' : 'DISTÂNCIA'}`);
