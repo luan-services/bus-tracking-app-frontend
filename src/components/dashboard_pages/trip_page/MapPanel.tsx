@@ -124,7 +124,7 @@ const MapPanel: React.FC<MapPanelProps> = ({ liveData }) => {
             L.geoJSON(liveData.routePath, { style: { color: '#4f46e5', weight: 5, opacity: 0.8 } }).addTo(map);
         }
         liveData.stops?.forEach(stop => {
-            // checa se a distancia é maior para mostrar visualmente como reached e se foi marcada no backend como reached
+            // LOGICA ARRUMADA: checa se a distancia é maior para mostrar visualmente como reached e se foi marcada no backend como reached
             const isReached = stop.distanceFromStart <= liveData.distanceTraveled || liveData.stopsReached.includes(stop.name)
 
             L.circleMarker([stop.location.coordinates[1], stop.location.coordinates[0]], {

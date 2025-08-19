@@ -14,7 +14,6 @@ interface InfoPanelProps extends React.HTMLAttributes<HTMLDivElement> {
 // são marcadas como alcançadas no objeto da trip. Isso é algo raro, porém é uma experiência frustrante paradas já passadas aparecerem
 // 'verdes' no mapa. Por conta disso, esse código implementa um check de distância para remover a cor verde das stops no frontend.
 
-
 // const InfoPanel: React.FC<InfoPanelProps> = ({ liveData })
 const InfoPanel = ({ liveData }: InfoPanelProps) => {
     // pega o progresso da trip em % para usar na barra de porcentagem
@@ -58,20 +57,20 @@ const InfoPanel = ({ liveData }: InfoPanelProps) => {
                         liveData.stops.map((stop, index) => {
                             
                             // checa se a parada foi passada
-                            const isPast = stop.distanceFromStart <= liveData.distanceTraveled;
+                            const isReached = stop.distanceFromStart <= liveData.distanceTraveled || liveData.stopsReached.includes(stop.name)
                             
                             // pega o eta dela do etaMap, se existir
                             const etaMinutes = etaMap.get(stop.name);
                             
-                            const itemClasses = isPast ? 'text-gray-400' : 'text-gray-800';
-                            const iconBgClasses = isPast ? 'bg-gray-400' : 'bg-green-500';
+                            const itemClasses = isReached ? 'text-gray-400' : 'text-gray-800';
+                            const iconBgClasses = isReached ? 'bg-gray-400' : 'bg-green-500';
                             const iconCheck = '✓';
-                            const iconHTML = isPast 
+                            const iconHTML = isReached 
                                 ? `<div class="w-full h-full rounded-full flex items-center justify-center text-white font-bold text-sm">${iconCheck}</div>`
                                 : `<div class="w-full h-full rounded-full flex items-center justify-center text-white font-bold text-xs">${index + 1}</div>`;
 
                             // faz um texto do eta
-                            const etaText = (etaMinutes !== undefined && etaMinutes !== null && !isPast) 
+                            const etaText = (etaMinutes !== undefined && etaMinutes !== null && !isReached) 
                                 ? `<span class="font-semibold text-indigo-600">${etaMinutes === 0 ? 'Chegando' : `${etaMinutes} min`}</span>`
                                 : '';
 
