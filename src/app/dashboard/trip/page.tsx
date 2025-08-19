@@ -7,6 +7,9 @@ import { io, Socket } from 'socket.io-client';
 import { fetchFromClient } from '@/lib/api-client';
 // importa types
 import { LiveTripData } from '@/types/index';
+// importa função de haversine
+import { calculateDistance } from '@/lib/haversine';
+
 
 // Tipagem para o status da viagem retornado pela API (backend) que retorna { message: "Usuário possui uma trip ativa", trip_id: existingTrip.id } 
 // ou { message: "Usuário não possui trip ativa" }
@@ -27,22 +30,6 @@ const StartTripPanel = dynamic(() => import('@/components/dashboard_pages/trip_p
 const ActiveTripPanel = dynamic(() => import('@/components/dashboard_pages/trip_page/ActiveTripPanel'), { ssr: false });
 const MapPanel = dynamic(() => import('@/components/dashboard_pages/trip_page/MapPanel'), { ssr: false });
 const InfoPanel = dynamic(() => import('@/components/dashboard_pages/trip_page/InfoPanel'), { ssr: false });
-
-// NOVO: Função para calcular distância entre dois pontos baseado na geografia da terra(Fórmula de Haversine)
-function calculateDistance(lat1: number, lon1: number, lat2: number, lon2: number): number {
-    const R = 6371e3; // Raio da Terra em metros
-    const φ1 = lat1 * Math.PI / 180;
-    const φ2 = lat2 * Math.PI / 180;
-    const Δφ = (lat2 - lat1) * Math.PI / 180;
-    const Δλ = (lon2 - lon1) * Math.PI / 180;
-
-    const a = Math.sin(Δφ / 2) * Math.sin(Δφ / 2) +
-              Math.cos(φ1) * Math.cos(φ2) *
-              Math.sin(Δλ / 2) * Math.sin(Δλ / 2);
-    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-
-    return R * c; // Distância em metros
-}
 
 
 export default function TripPage() {
