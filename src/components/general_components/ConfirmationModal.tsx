@@ -3,7 +3,7 @@
 import React from 'react';
 
 // define o tipo do modal, garante que o componente receba os parametros isOpen, onClose, onConfirm
-type ConfirmationModalProps = {
+interface ConfirmationModalProps {
     isOpen: boolean;
     onClose: () => void;
     onConfirm: () => void;

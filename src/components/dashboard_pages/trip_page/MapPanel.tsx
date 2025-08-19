@@ -4,7 +4,7 @@ import { useEffect, useRef, useState, useCallback } from 'react';
 import { renderToString } from 'react-dom/server';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
-import { LiveTripData } from '@/types/trip';
+import { LiveTripData } from '@/types/index';
 import {LocateFixed} from 'lucide-react'
 
 /// !!!!!!!!!! PRECISA ADICIONAR O MESMO CHECK DE STOPS DO INFO PANEL AQUI PARA IMPEDIR PARADAS VERDES ATRÁS DA POSIÇÃO NA ROTA

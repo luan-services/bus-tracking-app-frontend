@@ -1,5 +1,5 @@
 import { redirect } from 'next/navigation';
-import { fetchFromServer } from '@/lib/api';
+import { fetchFromServer } from '@/lib/api-server';
 import type { User } from '@/types/index.ts';
 
 export default async function ProfilePage() {

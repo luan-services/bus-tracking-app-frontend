@@ -1,5 +1,5 @@
 import { redirect } from 'next/navigation';
-import { fetchFromServer } from '@/lib/api';
+import { fetchFromServer } from '@/lib/api-server';
 import type { User } from '@/types/index.ts';
 
 // Este layout envolve TODAS as páginas dentro de /admin. Atua como o segundo portão.

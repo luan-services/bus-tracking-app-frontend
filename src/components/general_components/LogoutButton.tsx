@@ -13,7 +13,7 @@ interface LogoutButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement
 	onClickParent?: (prop?: boolean) => void; // função unica pro botão de logout do dashboard, em outros lugares não faz nada
 	activeText?: string,
 	buttonColor?: string,
-}
+};
 
 // export function LogoutButton({ children, className, useConfirmScreen = true }: LogoutButtonProps) << forma mais 'moderna' de fazer (ambas iguais)
 export const LogoutButton = ({ children, className, useConfirmScreen = true, activeText = "Saindo...", buttonColor = "white", onClickParent = (prop: boolean = true) => ''}: LogoutButtonProps) => {	
@@ -29,7 +29,8 @@ export const LogoutButton = ({ children, className, useConfirmScreen = true, act
 		setIsLoading(true); // useState que quando é true muda o texto do botão para 'carregando' e desativa ele
 
 		try {
-			// tenta acessar o route.ts de logout								
+			// logout faz uma chamada direto pro route.ts do frontend (via client), o route por sua vez chama o logout do backend e destroi
+			// os cookies (via server)							
 			// desligar o backend não causa erro aqui, pois o route de logout remove os cookies no frontend
 			const response = await fetch('/api/auth/logout', { method: 'POST' });
 

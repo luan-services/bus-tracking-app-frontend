@@ -6,11 +6,14 @@ import { useState, useEffect, FormEvent, ChangeEvent } from 'react';
 import { useRouter } from 'next/navigation';
 // importamos nosso componente de notificação de erro.
 import NotificationToast from '../general_components/NotificationToast';
-// como o componente NotificationToast recebe 2 parametros (mensagem e tipo) precisamos improtar o type dele para definir um useState (notification) que vai ser as props dele
-import {NotificationToastPropsState } from '@/types'
+
+// como o componente NotificationToast recebe 2 parametros (mensagem e tipo) precisamos definir um type para ele
+type NotificationToastPropsState = {
+	message: string;
+	type: 'success' | 'error';
+} | null;
 
 import { LoginButton } from './LoginButton';
-
 
 // função básica para validar os campos de email e password, recebe fieldName e value, retorna uma string (texto dizendo o erro) ou undefined (caso não haja erro)
 function validateField(fieldName: 'email' | 'password', value: string): string | undefined {

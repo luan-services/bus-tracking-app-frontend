@@ -6,7 +6,14 @@ import { io, Socket } from 'socket.io-client';
 // importa função custom de fetch com refresh de token
 import { fetchFromClient } from '@/lib/api-client';
 // importa types
-import { TripStatus, LiveTripData } from '@/types/trip';
+import { LiveTripData } from '@/types/index';
+
+// Tipagem para o status da viagem retornado pela API (backend) que retorna { message: "Usuário possui uma trip ativa", trip_id: existingTrip.id } 
+// ou { message: "Usuário não possui trip ativa" }
+interface TripStatus {
+    message: string;
+    trip_id?: string;
+};
 
 // Import dinâmico para componentes client-side, isso impede que esses componentes sejam pré-renderizados no servidor, mesmo com o use cliente,
 // ele tenta pré-carregar qualquer coisa que não seja useState, effect, etc, e isso pode quebrar pois o servidor é um ambiente Node.js, 

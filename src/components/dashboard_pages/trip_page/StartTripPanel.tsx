@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { fetchFromClient } from '@/lib/api-client';
-import { Line } from '@/types/trip';
+import { Line } from '@/types/index';
 import { GenericButton } from '@/components/general_components/GenericButton';
 import { GenericDropdown } from '@/components/general_components/GenericDropDown';
 

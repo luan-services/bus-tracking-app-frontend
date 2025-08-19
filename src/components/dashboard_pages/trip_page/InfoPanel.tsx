@@ -1,6 +1,6 @@
 'use client';
 
-import { LiveTripData } from '@/types/trip';
+import { LiveTripData } from '@/types/index';
 
 interface InfoPanelProps extends React.HTMLAttributes<HTMLDivElement> {
     liveData: LiveTripData | null;

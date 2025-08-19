@@ -1,8 +1,12 @@
 // src/components/Notification.tsx
-
-// importamos esse type que define quais propriedades o componente (funcao) vai receber. (e retornar)
-import { NotificationToastProps } from "@/types";
 import {XIcon} from 'lucide-react'
+
+interface NotificationToastProps {
+	message: string;
+	type: 'success' | 'error';
+	className?: string;
+	onClick: () => void; // Uma função que será chamada quando o usuário clicar para fechar.
+};
 
 export default function NotificationToast({ message, type, onClick, className }: NotificationToastProps) {
 	// Define a cor de fundo com base no tipo da notificação.
