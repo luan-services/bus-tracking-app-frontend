@@ -5,7 +5,7 @@ import { useState, useEffect, FormEvent, ChangeEvent } from 'react';
 // importando use router, para enviar o usuário para o url da dashboard do motorista após login
 import { useRouter } from 'next/navigation';
 // importamos nosso componente de notificação de erro.
-import NotificationToast from '../general_components/NotificationToast';
+import { NotificationToast } from '../general_components/NotificationToast';
 
 // como o componente NotificationToast recebe 2 parametros (mensagem e tipo) precisamos definir um type para ele
 type NotificationToastPropsState = {

@@ -8,7 +8,7 @@ interface NotificationToastProps {
 	onClick: () => void; // Uma função que será chamada quando o usuário clicar para fechar.
 };
 
-export default function NotificationToast({ message, type, onClick, className }: NotificationToastProps) {
+export const NotificationToast = ({ message, type, onClick, className }: NotificationToastProps) => {
 	// Define a cor de fundo com base no tipo da notificação.
 	const ClassName = className || "p-4 pt-2 pr-2 rounded-xs flex items-start justify-between max-w-sm";
 	const typeClasses = type === 'error'  ? 'bg-red-500 text-white' : 'bg-green-500 text-white';
