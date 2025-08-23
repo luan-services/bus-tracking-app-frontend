@@ -45,7 +45,7 @@ export const StartTripPanel = ({ onTripStart, disabled }: StartTripPanelProps) =
     }, []);
 
 
-    // função para iniciar trip, pega a posição atual e faz uma chamada à startTrip.
+    // função para iniciar trip, pega a posição atual, faz uma chamada à startTrip e chama onTripStart.
     const handleStartTrip = async () => {
         if (!selectedLine) {
             setError('Por favor, selecione uma linha.');
@@ -63,8 +63,8 @@ export const StartTripPanel = ({ onTripStart, disabled }: StartTripPanelProps) =
                         method: 'POST',
                         body: JSON.stringify({
                             lineId: selectedLine,
-                            //lng: longitude, lat: latitude
-                            lng: -44.31804, lat: -23.00953
+                            lng: longitude, lat: latitude
+                            //lng: -44.31804, lat: -23.00953
                         }),
                     });
 

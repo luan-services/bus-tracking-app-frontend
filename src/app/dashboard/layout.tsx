@@ -31,9 +31,12 @@ export default async function DashboardLayout({ children }: { children: React.Re
 	// se passou nas verificações, renderiza a estrutura da dashboard.
 	return (
 		<div className="flex md:flex-row min-h-screen w-full font-roboto bg-gray-100 pb-[44px] md:pb-0"> {/* pb = tamanho do nav (serve para impedir que o txt das paginas fiquem presos atras do nav */}
-			{/* Passa os dados do usuário para a barra de navegação para ela saber quais botões mostrar */}
+			{/* passa os dados do usuário para a barra de navegação para ela saber quais botões mostrar */}
 			<DashboardNav user={user} />
 			<main className="w-full bg-gray-100 md:p-10">{children}</main>
+			{/* children aqui funciona da seguinte forma: qualquer rota dentro de /dashboard/_rota_ vai ter esse exato layout, e tudo
+			que estiver dentro de _rota_ vai ficar onde está {children}, ou seja, se a rota for /dashboard/trip, tudo do page.tsx da pasta 
+			trip vai ser renderizado dentro de children bem aqui. */}
 		</div>
 	);
 }

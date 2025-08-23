@@ -342,7 +342,7 @@ export default function TripPage() {
 
     return (
         <div className="p-2 grid grid-cols-1 md:grid-cols-3 max-w-296 gap-4">
-                {/* Coluna do Mapa */}            
+                {/* coluna do mapa e dos controlers */}
                 <div className="flex flex-col md:col-span-2 gap-4">
                     
                     <MapPanel liveData={liveData}/>
@@ -361,7 +361,7 @@ export default function TripPage() {
                 
                 </div>
 
-                {/* Coluna de Controle e Informações */}
+                {/* coluna das informações */}
                 <div className="md:col-span-1">
                     <InfoPanel liveData={liveData} />
                 </div>
