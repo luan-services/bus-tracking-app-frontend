@@ -35,7 +35,6 @@ export const ConfirmationModal = ({isOpen, onClose, onConfirm, children = ''}: C
 
                 {/* Button Container */}
                 <div className="flex justify-end gap-4">
-                {/* Cancelar Button */}
                 <button onClick={onClose} className="cursor-pointer active:scale-95 rounded-md bg-gray-300 px-4 py-2 text-sm w-24 text-gray-800 transition hover:bg-gray-400">
                     Cancelar
                 </button>
