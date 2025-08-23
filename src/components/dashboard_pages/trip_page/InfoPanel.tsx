@@ -6,8 +6,6 @@ interface InfoPanelProps extends React.HTMLAttributes<HTMLDivElement> {
     liveData: LiveTripData | null;
 }
 
-// os exports aqui são default pq os imports no page são dinâmicos, fica mais fácil assim
-
 // esse componente não modifica dado algum, ele é responsável apenas pela exibição das informações.
 
 // quando uma viagem começa no meio do caminho (e em alguns saltos especificos de distancia (quando o gps cai)), algumas paradas nunca
