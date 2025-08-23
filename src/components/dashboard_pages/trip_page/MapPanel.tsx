@@ -7,8 +7,6 @@ import L from 'leaflet';
 import { LiveTripData } from '@/types/index';
 import {LocateFixed} from 'lucide-react'
 
-/// !!!!!!!!!! PRECISA ADICIONAR O MESMO CHECK DE STOPS DO INFO PANEL AQUI PARA IMPEDIR PARADAS VERDES ATRÁS DA POSIÇÃO NA ROTA
-
 // Corrige o problema com os ícones padrão do Leaflet no Next.js
 if (typeof window !== 'undefined') {
     delete (L.Icon.Default.prototype as any)._getIconUrl;
@@ -26,7 +24,7 @@ interface MapPanelProps {
     liveData: LiveTripData | null;
 }
 
-const MapPanel: React.FC<MapPanelProps> = ({ liveData }) => {
+export const MapPanel = ({ liveData }:MapPanelProps) => {
     const mapRef = useRef<L.Map | null>(null);
     const busMarkerRef = useRef<L.Marker | null>(null);
     const rawBusMarkerRef = useRef<L.CircleMarker | null>(null);
@@ -175,5 +173,3 @@ const MapPanel: React.FC<MapPanelProps> = ({ liveData }) => {
         </div>
     );
 };
-
-export default MapPanel;

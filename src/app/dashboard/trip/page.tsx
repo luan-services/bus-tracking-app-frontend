@@ -26,10 +26,10 @@ interface TripStatus {
 // realmente necessário, em vez de carregá-lo todo de uma vez quando a página é aberta. Isso poupa memória e alivia a carga inicial de coisas
 // a serem baixadas
 import dynamic from 'next/dynamic';
-const StartTripPanel = dynamic(() => import('@/components/dashboard_pages/trip_page/StartTripPanel'), { ssr: false });
-const ActiveTripPanel = dynamic(() => import('@/components/dashboard_pages/trip_page/ActiveTripPanel'), { ssr: false });
-const MapPanel = dynamic(() => import('@/components/dashboard_pages/trip_page/MapPanel'), { ssr: false });
-const InfoPanel = dynamic(() => import('@/components/dashboard_pages/trip_page/InfoPanel'), { ssr: false });
+const StartTripPanel = dynamic(() => import('@/components/dashboard_pages/trip_page/StartTripPanel').then((moduleImport) => moduleImport.StartTripPanel), { ssr: false });
+const ActiveTripPanel = dynamic(() => import('@/components/dashboard_pages/trip_page/ActiveTripPanel').then((moduleImport) => moduleImport.ActiveTripPanel), { ssr: false });
+const MapPanel = dynamic(() => import('@/components/dashboard_pages/trip_page/MapPanel').then((moduleImport) => moduleImport.MapPanel), { ssr: false });
+const InfoPanel = dynamic(() => import('@/components/dashboard_pages/trip_page/InfoPanel').then((moduleImport) => moduleImport.InfoPanel), { ssr: false });
 
 
 export default function TripPage() {

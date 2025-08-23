@@ -15,7 +15,7 @@ interface InfoPanelProps extends React.HTMLAttributes<HTMLDivElement> {
 // 'verdes' no mapa. Por conta disso, esse código implementa um check de distância para remover a cor verde das stops no frontend.
 
 // const InfoPanel: React.FC<InfoPanelProps> = ({ liveData })
-const InfoPanel = ({ liveData }: InfoPanelProps) => {
+export const InfoPanel = ({ liveData }: InfoPanelProps) => {
     // pega o progresso da trip em % para usar na barra de porcentagem
     const progressPercentage = liveData ? (liveData.distanceTraveled / liveData.totalRouteLength) * 100 : 0;
 
@@ -95,5 +95,3 @@ const InfoPanel = ({ liveData }: InfoPanelProps) => {
         </div>
     );
 };
-
-export default InfoPanel;

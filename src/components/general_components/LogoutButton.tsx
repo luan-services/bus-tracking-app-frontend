@@ -76,7 +76,9 @@ export const LogoutButton = ({ children, className, useConfirmScreen = true, act
 				{isLoading ?  (activeText ? activeText : children) : children}
 			</button>
 
-			<ConfirmationModal isOpen={isModalOpen} onConfirm={() => handleLogout()} onClose={() => {setIsModalOpen(false), onClickParent()}}></ConfirmationModal>
+			<ConfirmationModal isOpen={isModalOpen} onConfirm={() => handleLogout()} onClose={() => {setIsModalOpen(false), onClickParent()}}>
+				Tem certeza que deseja sair?
+			</ConfirmationModal>
 		</>
 	);
 }

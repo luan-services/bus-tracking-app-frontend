@@ -11,7 +11,7 @@ interface StartTripPanelProps {
     disabled: boolean;
 }
 
-const StartTripPanel = ({ onTripStart, disabled }: StartTripPanelProps) => {
+export const StartTripPanel = ({ onTripStart, disabled }: StartTripPanelProps) => {
     const [lines, setLines] = useState<Line[]>([]);
     const [selectedLine, setSelectedLine] = useState<string>('');
     const [isLoading, setIsLoading] = useState(false);
@@ -107,5 +107,3 @@ const StartTripPanel = ({ onTripStart, disabled }: StartTripPanelProps) => {
         </div>
     );
 };
-
-export default StartTripPanel;

@@ -4,12 +4,13 @@ import React from 'react';
 
 // define o tipo do modal, garante que o componente receba os parametros isOpen, onClose, onConfirm
 interface ConfirmationModalProps {
+    children?: React.ReactNode, // props que define os children do objeto
     isOpen: boolean;
     onClose: () => void;
     onConfirm: () => void;
 };
 
-export const ConfirmationModal = ({isOpen, onClose, onConfirm,}: ConfirmationModalProps) => {
+export const ConfirmationModal = ({isOpen, onClose, onConfirm, children = ''}: ConfirmationModalProps) => {
     // se não está open retorna div vazia
     if (!isOpen) {
         return null;
@@ -24,18 +25,18 @@ export const ConfirmationModal = ({isOpen, onClose, onConfirm,}: ConfirmationMod
 
     return (
         /* background opaco */
-        <div onClick={handleBackgroundClick} className="fixed top-0 left-0 w-full h-screen z-50 flex items-center justify-center bg-black/50">
+        <div onClick={handleBackgroundClick} className="fixed top-0 left-0 w-full h-screen z-[10000] flex items-center justify-center bg-black/50">
             {/* Modal Card */}
-            <div className="m-2 p-8 flex flex-col text-center items-center gap-4 bg-white border-1 border-gray-200 rounded-lg shadow-md w-full max-w-96">
+            <div className="m-2 p-8 flex flex-col text-center items-center gap-4 bg-white border-1 border-gray-300 rounded-lg shadow-md w-full max-w-96">
                 {/* Confirmation Text */}
                 <h2 className="text-center text-lg font-semibold text-gray-800">
-                    Tem certeza que deseja sair?
+                    {children != "" ? children : "Tem certeza que deseja fechar?"}
                 </h2>
 
                 {/* Button Container */}
                 <div className="flex justify-end gap-4">
                 {/* Cancelar Button */}
-                <button onClick={onClose} className="cursor-pointer active:scale-95 rounded-md bg-gray-200 px-4 py-2 text-sm w-24 text-gray-800 transition hover:bg-gray-300">
+                <button onClick={onClose} className="cursor-pointer active:scale-95 rounded-md bg-gray-300 px-4 py-2 text-sm w-24 text-gray-800 transition hover:bg-gray-400">
                     Cancelar
                 </button>
 
