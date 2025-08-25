@@ -6,7 +6,8 @@
 }
 
 @theme {
-    --color-green-1: #cdf7d6;
+    --color-custom-light-green: #cdf7d6;
+    --color-custom-dark-green: #204525;
 }
 
 /* css pro botão de pin do mapa */
