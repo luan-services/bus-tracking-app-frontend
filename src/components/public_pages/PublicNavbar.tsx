@@ -8,13 +8,13 @@ export const PublicNavbar = () => {
     const [isOpen, setIsOpen] = useState(false);
 
     return (
-        <nav className="flex w-full px-4 md:px-20 bg-white justify-center shadow-md">
-            <div className="flex container items-center justify-between min-h-14"> {/* container p impedir crescimento excessivo */}
+        <nav className="flex w-full bg-white justify-center shadow-md border-b-1 border-gray-300">
+            <div className="flex container px-8 md:px-20 items-center justify-between min-h-14"> {/* container p impedir crescimento excessivo */}
 
                 {/* Brand/Logo */}
                 <div className="flex">
                     <Link href="/" className="text-2xl font-bold text-green-700">
-                        BusTrack
+                        BrandLogo
                     </Link>
                 </div>
 
