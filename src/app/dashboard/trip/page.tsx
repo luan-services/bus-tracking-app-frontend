@@ -118,7 +118,6 @@ export default function TripPage() {
         // ouve a mensagem 'tripEnded' que é emitida para a sala com tripId quando a a função endTrip do backend é chamada.
         socket.on('tripEnded', (data: { message: string }) => {
             console.log('Viagem encerrada via socket:', data.message);
-            alert(data.message);
             // roda a função handleTripEnd, que vai se desconectar do socket e resetar todos os useStates
             handleTripEnd();
         });

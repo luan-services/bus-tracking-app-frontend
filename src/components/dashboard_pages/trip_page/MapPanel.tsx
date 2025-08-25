@@ -17,9 +17,6 @@ if (typeof window !== 'undefined') {
     });
 }
 
-// SVG para o botão de centralizar
-const centerIconSvg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" style="width: 1.25rem; height: 1.25rem;"><path d="M12 8c-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4-1.79-4-4-4zm8.94 3A8.994 8.994 0 0 0 13 3.06V1h-2v2.06A8.994 8.994 0 0 0 3.06 11H1v2h2.06A8.994 8.994 0 0 0 11 20.94V23h2v-2.06A8.994 8.994 0 0 0 20.94 13H23v-2h-2.06zM12 19c-3.87 0-7-3.13-7-7s3.13-7 7-7 7 3.13 7 7-3.13 7-7 7z"/></svg>`;
-
 interface MapPanelProps {
     liveData: LiveTripData | null;
 }
@@ -58,7 +55,7 @@ export const MapPanel = ({ liveData }:MapPanelProps) => {
             const FollowControl = L.Control.extend({
                 onAdd: function() {
                     const button = L.DomUtil.create('button', 'leaflet-bar leaflet-control leaflet-control-custom follow-button');
-                    const iconHtml = renderToString(<LocateFixed strokeWidth={2.5} size={18} />);
+                    const iconHtml = renderToString(<LocateFixed strokeWidth={2.5} size={15} />);
                     button.innerHTML = iconHtml;
                     button.title = 'Centralizar e seguir o ônibus';
                     

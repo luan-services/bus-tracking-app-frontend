@@ -15,7 +15,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
 	// se o usuário não for 'admin', acesso negado.
 	if (user.role !== 'admin') {
 		return (
-		<div className="flex flex-1 w-full font-roboto items-center justify-center bg-white sm:bg-gray-100">
+		<div className="flex flex-1 w-full h-full font-roboto items-center justify-center bg-white sm:bg-gray-100">
 			<div className="p-8 flex flex-col text-center items-center gap-4 bg-white md:border-1 border-gray-200 md:rounded-lg md:shadow-md w-full max-w-96">
 				<h1 className="text-3xl font-bold text-red-500">Acesso Negado</h1>
 				<p className="text-gray-700">Você não tem acesso à essa página.</p>
