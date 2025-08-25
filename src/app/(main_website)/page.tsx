@@ -1,5 +1,5 @@
-import { LineSelector } from "@/components/public_pages/home/LineSelector";
-import {StopMapContainer} from "@/components/public_pages/home/StopMapContainer";
+import { LineSelector } from "@/components/main_pages/home_page/LineSelector";
+import {StopMapContainer} from "@/components/main_pages/home_page/StopMapContainer";
 
 // Tipos para os dados, eles permanecem os mesmos
 interface Line {

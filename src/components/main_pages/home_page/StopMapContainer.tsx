@@ -24,7 +24,7 @@ interface StopsMapProps {
 }
 
 
-const StopMap = dynamic(() => import('../../public_pages/home/StopMap'),
+const StopMap = dynamic(() => import('./StopMap'),
     { 
       ssr: false // A chave para desativar a renderização no servidor
     }

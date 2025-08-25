@@ -1,7 +1,7 @@
 import { redirect } from 'next/navigation';
 import { fetchFromServer } from '@/lib/api-server';
 import type { User } from '@/types/index.ts';
-import { DashboardNav } from '@/components/dashboard/DashboardNav';
+import { DashboardNav } from '@/components/dashboard_pages/dashboard_nav/DashboardNav';
 import { LogoutButton } from '@/components/general_components/LogoutButton';
 
 // este é o layout principal do dashboard. Atua como o primeiro portão de segurança.

@@ -3,7 +3,10 @@
 
 @theme inline {
     --font-roboto: var(--font-roboto);
-    --color-azul-personalizado: #014005;
+}
+
+@theme {
+    --color-green-1: #cdf7d6;
 }
 
 /* css pro botão de pin do mapa */

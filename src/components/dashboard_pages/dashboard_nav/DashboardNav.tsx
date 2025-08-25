@@ -4,7 +4,7 @@ import { usePathname, useRouter } from 'next/navigation';
 import { User as UserIcon, MapPlus, Settings, Pin, PinOff } from 'lucide-react';
 import type { User } from '@/types/index.ts';
 import { NavItem } from './NavItem';
-import { LogoutButton } from '../general_components/LogoutButton';
+import { LogoutButton } from '../../general_components/LogoutButton';
 import { useState } from 'react';
 
 // Recebe o usuário como prop para saber quais botões renderizar
