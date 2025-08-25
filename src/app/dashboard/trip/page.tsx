@@ -340,7 +340,7 @@ export default function TripPage() {
     }
 
     return (
-        <div className="p-2 grid grid-cols-1 md:grid-cols-3 max-w-296 gap-4">
+        <div className="p-2 w-full grid grid-cols-1 md:grid-cols-3 max-w-296 gap-4">
                 {/* coluna do mapa e dos controlers */}
                 <div className="flex flex-col md:col-span-2 gap-4">
                     
@@ -356,7 +356,6 @@ export default function TripPage() {
                             disabled={!!tripId} // Correção: deve ser desabilitado se NÃO houver tripId
                         />
                    </div>
-
                 
                 </div>
 

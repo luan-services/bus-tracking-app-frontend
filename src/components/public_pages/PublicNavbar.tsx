@@ -19,18 +19,16 @@ export const PublicNavbar = () => {
                 </div>
 
                 {/* Desktop Menu */}
-                <div className="hidden md:flex">
-                    <div className="ml-10 flex items-baseline space-x-4">
-                        <Link href="/" className="text-gray-600 hover:bg-gray-100 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium">
+                <div className="hidden md:flex gap-4">
+                        <Link href="/" className="text-gray-600 transition duration-200 hover:bg-gray-100 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium">
                             Início
                         </Link>
-                        <Link href="/#linhas" className="text-gray-600 hover:bg-gray-100 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium">
+                        <Link href="/lines" className="text-gray-600 transition duration-200 hover:bg-gray-100 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium">
                             Linhas
                         </Link>
-                        <Link href="/dashboard" className="text-gray-600 hover:bg-gray-100 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium">
+                        <Link href="/login" className="text-gray-600 transition duration-200 hover:bg-gray-100 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium">
                             Acesso Restrito
                         </Link>
-                    </div>
                 </div>
 
                 {/* Hamburger Button (Mobile) 🍔 */}
