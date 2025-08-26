@@ -17,7 +17,7 @@ interface LineSelectorProps {
 }
 
 export const LineSelector = ({ lines }: LineSelectorProps) => {
-    const [selectedLine, setSelectedLine] = useState<string>(lines[0]?._id || '');
+    const [selectedLine, setSelectedLine] = useState<string>('');
     const router = useRouter();
 
     const handleNavigateToLine = () => {
@@ -27,24 +27,44 @@ export const LineSelector = ({ lines }: LineSelectorProps) => {
     };
 
     return (
-        <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-md mx-auto">
-            <h2 className="text-2xl font-bold text-center text-gray-800 mb-4">
-                Consulte sua Linha
-            </h2>
-            <GenericDropdown
-                options={lines.map((line) => ({ _id: line._id, optionText: `${line.lineNumber} - ${line.name}` }))}
-                value={selectedLine}
-                onChange={(id: string) => setSelectedLine(id)}
-                placeholder="Selecione uma linha"
-                disabled={lines.length === 0}
-            />
-            <GenericButton
-                onClick={handleNavigateToLine}
-                disabled={!selectedLine}
-                className="w-full mt-4"
-            >
-                Ver Detalhes da Linha
-            </GenericButton>
+        <div className="flex flex-col px-6 py-12 gap-6 rounded-lg border-1 bg-white border-gray-300 shadow-lg items-center w-88 h-108">
+
+            <div className="flex w-full flex-col gap-2">
+                
+                <span className="font-bold text-xl">Linhas</span>
+                <span className="text-sm">Acompanhe em tempo real os ônibus da linha desejada.</span>
+            </div>
+
+            
+            <div className="flex w-full flex-col gap-2">
+                    
+                    
+                <span className="text-sm">Você pode ver detalhes como: rotas, posição do ônibus, tempo estimado de chega, itinerário, horários e muito mais!</span>
+
+                <GenericDropdown
+                    options={lines.map((line) => ({ _id: line._id, optionText: `${line.lineNumber} - ${line.name}` }))}
+                    value={selectedLine}
+                    onChange={(id: string) => setSelectedLine(id)}
+                    placeholder="Selecione uma linha"
+                    disabled={lines.length === 0}/>
+                    
+
+
+            </div>
+
+
+            <div className="border-b-1 w-full border-gray-300"></div>
+
+            <div className="flex w-full gap-4 items-center justify-around">
+                <div className="flex flex-col">
+                    <span className="font-bold">Valor da Passagem:</span>
+                    <span>R$ valor</span>
+                </div>
+                
+                <GenericButton onClick={handleNavigateToLine} disabled={!selectedLine} className="w-32 py-2 font-medium">
+                    Ver Detalhes
+                </GenericButton>
+            </div>
         </div>
     );
 };

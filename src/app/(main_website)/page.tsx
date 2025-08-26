@@ -107,25 +107,25 @@ export default async function HomePage() {
             >
                 {/* 2. This is the new overlay div. It creates the fade effect. */}
                 {/* You can change bg-black or opacity-50 to whatever you like. */}
-                <div className="absolute inset-0 bg-green-200 opacity-20"></div>
+                <div className="absolute inset-0 bg-white opacity-40"></div>
 
-                {/* 3. Added 'relative' here to place the content on top of the overlay */}
-                <div className="relative justify-center md:px-40 flex min-h-132 w-full">
-                    <div className="container flex justify-center md:justify-end items-center">
-                        <div className="flex flex-col gap-6 bg-custom-light-green-2 border-b-14 border-l-14 shadow-[14px_-14px_0_0_#fff454] border-custom-yellow p-8 max-w-108 min-h-98">
+                {/* 3. Added 'relative' here to place the content ontop of the overlay */}
+                <div className="relative justify-center md:px-40 flex min-h-144 py-8 w-full">
+                    <div className="container max-h-144 flex justify-center md:justify-end items-center">
+                        <div className="flex flex-col gap-6 bg-custom-light-green-2 border-b-14 border-l-14 shadow-[14px_-14px_0_0_#fffab8] border-custom-light-yellow p-8 max-w-108 min-h-98">
                             <span className="text-4xl text-center font-extrabold text-white">
                                 Bem-vindo ao BuzOnd
                             </span>
                             
-                            <span className="text-lg text-gray-900 max-w-2xl font-medium">
+                            <span className="text-lg text-gray-900 max-w-2xl font-medium overflow-clip">
                                 Acompanhe trajetos dos ônibus da 'nome_empresa' em tempo real com apenas um clique.
                             </span>
                             
-                            <span className="text-lg text-gray-900 max-w-2xl font-medium">
+                            <span className="text-lg text-gray-900 max-w-2xl font-medium overflow-clip">
                                 Acesse o mapa interativo para acompanhar a linha desejada ou consulte informações de horários, paradas, itinerário, etc.
                             </span>
                             
-                            <Link href="/map" className="flex self-center text-lg text-black bg-custom-yellow border-b-3 border-amber-700 py-2 px-6 rounded-lg font-medium active:scale-98 hover:scale-103 transition hover:cursor-pointer">
+                            <Link href="/map" className="flex self-center text-lg text-black bg-custom-light-yellow border-b-4 border-amber-500 py-2 px-6 rounded-lg font-medium active:scale-98 hover:scale-103 transition hover:cursor-pointer">
                                 Começar
                             </Link>
                         </div>
@@ -133,9 +133,23 @@ export default async function HomePage() {
                 </div>
             </section>
             
+
+            {/* seção 2: seletor de linhas */}
+            <section className="w-full flex justify-center py-12 md:px-16">
+                <div className="container px-2 md:px-8 py-12 gap-4 flex justify-center items-center bg-custom-light-yellow">
+                    <div className="hidden md:flex flex-col gap-12 p-8 max-w-116">
+                        <span className="flex font-bold text-4xl text-custom-dark-green">BUSQUE DETALHES EM TEMPO REAL SOBRE DIFERENTES FROTAS DE ÔNIBUS</span>
+                        
+                        <span className="flex font-bold text-4xl text-custom-dark-green">TOTALMENTE GRATUITO, SEM INCLUSÃO DE CONTEÚDO PREMIUM OU ADS</span> 
+                       
+                    </div>
+                    
+                    <LineSelector lines={lines} />
+
+                </div>
+            </section>
             
-                {/* O componente LineSelector continua funcionando sem alterações */}
-                <LineSelector lines={lines} />
+                
 
 
             {/* Seção 2: Mapa Interativo de Paradas */}
