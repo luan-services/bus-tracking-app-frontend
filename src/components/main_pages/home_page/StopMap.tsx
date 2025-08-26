@@ -1,11 +1,14 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
+// NEW: Import the 'Bus' icon
+import { useEffect, useRef, useState } from 'react';
+import { renderToString } from 'react-dom/server';
 import { useRouter } from 'next/navigation';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
+import { LocateFixed, Bus } from 'lucide-react'; // MODIFIED: Imported Bus icon
 
-// Tipos que esperamos receber do backend
+// --- Type Definitions (no changes) ---
 interface LineInfo {
     _id: string;
     lineNumber: string;
@@ -17,12 +20,16 @@ interface Stop {
     name: string;
     location: {
         type: 'Point';
-        coordinates: [number, number]; // [longitude, latitude]
+        coordinates: [number, number];
     };
     lines: LineInfo[];
 }
 
-// Corrige o problema com os ícones padrão do Leaflet no Next.js
+interface StopsMapProps {
+    stops: Stop[];
+}
+
+// --- Leaflet Icon Fix (no changes) ---
 if (typeof window !== 'undefined') {
     delete (L.Icon.Default.prototype as any)._getIconUrl;
     L.Icon.Default.mergeOptions({
@@ -32,38 +39,82 @@ if (typeof window !== 'undefined') {
     });
 }
 
-interface StopsMapProps {
-    stops: Stop[];
-}
 
 export const StopMap = ({ stops }: StopsMapProps) => {
     const mapRef = useRef<L.Map | null>(null);
     const mapContainerRef = useRef<HTMLDivElement>(null);
     const router = useRouter();
 
+    const [userLocation, setUserLocation] = useState<L.LatLng | null>(null);
+    const [isFollowingUser, setIsFollowingUser] = useState(false);
+    const userMarkerRef = useRef<L.CircleMarker | null>(null);
+
+    // MODIFIED: State and Ref for the heading cone
+    const [userHeading, setUserHeading] = useState<number | null>(null);
+    const headingConeRef = useRef<L.Polygon | null>(null);
+
+    // MODIFIED: Effect to get and watch the user's GPS location and heading
+    useEffect(() => {
+        if (typeof window !== 'undefined' && 'geolocation' in navigator) {
+            const watcher = navigator.geolocation.watchPosition(
+                (position) => {
+                    const { latitude, longitude, heading } = position.coords;
+                    const newLatLng = new L.LatLng(latitude, longitude);
+                    
+                    setUserLocation(newLatLng);
+                    
+                    // Set the heading state if it's a valid number, otherwise set to null
+                    if (typeof heading === 'number' && !isNaN(heading)) {
+                        setUserHeading(heading);
+                    } else {
+                        setUserHeading(null);
+                    }
+                },
+                (error) => {
+                    console.error("Geolocation error:", error.message);
+                },
+                {
+                    enableHighAccuracy: true,
+                    timeout: 10000,
+                    maximumAge: 0,
+                }
+            );
+
+            return () => {
+                navigator.geolocation.clearWatch(watcher);
+            };
+        }
+    }, []);
+
+    // Effect for map initialization and controls (no changes here)
     useEffect(() => {
         if (mapContainerRef.current && !mapRef.current) {
-            // Coordenadas centrais de Angra dos Reis
             const map = L.map(mapContainerRef.current).setView([-23.006, -44.318], 13);
 
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                 attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
             }).addTo(map);
+            
+            mapRef.current = map;
+            
+            // --- Bus Stop Markers with Icons ---
+            const busIconHtml = renderToString(<Bus size={18} color="#4f46e5" />);
+            const busIcon = L.divIcon({
+                html: `<div class="bg-white rounded-full p-1 shadow-md">${busIconHtml}</div>`,
+                className: '',
+                iconSize: [26, 26],
+                iconAnchor: [13, 13],
+            });
 
             stops.forEach(stop => {
-                const marker = L.circleMarker([stop.location.coordinates[1], stop.location.coordinates[0]], {
-                    radius: 6,
-                    color: '#4f46e5',
-                    fillColor: '#4f46e5',
-                    fillOpacity: 0.9,
+                const marker = L.marker([stop.location.coordinates[1], stop.location.coordinates[0]], {
+                    icon: busIcon
                 }).addTo(map);
 
-                // Cria o conteúdo do popup
                 let popupContent = `<div class="font-sans"><b>${stop.name}</b><hr class="my-1">`;
                 if (stop.lines.length > 0) {
                     popupContent += `<p class="text-xs text-gray-600 mb-1">Linhas que passam aqui:</p><ul class="list-none p-0 m-0">`;
                     stop.lines.forEach(line => {
-                        // Usamos um ID único para cada link para poder adicionar o event listener
                         const linkId = `line-link-${line._id}-${stop._id}`;
                         popupContent += `<li><a href="/lines/${line._id}" id="${linkId}" class="text-indigo-600 hover:underline text-sm">${line.lineNumber} - ${line.name}</a></li>`;
                     });
@@ -75,7 +126,6 @@ export const StopMap = ({ stops }: StopsMapProps) => {
                 
                 marker.bindPopup(popupContent);
 
-                // Adiciona o evento para que o clique funcione com o Next Router
                 marker.on('popupopen', () => {
                     stop.lines.forEach(line => {
                         const linkId = `line-link-${line._id}-${stop._id}`;
@@ -90,18 +140,118 @@ export const StopMap = ({ stops }: StopsMapProps) => {
                 });
             });
 
-            mapRef.current = map;
+            // Custom control to follow user's location
+            const FollowUserControl = L.Control.extend({
+                onAdd: function() {
+                    const button = L.DomUtil.create('button', 'leaflet-bar leaflet-control leaflet-control-custom follow-user-button');
+                    const iconHtml = renderToString(<LocateFixed strokeWidth={2.5} size={15} />);
+                    button.innerHTML = iconHtml;
+                    button.title = 'Centralizar na sua localização';
+                    
+                    L.DomEvent.disableClickPropagation(button);
+                    L.DomEvent.on(button, 'click', () => {
+                        setIsFollowingUser(prev => !prev);
+                        if (!isFollowingUser && userLocation) {
+                           map.setView(userLocation, 16, { animate: true });
+                        }
+                    });
+                    
+                    return button;
+                }
+            });
+
+            new FollowUserControl({ position: 'topleft' }).addTo(map);
+
+            map.on('dragstart', () => {
+                setIsFollowingUser(false);
+            });
         }
-    }, [stops, router]);
+    }, [stops, router, isFollowingUser, userLocation]);
+
+    // Effect to update the follow button's style based on state (no changes)
+    useEffect(() => {
+        const button = document.querySelector('.follow-user-button') as HTMLElement;
+        if (button) {
+            button.style.backgroundColor = isFollowingUser ? '#e0e7ff' : '#ffffff';
+            button.style.color = isFollowingUser ? '#4338ca' : '#555555';
+        }
+    }, [isFollowingUser]);
+
+    // MODIFIED: Effect to draw user marker AND heading cone
+    useEffect(() => {
+        const map = mapRef.current;
+        if (!map || !userLocation) return;
+
+        // --- User Marker Logic ---
+        if (!userMarkerRef.current) {
+            userMarkerRef.current = L.circleMarker(userLocation, {
+                radius: 8,
+                color: '#ffffff',
+                weight: 2,
+                fillColor: '#3b82f6',
+                fillOpacity: 1,
+            }).addTo(map);
+        } else {
+            userMarkerRef.current.setLatLng(userLocation);
+        }
+
+        // --- Heading Cone Logic ---
+        if (userHeading !== null) {
+            const angle = 20; // Spread of the cone in degrees
+            const coneLength = 0.0003; // Adjust this value for a larger/smaller cone
+            
+            // Convert leaflet's LatLng to a standard object for calculations
+            const centerPoint = { lat: userLocation.lat, lng: userLocation.lng };
+
+            // Calculate the two outer points of the cone in degrees
+            const p1 = {
+                lat: centerPoint.lat + coneLength * Math.cos((userHeading - angle) * Math.PI / 180),
+                lng: centerPoint.lng + coneLength * Math.sin((userHeading - angle) * Math.PI / 180)
+            };
+            const p2 = {
+                lat: centerPoint.lat + coneLength * Math.cos((userHeading + angle) * Math.PI / 180),
+                lng: centerPoint.lng + coneLength * Math.sin((userHeading + angle) * Math.PI / 180)
+            };
+
+            const coneLatLngs: L.LatLngExpression[] = [
+                [centerPoint.lat, centerPoint.lng],
+                [p1.lat, p1.lng],
+                [p2.lat, p2.lng]
+            ];
+
+            // Create or update the cone polygon
+            if (!headingConeRef.current) {
+                headingConeRef.current = L.polygon(coneLatLngs, {
+                    color: '#60a5fa', // A lighter blue
+                    fillColor: '#60a5fa',
+                    fillOpacity: 0.5,
+                    weight: 1,
+                }).addTo(map);
+            } else {
+                headingConeRef.current.setLatLngs(coneLatLngs);
+            }
+        } else if (headingConeRef.current) {
+            // If heading becomes null (e.g., user stops), remove the cone
+            map.removeLayer(headingConeRef.current);
+            headingConeRef.current = null;
+        }
+
+        // --- Following Logic ---
+        if (isFollowingUser) {
+            map.setView(userLocation, map.getZoom() < 15 ? 16 : map.getZoom(), {
+                animate: true,
+                duration: 0.5 
+            });
+        }
+    }, [userLocation, isFollowingUser, userHeading]);
+
 
     return (
         <div className="bg-white p-4 rounded-lg shadow-lg w-full h-[60vh]">
-             <h2 className="text-2xl font-bold text-center text-gray-800 mb-4">
+            <h2 className="text-2xl font-bold text-center text-gray-800 mb-4">
                 Mapa de Paradas
             </h2>
             <div ref={mapContainerRef} className="h-[calc(100%-40px)] w-full rounded-md" />
         </div>
     );
 };
-
-export default StopMap;

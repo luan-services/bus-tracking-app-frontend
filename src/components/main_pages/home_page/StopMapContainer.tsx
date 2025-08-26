@@ -24,11 +24,10 @@ interface StopsMapProps {
 }
 
 
-const StopMap = dynamic(() => import('./StopMap'),
+const StopMap = dynamic(() => import('@/components/main_pages/home_page/StopMap').then((mod) => mod.StopMap),
     { 
       ssr: false // A chave para desativar a renderização no servidor
-    }
-);
+    })
 
 
 export const StopMapContainer = ({ stops }: StopsMapProps) => {
