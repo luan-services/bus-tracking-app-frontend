@@ -1,5 +1,7 @@
+import { FeatureCard } from "@/components/main_pages/home_page/FeatureCard";
 import { LineSelector } from "@/components/main_pages/home_page/LineSelector";
 import {StopMapContainer} from "@/components/main_pages/home_page/StopMapContainer";
+import { Users, Bus, Building } from 'lucide-react';
 
 import heroSectionImage from "@/images/bus-hero-section.png"
 import Link from "next/link";
@@ -152,11 +154,57 @@ export default async function HomePage() {
                 
 
 
-            {/* Seção 2: Mapa Interativo de Paradas */}
+            {/* seção 3: mapa com paradas */}
             <section id="mapa" className="py-10">
                  {/* O componente StopsMap continua funcionando sem alterações, pois recebe os dados no formato esperado */}
                 <StopMapContainer stops={stops} />
             </section>
+
+
+            {/* seção 4: sobre */}
+            <section className="w-full flex justify-center py-12">
+                <div className="container px-2 md:px-8 py-12 gap-4 flex justify-center items-center bg-custom-light-yellow">
+                    <div className="flex flex-col gap-4 p-8 items-center">
+                        <span className="flex font-bold text-center text-4xl">Sobre o Sistema</span>
+
+                        <div className="flex flex-col lg:flex-row items-center justify-center">
+                            <FeatureCard
+                                Icon={Users}
+                                title="Visitantes"
+                                description="Podem acessar informações dos ônibus para programarem suas viagens."
+                            />
+                            <FeatureCard 
+                                Icon={Bus}
+                                title="Motoristas"
+                                description="Realizam viagens e enviam dados ao sistema que coleta e distribui aos visitantes."
+                            />
+                            <FeatureCard
+                                Icon={Building}
+                                title="Empresas"
+                                description="Contratam o serviço para atualizar o sistema com detalhes específicos de suas linhas de ônibus."
+                            />
+                        </div>
+
+                        <span className="w-full max-w-200 text-start md:text-center text-md">
+                            O BuzOnd é um app de rastreamento de ônibus em tempo real, cada empresa de ônibus parceira possui um website único
+                            que dispõe informações de sua própria frota. <br/><br/>
+                            
+                            Os motoristas iniciam viagens usando o sistema BuzOnd, enviando dados de posicionamento e alimentando uma base de dados 
+                            que vai dispor dados de estimativa de tempo de chegada para cada trajeto.
+                        </span>
+
+                        <Link href="/about">
+                            <span className="flex text-gray-600 hover:text-gray-900 font-medium text-md md:text-xl gap-2">
+                                Para mais informações acesse: Como Funciona
+                            </span>
+                        </Link>
+                    </div>
+
+                </div>
+            </section>
         </div>
+
+
+
     );
 }
