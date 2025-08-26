@@ -32,38 +32,38 @@ export const PublicNavbar = () => {
 
                 {/* menu desktop */}
                 <div className="hidden md:flex gap-2">
-                    <Link className="flex px-3 py-2 rounded-md items-center" href="/">
-                        <span className="text-gray-600 text-center text-sm transition duration-200 hover:bg-custom-light-green hover:text-green-900 font-medium">
+                    <Link className="flex px-3 py-2 rounded-md items-center hover:bg-custom-light-green transition duration-200" href="/">
+                        <span className="text-gray-600 text-center text-sm hover:text-green-900 font-medium">
                             Início
                         </span>
                     </Link>
                     
-                    <Link className="flex px-3 py-2 rounded-md items-center"  href="/lines">
-                        <span className="text-gray-600 text-center text-sm transition duration-200 hover:bg-custom-light-green hover:text-green-900 font-medium">
+                    <Link className="flex px-3 py-2 rounded-md items-center hover:bg-custom-light-green transition duration-200"  href="/lines">
+                        <span className="text-gray-600 text-center text-sm hover:text-green-900 font-medium">
                             Mapa Iterativo
                         </span>
                     </Link>
 
-                    <Link className="flex px-3 py-2 rounded-md items-center"  href="/contact"> {/* essa pagina vai mostrar a informação de cada linha diretamente nela, sem ir para uma página própria após selecionar a linha */}
-                        <span className="text-gray-600 text-center text-sm transition duration-200 hover:bg-custom-light-green hover:text-green-900 font-medium">
+                    <Link className="flex px-3 py-2 rounded-md items-center hover:bg-custom-light-green transition duration-200"  href="/contact"> {/* essa pagina vai mostrar a informação de cada linha diretamente nela, sem ir para uma página própria após selecionar a linha */}
+                        <span className="text-gray-600 text-center text-sm hover:text-green-900 font-medium">
                             Informações de Linhas
                         </span>
                     </Link>
 
-                    <Link className="flex px-3 py-2 rounded-md items-center"  href="/contact"> {/* essa pagina vai mostrar a informação de cada linha diretamente nela, sem ir para uma página própria após selecionar a linha */}
-                        <span className="text-gray-600 text-center text-sm transition duration-200 hover:bg-custom-light-green hover:text-green-900 font-medium">
+                    <Link className="flex px-3 py-2 rounded-md items-center hover:bg-custom-light-green transition duration-200"  href="/contact"> {/* essa pagina vai mostrar a informação de cada linha diretamente nela, sem ir para uma página própria após selecionar a linha */}
+                        <span className="text-gray-600 text-center text-sm hover:text-green-900 font-medium">
                             Rastreamento de Linhas
                         </span>
                     </Link>
 
-                    <Link className="flex px-3 py-2 rounded-md items-center"  href="/contact"> {/* essa pagina vai mostrar a informação de cada linha diretamente nela, sem ir para uma página própria após selecionar a linha */}
-                        <span className="text-gray-600 text-center text-sm transition duration-200 hover:bg-custom-light-green hover:text-green-900 font-medium">
+                    <Link className="flex px-3 py-2 rounded-md items-center hover:bg-custom-light-green transition duration-200"  href="/contact"> {/* essa pagina vai mostrar a informação de cada linha diretamente nela, sem ir para uma página própria após selecionar a linha */}
+                        <span className="text-gray-600 text-center text-sm over:text-green-900 font-medium">
                             Como Funciona
                         </span>
                     </Link>
 
-                    <Link className="flex px-3 py-2 rounded-md items-center"  href="/contact">
-                        <span className="text-gray-600 text-center text-sm transition duration-200 hover:bg-custom-light-green hover:text-green-900 font-medium">
+                    <Link className="flex px-3 py-2 rounded-md items-center hover:bg-custom-light-green transition duration-200"  href="/contact">
+                        <span className="text-gray-600 text-center text-sm hover:text-green-900 font-medium">
                             Contato
                         </span>
                     </Link>
