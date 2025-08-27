@@ -99,7 +99,7 @@ export default async function HomePage() {
     const { lines, stops } = await getLinesAndProcessStops();
 
     return (
-        <div className="flex flex-col w-full">
+        <div className="flex flex-col w-full pt-2">
 
             {/* seção 1: hero section */}
             <section 
@@ -109,7 +109,7 @@ export default async function HomePage() {
             >
                 {/* 2. This is the new overlay div. It creates the fade effect. */}
                 {/* You can change bg-black or opacity-50 to whatever you like. */}
-                <div className="absolute inset-0 bg-white opacity-40"></div>
+                <div className="absolute inset-0 bg-white opacity-30"></div>
 
                 {/* 3. Added 'relative' here to place the content ontop of the overlay */}
                 <div className="relative justify-center md:px-40 flex min-h-144 py-8 w-full">
@@ -138,7 +138,7 @@ export default async function HomePage() {
 
             {/* seção 2: seletor de linhas */}
             <section className="w-full flex justify-center py-12 md:px-16">
-                <div className="container px-2 md:px-8 py-12 gap-4 flex justify-center items-center bg-custom-light-yellow">
+                <div className="container px-2 md:px-8 py-12 gap-4 flex justify-center items-center bg-custom-light-yellow pattern-circles">
                     <div className="hidden md:flex flex-col gap-12 p-8 max-w-116">
                         <span className="flex font-bold text-4xl text-custom-dark-green">BUSQUE DETALHES EM TEMPO REAL SOBRE DIFERENTES FROTAS DE ÔNIBUS</span>
                         
@@ -155,9 +155,16 @@ export default async function HomePage() {
 
 
             {/* seção 3: mapa com paradas */}
-            <section id="mapa" className="py-10">
-                 {/* O componente StopsMap continua funcionando sem alterações, pois recebe os dados no formato esperado */}
-                <StopMapContainer stops={stops} />
+            <section className="flex flex-col w-full justify-center items-center py-10 gap-4">
+
+                <span className="px-2 text-4xl font-bold pb-2 border-b-4 border-custom-yellow">Mapa de Paradas</span>
+
+                <span className="px-2 md:max-w-200 pb-4 text-center">Se preferir, econtre linhas próximas de você no mapa abaixo. Clique nas paradas próximas para saber 
+                    quais linhas passam por elas e escolha a linha para ver os detalhes dela.</span>
+
+                <div className="md:px-8  py-10 w-full flex justify-center three-part-bg">
+                    <StopMapContainer stops={stops} />
+                </div>
             </section>
 
 

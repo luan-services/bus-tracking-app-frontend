@@ -89,7 +89,7 @@ export const StopMap = ({ stops }: StopsMapProps) => {
     // Effect for map initialization and controls (no changes here)
     useEffect(() => {
         if (mapContainerRef.current && !mapRef.current) {
-            const map = L.map(mapContainerRef.current).setView([-23.006, -44.318], 13);
+            const map = L.map(mapContainerRef.current, { scrollWheelZoom: false }).setView([-23.006, -44.318], 13);
 
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                 attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
@@ -247,11 +247,8 @@ export const StopMap = ({ stops }: StopsMapProps) => {
 
 
     return (
-        <div className="bg-white p-4 rounded-lg shadow-lg w-full h-[60vh]">
-            <h2 className="text-2xl font-bold text-center text-gray-800 mb-4">
-                Mapa de Paradas
-            </h2>
-            <div ref={mapContainerRef} className="h-[calc(100%-40px)] w-full rounded-md" />
+        <div className="flex md:border-1 md:border-gray-300 md:bg-white p-1 rounded-xs md:shadow-md w-full max-w-296 h-[calc(70vh)] md:h-140">
+            <div ref={mapContainerRef} className="h-[calc(100%)] w-full"/>
         </div>
     );
 };

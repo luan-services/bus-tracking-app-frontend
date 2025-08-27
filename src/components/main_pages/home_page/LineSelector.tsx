@@ -27,11 +27,14 @@ export const LineSelector = ({ lines }: LineSelectorProps) => {
     };
 
     return (
-        <div className="flex flex-col px-6 py-12 gap-6 rounded-lg border-1 bg-white border-gray-300 shadow-lg items-center w-88 h-108">
+        <div className="flex flex-col px-6 py-10 gap-6 rounded-lg border-1 bg-white border-gray-300 shadow-lg items-center w-88 h-108">
 
             <div className="flex w-full flex-col gap-2">
                 
                 <span className="font-bold text-xl">Linhas</span>
+                
+                <div className="border-b-1 w-full border-custom-light-green-2"></div>
+
                 <span className="text-sm">Acompanhe em tempo real os ônibus da linha desejada.</span>
             </div>
 
@@ -53,7 +56,7 @@ export const LineSelector = ({ lines }: LineSelectorProps) => {
             </div>
 
 
-            <div className="border-b-1 w-full border-gray-300"></div>
+            <div className="border-b-1 w-full border-custom-light-green-2"></div>
 
             <div className="flex w-full gap-4 items-center justify-around">
                 <div className="flex flex-col">
