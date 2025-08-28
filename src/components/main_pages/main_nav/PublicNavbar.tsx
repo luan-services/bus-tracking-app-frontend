@@ -73,7 +73,7 @@ export const PublicNavbar = () => {
 
             {/* menu backdrop */}
             {isOpen &&
-                <div className="fixed w-full h-full bg-black opacity-50 z-[2000] md:hidden" onClick={() => setIsOpen(false)}/>
+                <div className="fixed w-full h-full bg-black opacity-50 z-[2000] md:hidden " onClick={() => setIsOpen(false)}/>
             }
 
             {/* menu (mobile) */}

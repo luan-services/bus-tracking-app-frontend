@@ -104,19 +104,19 @@ export default async function HomePage() {
        
 
                 <div className="relative justify-center lg:px-48 flex min-h-144 py-8 w-full">
-                    <div className="container max-h-144 flex justify-center md:justify-end items-center">
+                    <div className="container px-2 max-h-144 flex justify-center md:justify-end items-center">
 
-                        <div className="flex flex-col max-w-108 min-h-98 ">
-                            <span className="text-4xl text-center font-extrabold py-5 text-white bg-custom-light-green-2 rounded-t-lg">
+                        <div className="flex flex-col max-w-108 min-h-98">
+                            <span className="px-3 flex items-center justify-center text-3xl md:text-4xl text-center font-extrabold py-5 text-white bg-custom-light-green-2 rounded-t-lg">
                                 Bem-vindo ao BuzOnd!
                             </span>
 
                             <div className="flex flex-col gap-6 w-full p-8 rounded-b-lg bg-white ">
-                                <span className=" text-lg text-gray-700 max-w-2xl font-medium overflow-clip">
+                                <span className="text-sm md:text-lg text-gray-700 max-w-2xl font-medium overflow-clip">
                                     Acompanhe trajetos dos ônibus da 'nome_empresa' em tempo real com apenas um clique.
                                 </span>
                                 
-                                <span className="text-lg text-gray-700 max-w-2xl font-medium overflow-clip">
+                                <span className="text-sm md:text-lg text-gray-700 max-w-2xl font-medium overflow-clip">
                                     Acesse o mapa interativo para acompanhar a linha desejada ou consulte informações de horários, paradas, itinerário, etc.
                                 </span>
                                 
@@ -164,10 +164,9 @@ export default async function HomePage() {
 
 
             {/* seção 4: sobre */}
-            <section className="w-full flex justify-center py-12">
-                <div className="container px-2 md:px-8 py-12 gap-4 flex justify-center items-center bg-custom-light-yellow">
+            <section className="w-full flex flex-col items-center justify-center py-12">
+                <span className="px-2 text-4xl font-bold pb-2 border-b-4 border-custom-yellow text-center">Sobre o Site</span>
                     <div className="flex flex-col gap-4 p-8 items-center">
-                        <span className="flex font-bold text-center text-4xl">Sobre o Sistema</span>
 
                         <div className="flex flex-col lg:flex-row items-center justify-center">
                             <FeatureCard
@@ -202,7 +201,6 @@ export default async function HomePage() {
                         </Link>
                     </div>
 
-                </div>
             </section>
         </div>
 
