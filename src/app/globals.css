@@ -30,15 +30,10 @@
 }
 
 
-.three-part-bg {
-    @media (width >= 48rem /* 768px */) {
-        background-image: linear-gradient(
-            to right,
-            #fffab8 20%,  /* Yellow from the start (0%) to 20% */
-            white 20%,    /* White from 20% ... */
-            white 80%,    /* ... to 80% */
-            #fffab8 80%   /* Yellow from 80% to the end (100%) */
-        );
-    }
+/* cortar o bg no meio */
 
+@media (width >= 48rem /* 768px */) {
+    .hero-clip-path {
+        clip-path: polygon(0 0, 45% 0, 65% 100%, 0 100%) !important;
+    }
 }

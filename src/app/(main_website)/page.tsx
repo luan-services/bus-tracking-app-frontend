@@ -3,7 +3,7 @@ import { LineSelector } from "@/components/main_pages/home_page/LineSelector";
 import {StopMapContainer} from "@/components/main_pages/home_page/StopMapContainer";
 import { Users, Bus, Building } from 'lucide-react';
 
-import heroSectionImage from "@/images/bus-hero-section.png"
+import heroSectionImage from "@/images/bus-hero-section.jpg"
 import Link from "next/link";
 
 interface Line {
@@ -99,56 +99,33 @@ export default async function HomePage() {
         <div className="flex flex-col w-full pt-2">
 
             {/* seção 1: hero section */}
-<section 
-    // This is now just a positioning container, no background here.
-    className="container self-center relative" 
->
-    {/* 1. This div is ONLY for the background image. */}
-    {/* We apply the image and clip it into a diagonal shape. */}
-    <div 
-        className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-        style={{ 
-            backgroundImage: `url(${heroSectionImage.src})`,
-            // This clip-path creates the left-side diagonal shape '\'
-            clipPath: 'polygon(0 0, 45% 0, 65% 100%, 0 100%)'
-        }}
-    ></div>
+            <section className="container self-center relative">
+                <div className="absolute inset-0 bg-bottom-center hero-clip-path" style={ {backgroundImage: `url(${heroSectionImage.src})`}}/>
+       
 
-    {/* 2. This div is ONLY for the white background half. */}
-    {/* It is clipped to be the inverse shape of the image. */}
-    <div 
-        className="absolute inset-0 bg-white"
-        style={{
-            // This clip-path creates the right-side diagonal shape
-            clipPath: 'polygon(45% 0, 100% 0, 100% 100%, 65% 100%)'
-        }}
-    ></div>
-
-    {/* 3. Your content sits on top of both layers. */}
-    {/* Added z-10 to ensure it's above the background divs. */}
-    <div className="relative z-10 justify-center md:px-40 flex min-h-144 py-8 w-full">
-        <div className="container max-h-144 flex justify-center md:justify-end items-center">
-            {/* I've used the more modern box design from our previous conversation */}
-            <div className="flex flex-col gap-6 p-8 max-w-108 min-h-98 rounded-lg shadow-lg bg-custom-light-green-2">
-                <span className="text-4xl text-center font-extrabold text-white">
-                    Bem-vindo ao BuzOnd
-                </span>
-                
-                <span className="text-lg text-white max-w-2xl font-medium">
-                    Acompanhe trajetos dos ônibus da 'nome_empresa' em tempo real com apenas um clique.
-                </span>
-                
-                <span className="text-lg text-white max-w-2xl font-medium">
-                    Acesse o mapa interativo para acompanhar a linha desejada ou consulte informações de horários, paradas, itinerário, etc.
-                </span>
-                
-                <a href="/map" className="flex self-center text-lg text-gray-800 bg-custom-light-yellow border-b-4 border-amber-500 py-2 px-6 rounded-lg font-medium active:scale-98 hover:scale-103 transition hover:cursor-pointer">
-                    Começar
-                </a>
-            </div>
-        </div>
-    </div>
-</section>
+                <div className="relative justify-center md:px-40 flex min-h-144 py-8 w-full">
+                    <div className="container max-h-144 flex justify-center md:justify-end items-center">
+                        <div className="flex flex-col gap-6 bg-custom-light-green-2 border-b-14 border-l-14 shadow-[14px_-14px_0_0_#fffab8] border-custom-light-yellow p-8 max-w-108 min-h-98">
+                            <span className="text-4xl text-center font-extrabold text-white">
+                                Bem-vindo ao BuzOnd
+                            </span>
+                            
+                            <span className="text-lg text-gray-900 max-w-2xl font-medium overflow-clip">
+                                Acompanhe trajetos dos ônibus da 'nome_empresa' em tempo real com apenas um clique.
+                            </span>
+                            
+                            <span className="text-lg text-gray-900 max-w-2xl font-medium overflow-clip">
+                                Acesse o mapa interativo para acompanhar a linha desejada ou consulte informações de horários, paradas, itinerário, etc.
+                            </span>
+                            
+                            <Link href="/map" className="flex self-center text-lg text-black bg-custom-light-yellow border-b-4 border-amber-500 py-2 px-6 rounded-lg font-medium active:scale-98 hover:scale-103 transition hover:cursor-pointer">
+                                Começar
+                            </Link>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
 
             {/* seção 2: seletor de linhas */}
             <section className="w-full flex justify-center py-12 md:px-16">
