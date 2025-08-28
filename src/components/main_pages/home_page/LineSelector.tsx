@@ -35,14 +35,14 @@ export const LineSelector = ({ lines }: LineSelectorProps) => {
                 
                 <div className="border-b-1 w-full border-custom-light-green-2"></div>
 
-                <span className="text-sm">Acompanhe em tempo real os ônibus da linha desejada.</span>
+                <span className="text-sm text-gray-700">Acompanhe em tempo real os ônibus da linha desejada.</span>
             </div>
 
             
             <div className="flex w-full flex-col gap-2">
                     
                     
-                <span className="text-sm">Você pode ver detalhes como: rotas, posição do ônibus, tempo estimado de chega, itinerário, horários e muito mais!</span>
+                <span className="text-sm text-gray-700">Você pode ver detalhes como: rotas, posição do ônibus, tempo estimado de chega, itinerário, horários e muito mais!</span>
 
                 <GenericDropdown
                     options={lines.map((line) => ({ _id: line._id, optionText: `${line.lineNumber} - ${line.name}` }))}
@@ -60,8 +60,8 @@ export const LineSelector = ({ lines }: LineSelectorProps) => {
 
             <div className="flex w-full gap-4 items-center justify-around">
                 <div className="flex flex-col">
-                    <span className="font-bold">Valor da Passagem:</span>
-                    <span>R$ valor</span>
+                    <span className="font-bold text-gray-700">Valor da Passagem:</span>
+                    <span className="text-gray-700">R$ valor</span>
                 </div>
                 
                 <GenericButton onClick={handleNavigateToLine} disabled={!selectedLine} className="w-32 py-2 font-medium">

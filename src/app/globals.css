@@ -6,7 +6,7 @@
 }
 
 @theme {
-    --color-custom-light-green: #cdf7d6;
+    --color-custom-light-green: #c7ffcb;
     --color-custom-light-green-2: #8eed93;
     --color-custom-dark-green: #204525;
     --color-custom-light-yellow: #fffab8;
@@ -34,10 +34,10 @@
     @media (width >= 48rem /* 768px */) {
         background-image: linear-gradient(
             to right,
-            #FEF7DA 20%,  /* Yellow from the start (0%) to 20% */
+            #fffab8 20%,  /* Yellow from the start (0%) to 20% */
             white 20%,    /* White from 20% ... */
             white 80%,    /* ... to 80% */
-            #FEF7DA 80%   /* Yellow from 80% to the end (100%) */
+            #fffab8 80%   /* Yellow from 80% to the end (100%) */
         );
     }
 

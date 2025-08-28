@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { Menu, X} from 'lucide-react';
 import buzondLogo from '@/images/buzond_logo.png';
 import Image from 'next/image';
+import { PublicNavItem } from './PublicNavItem';
 
 export const PublicNavbar = () => {
     // State to manage whether the mobile menu is open or closed
@@ -19,54 +20,43 @@ export const PublicNavbar = () => {
 
     return (
         // Set position to relative to contain the absolutely positioned menu
-        <nav className="relative flex w-full bg-white justify-center shadow-md border-b-1 border-gray-300">
+        <nav className="relative flex w-full bg-white justify-center shadow-md border-b-2 border-gray-300">
 
             {/* itens do navbar */}
             <div className="flex container px-8 items-center justify-between min-h-14">
 
+                {/* logo */}
                 <div className="flex">
-                    <Link href="/" className="text-2xl py-2 font-bold text-green-700">
+                    <Link href="/" className="py-2">
                         <Image src={buzondLogo} width="140" alt="logo.png" placeholder="blur"/>
                     </Link>
                 </div>
 
                 {/* menu desktop */}
                 <div className="hidden md:flex gap-2">
-                    <Link className="flex px-3 py-2 rounded-md items-center hover:bg-custom-light-green transition duration-200" href="/">
-                        <span className="text-gray-600 text-center text-sm hover:text-green-900 font-medium">
+                        <PublicNavItem href="/">
                             Início
-                        </span>
-                    </Link>
-                    
-                    <Link className="flex px-3 py-2 rounded-md items-center hover:bg-custom-light-green transition duration-200"  href="/lines">
-                        <span className="text-gray-600 text-center text-sm hover:text-green-900 font-medium">
+                        </PublicNavItem>
+        
+                        <PublicNavItem href="/map">
                             Mapa Iterativo
-                        </span>
-                    </Link>
-
-                    <Link className="flex px-3 py-2 rounded-md items-center hover:bg-custom-light-green transition duration-200"  href="/contact"> {/* essa pagina vai mostrar a informação de cada linha diretamente nela, sem ir para uma página própria após selecionar a linha */}
-                        <span className="text-gray-600 text-center text-sm hover:text-green-900 font-medium">
+                        </PublicNavItem>
+                
+                        <PublicNavItem href="/lines">
                             Informações de Linhas
-                        </span>
-                    </Link>
-
-                    <Link className="flex px-3 py-2 rounded-md items-center hover:bg-custom-light-green transition duration-200"  href="/contact"> {/* essa pagina vai mostrar a informação de cada linha diretamente nela, sem ir para uma página própria após selecionar a linha */}
-                        <span className="text-gray-600 text-center text-sm hover:text-green-900 font-medium">
+                        </PublicNavItem>
+                
+                        <PublicNavItem href="/about">
                             Rastreamento de Linhas
-                        </span>
-                    </Link>
-
-                    <Link className="flex px-3 py-2 rounded-md items-center hover:bg-custom-light-green transition duration-200"  href="/contact"> {/* essa pagina vai mostrar a informação de cada linha diretamente nela, sem ir para uma página própria após selecionar a linha */}
-                        <span className="text-gray-600 text-center text-sm over:text-green-900 font-medium">
+                        </PublicNavItem>
+                
+                        <PublicNavItem href="/about">
                             Como Funciona
-                        </span>
-                    </Link>
-
-                    <Link className="flex px-3 py-2 rounded-md items-center hover:bg-custom-light-green transition duration-200"  href="/contact">
-                        <span className="text-gray-600 text-center text-sm hover:text-green-900 font-medium">
+                        </PublicNavItem>
+                    
+                        <PublicNavItem href="/contact">
                             Contato
-                        </span>
-                    </Link>
+                        </PublicNavItem>
                 </div>
 
                 {/* botão hamburguer (mobile) */}
