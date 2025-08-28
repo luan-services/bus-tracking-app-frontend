@@ -8,7 +8,7 @@
 @theme {
     --color-custom-light-green: #c7ffcb;
     --color-custom-light-green-2: #8eed93;
-    --color-custom-dark-green: #204525;
+    --color-custom-dark-green: #2c5e30;
     --color-custom-light-yellow: #fffab8;
     --color-custom-yellow: #fff454;
 }
@@ -31,6 +31,21 @@
 
 
 /* cortar o bg no meio */
+
+.three-part-bg {
+    @media (width >= 48rem /* 768px */) {
+        background-image: linear-gradient(
+            to right,
+            #fffab8 20%,  /* Yellow from the start (0%) to 20% */
+            white 20%,    /* White from 20% ... */
+            white 80%,    /* ... to 80% */
+            #fffab8 80%   /* Yellow from 80% to the end (100%) */
+        );
+    }
+
+}
+
+/* cartar a hero section na lateral */
 
 @media (width >= 48rem /* 768px */) {
     .hero-clip-path {

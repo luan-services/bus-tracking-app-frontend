@@ -6,10 +6,11 @@ import instagramIcon from "@/images/instagram.svg"
 import buzondLogo from "@/images/buzond_logo.png"
 import { ScrollToTopButton } from "./ScrollToTopButton";
 import Link from "next/link";
+import { FooterNavItem } from "./FooterNavItem";
 
 export const PublicFooter = () => {
     return (
-        <footer className="flex w-full justify-center min-h-80 px-6 py-24 bg-custom-dark-green border-t border-black text-gray-100">
+        <footer className="flex w-full justify-center min-h-80 px-6 py-24 bg-custom-dark-green border-t border-black text-white">
 
             <div className="flex flex-col gap-4 container lg:px-24">
 
@@ -18,46 +19,34 @@ export const PublicFooter = () => {
 
                     <div className="flex w-full justify-evenly items-center flex-wrap gap-2">
                         
-                        <div className="flex font-bold text-4xl text-white">BuzOnd</div>
+                        <div className="flex font-bold text-4xl text-white select-none">BuzOnd</div>
 
                         <div className="flex flex-col w-full sm:w-auto">
-                            <Link className="flex px-3 py-2 rounded-md items-center hover:bg-custom-light-green hover:text-green-900 transition duration-200" href="/">
-                                <span className=" text-sm font-medium">
-                                    Início
-                                </span>
-                            </Link>
+                            <FooterNavItem href="/">
+                                Início
+                            </FooterNavItem>
 
-                            <Link className="flex px-3 py-2 rounded-md items-center hover:bg-custom-light-green hover:text-green-900 transition duration-200"  href="/contact"> {/* essa pagina vai mostrar a informação de cada linha diretamente nela, sem ir para uma página própria após selecionar a linha */}
-                                <span className=" text-s font-medium">
-                                    Como Funciona
-                                </span>
-                            </Link>
-
-                            <Link className="flex px-3 py-2 rounded-md items-center hover:bg-custom-light-green hover:text-green-900 transition duration-200"  href="/contact">
-                                <span className=" text-sm font-medium">
-                                    Contato
-                                </span>
-                            </Link>
+                            <FooterNavItem href="/about">
+                                Como Funciona
+                            </FooterNavItem>
+                        
+                            <FooterNavItem href="/contact">
+                                Contato
+                            </FooterNavItem>
                         </div>
 
                         <div className="flex flex-col w-full sm:w-auto">
-                            <Link className="flex px-3 py-2 rounded-md items-center hover:bg-custom-light-green hover:text-green-900 transition duration-200"  href="/lines">
-                                <span className=" text-sm font-medium">
-                                    Mapa Iterativo
-                                </span>
-                            </Link>
-
-                            <Link className="flex px-3 py-2 rounded-md items-center hover:bg-custom-light-green hover:text-green-900 transition duration-200"  href="/contact"> {/* essa pagina vai mostrar a informação de cada linha diretamente nela, sem ir para uma página própria após selecionar a linha */}
-                                <span className=" text-sm font-medium">
-                                    Informações de Linhas
-                                </span>
-                            </Link>
-
-                            <Link className="flex px-3 py-2 rounded-md items-center hover:bg-custom-light-green hover:text-green-900 transition duration-200"  href="/contact"> {/* essa pagina vai mostrar a informação de cada linha diretamente nela, sem ir para uma página própria após selecionar a linha */}
-                                <span className=" text-sm font-medium">
-                                    Rastreamento de Linhas
-                                </span>
-                            </Link>
+                        <FooterNavItem href="/map">
+                            Mapa Iterativo
+                        </FooterNavItem>
+                
+                        <FooterNavItem href="/lines">
+                            Informações de Linhas
+                        </FooterNavItem>
+                
+                        <FooterNavItem href="/about">
+                            Rastreamento de Linhas
+                        </FooterNavItem>
                         </div>
                     
 
@@ -65,13 +54,13 @@ export const PublicFooter = () => {
                 </div>
 
 
-                <div className="w-full border-b-1 border-gray-100"></div>
+                <div className="w-full border-b-1 border-white"></div>
 
                 <div className="flex w-full justify-between items-center py-2">
 
                     <div className="flex flex-wrap">
-                        <Link href="/" className="inline hover:cursor-pointer text-gray-100 hover:text-gray-300 transition mr-2">Políticas de Privacidade</Link>
-                        <Link href="/" className="inline hover:cursor-pointer text-gray-100 hover:text-gray-300 transition">Termos de Uso</Link>
+                        <Link href="/" className="inline hover:cursor-pointer text-white hover:text-gray-300 transition mr-2">Políticas de Privacidade</Link>
+                        <Link href="/" className="inline hover:cursor-pointer text-white hover:text-gray-300 transition">Termos de Uso</Link>
                     </div>
 
                     <div className="flex">

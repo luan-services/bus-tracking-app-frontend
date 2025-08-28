@@ -120,7 +120,7 @@ export default async function HomePage() {
                                     Acesse o mapa interativo para acompanhar a linha desejada ou consulte informações de horários, paradas, itinerário, etc.
                                 </span>
                                 
-                                <Link href="/map" className="flex self-center text-lg text-gray-700 bg-custom-light-yellow border-b-4 border-amber-500 py-2 px-6 rounded-lg font-medium active:scale-98 hover:scale-103 transition hover:cursor-pointer">
+                                <Link href="/map" className="flex self-center text-lg text-gray-700 bg-custom-light-yellow border-b-4 border-amber-500 py-2 px-6 rounded-md font-medium active:scale-95 hover:scale-105 hover:cursor-pointer">
                                     Começar
                                 </Link>
                             </div>

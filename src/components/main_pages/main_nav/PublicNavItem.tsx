@@ -1,8 +1,6 @@
-import Link, { LinkProps } from 'next/link'; // 1. Import Link and its props type
+import Link, { LinkProps } from 'next/link'; // importa link props do nexlinkt
 import React from 'react';
 
-// 2. Update the interface to extend LinkProps
-// I've also renamed it for clarity.
 interface PublicNavItemProps extends LinkProps {
   children?: React.ReactNode;
   className?: string;
