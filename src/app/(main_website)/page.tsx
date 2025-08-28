@@ -99,29 +99,33 @@ export default async function HomePage() {
         <div className="flex flex-col w-full pt-2">
 
             {/* seção 1: hero section */}
-            <section className="container self-center relative">
+            <section className="lg:container w-full self-center relative">
                 <div className="absolute inset-0 bg-bottom-center hero-clip-path" style={ {backgroundImage: `url(${heroSectionImage.src})`}}/>
        
 
-                <div className="relative justify-center md:px-40 flex min-h-144 py-8 w-full">
+                <div className="relative justify-center lg:px-48 flex min-h-144 py-8 w-full">
                     <div className="container max-h-144 flex justify-center md:justify-end items-center">
-                        <div className="flex flex-col gap-6 bg-custom-light-green-2 border-b-14 border-l-14 shadow-[14px_-14px_0_0_#fffab8] border-custom-light-yellow p-8 max-w-108 min-h-98">
-                            <span className="text-4xl text-center font-extrabold text-white">
-                                Bem-vindo ao BuzOnd
+
+                        <div className="flex flex-col max-w-108 min-h-98 ">
+                            <span className="text-4xl text-center font-extrabold py-5 text-white bg-custom-light-green-2 rounded-t-lg">
+                                Bem-vindo ao BuzOnd!
                             </span>
-                            
-                            <span className="text-lg text-gray-900 max-w-2xl font-medium overflow-clip">
-                                Acompanhe trajetos dos ônibus da 'nome_empresa' em tempo real com apenas um clique.
-                            </span>
-                            
-                            <span className="text-lg text-gray-900 max-w-2xl font-medium overflow-clip">
-                                Acesse o mapa interativo para acompanhar a linha desejada ou consulte informações de horários, paradas, itinerário, etc.
-                            </span>
-                            
-                            <Link href="/map" className="flex self-center text-lg text-black bg-custom-light-yellow border-b-4 border-amber-500 py-2 px-6 rounded-lg font-medium active:scale-98 hover:scale-103 transition hover:cursor-pointer">
-                                Começar
-                            </Link>
+
+                            <div className="flex flex-col gap-6 w-full p-8 rounded-b-lg bg-white ">
+                                <span className=" text-lg text-gray-700 max-w-2xl font-medium overflow-clip">
+                                    Acompanhe trajetos dos ônibus da 'nome_empresa' em tempo real com apenas um clique.
+                                </span>
+                                
+                                <span className="text-lg text-gray-700 max-w-2xl font-medium overflow-clip">
+                                    Acesse o mapa interativo para acompanhar a linha desejada ou consulte informações de horários, paradas, itinerário, etc.
+                                </span>
+                                
+                                <Link href="/map" className="flex self-center text-lg text-gray-700 bg-custom-light-yellow border-b-4 border-amber-500 py-2 px-6 rounded-lg font-medium active:scale-98 hover:scale-103 transition hover:cursor-pointer">
+                                    Começar
+                                </Link>
+                            </div>
                         </div>
+
                     </div>
                 </div>
             </section>
