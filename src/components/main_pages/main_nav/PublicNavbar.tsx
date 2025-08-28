@@ -23,12 +23,12 @@ export const PublicNavbar = () => {
         <nav className="relative flex w-full bg-white justify-center shadow-md border-b-2 border-gray-300">
 
             {/* itens do navbar */}
-            <div className="flex container px-8 items-center justify-between min-h-14">
+            <div className="flex container px-4 md:px-8 items-center justify-between min-h-14">
 
                 {/* logo */}
                 <div className="flex">
-                    <Link href="/" className="py-2">
-                        <Image src={buzondLogo} width="140" alt="logo.png" placeholder="blur"/>
+                    <Link href="/" className="py-2 w-28 md:w-35">
+                        <Image src={buzondLogo} alt="logo.png" placeholder="blur"/>
                     </Link>
                 </div>
 
@@ -73,7 +73,7 @@ export const PublicNavbar = () => {
 
             {/* menu backdrop */}
             {isOpen &&
-                <div className="fixed w-full h-full bg-black opacity-50 z-[2000] md:hidden " onClick={() => setIsOpen(false)}/>
+                <div className="fixed w-full h-full bg-black opacity-50 z-[2000] md:hidden overflow-hidden" onClick={() => setIsOpen(false)}/>
             }
 
             {/* menu (mobile) */}

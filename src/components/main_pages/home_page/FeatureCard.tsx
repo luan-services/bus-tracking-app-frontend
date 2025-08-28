@@ -11,16 +11,16 @@ interface FeatureCardProps {
 export const FeatureCard = ({ Icon, title, description }: FeatureCardProps) => {
 
   return (
-    <div className="bg-white border-1 border-gray-200 rounded-2xl shadow-lg p-8 m-4 max-w-sm min-h-88 justify-center w-full flex flex-col items-center text-center hover:shadow-xl hover:border-gray-300 transition duration-300">
+    <div className="bg-white border-[1.5] border-gray-200 rounded-2xl shadow-lg p-4 md:p-8 min-h-76 md:min-h-96 m-4 max-w-76 md:max-w-sm justify-center w-full flex flex-col items-center text-center hover:shadow-xl hover:border-gray-300 transition duration-300">
       <div className="bg-custom-light-green p-4 rounded-xl">
         <Icon className="text-green-900 h-8 w-8" />
       </div>
 
-      <h3 className="text-2xl font-bold text-custom-dark-green py-4">
+      <h3 className="text-xl md:text-2xl font-bold text-gray-700 py-4">
         {title}
       </h3>
 
-      <p className="text-gray-600">
+      <p className="md:text-[16px] text-gray-600">
         {description}
       </p>
     </div>

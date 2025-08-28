@@ -10,13 +10,18 @@ import { FooterNavItem } from "./FooterNavItem";
 
 export const PublicFooter = () => {
     return (
-        <footer className="flex w-full justify-center min-h-80 px-6 py-24 bg-custom-dark-green border-t border-black text-white">
+        <footer className="flex flex-col w-full items-center justify-center min-h-80 px-6 py-12 bg-custom-dark-green border-t border-black text-white">
+
+
+
 
             <div className="flex flex-col gap-4 container lg:px-24">
+                
+                <div className="w-full border-b-1 border-white"></div>
 
                 <div className="w-full justify-center items-center flex py-6 gap-4">
 
-
+                
                     <div className="flex w-full justify-evenly items-center flex-wrap gap-2">
                         
                         <div className="flex font-bold text-4xl text-white select-none">BuzOnd</div>

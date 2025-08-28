@@ -112,11 +112,11 @@ export default async function HomePage() {
                             </span>
 
                             <div className="flex flex-col gap-6 w-full p-8 rounded-b-lg bg-white ">
-                                <span className="text-sm md:text-lg text-gray-700 max-w-2xl font-medium overflow-clip">
+                                <span className="md:text-lg text-gray-700 max-w-2xl font-medium overflow-clip">
                                     Acompanhe trajetos dos ônibus da 'nome_empresa' em tempo real com apenas um clique.
                                 </span>
                                 
-                                <span className="text-sm md:text-lg text-gray-700 max-w-2xl font-medium overflow-clip">
+                                <span className="md:text-lg text-gray-700 max-w-2xl font-medium overflow-clip">
                                     Acesse o mapa interativo para acompanhar a linha desejada ou consulte informações de horários, paradas, itinerário, etc.
                                 </span>
                                 
@@ -152,9 +152,9 @@ export default async function HomePage() {
             {/* seção 3: mapa com paradas */}
             <section className="flex flex-col w-full justify-center items-center gap-4">
 
-                <span className="px-2 text-4xl font-bold pb-2 border-b-4 border-custom-yellow text-center">Mapa de Paradas</span>
+                <span className="px-2 text-3xl md:text-4xl font-bold pb-2 border-b-4 border-custom-yellow text-center">Mapa de Paradas</span>
 
-                <span className="px-2 md:max-w-200 pb-4 text-sm md:text-[16px] text-center">Se preferir, econtre linhas próximas de você no mapa abaixo. Clique nas paradas próximas para saber 
+                <span className="px-2 md:max-w-200 pb-4 md:text-lg text-center">Se preferir, econtre linhas próximas de você no mapa abaixo. <br className="md:hidden"></br><br className="md:hidden"></br> Clique nas paradas próximas para saber 
                     quais linhas passam por elas e escolha a linha para ver os detalhes dela.</span>
 
                 <div className="md:px-8  md:py-10 w-full flex justify-center three-part-bg">
@@ -165,7 +165,7 @@ export default async function HomePage() {
 
             {/* seção 4: sobre */}
             <section className="w-full flex flex-col items-center justify-center py-12">
-                <span className="px-2 text-4xl font-bold pb-2 border-b-4 border-custom-yellow text-center">Sobre o Site</span>
+                <span className="px-2 text-3xl md:text-4xl font-bold pb-2 border-b-4 border-custom-yellow text-center">Sobre o Site</span>
                     <div className="flex flex-col gap-4 p-8 items-center">
 
                         <div className="flex flex-col lg:flex-row items-center justify-center">
@@ -186,7 +186,7 @@ export default async function HomePage() {
                             />
                         </div>
 
-                        <span className="w-full max-w-200 text-start md:text-center text-md">
+                        <span className="w-full max-w-200 text-start md:text-center text-md text-gray-700">
                             O BuzOnd é um app de rastreamento de ônibus em tempo real, cada empresa de ônibus parceira possui um website único
                             que dispõe informações de sua própria frota. <br/><br/>
                             
@@ -195,7 +195,7 @@ export default async function HomePage() {
                         </span>
 
                         <Link href="/about">
-                            <span className="flex text-gray-600 hover:text-gray-900 font-medium text-md md:text-xl gap-2">
+                            <span className="flex w-full  text-gray-600 hover:text-gray-900 font-medium text-md md:text-xl gap-2">
                                 Para mais informações acesse: Como Funciona
                             </span>
                         </Link>

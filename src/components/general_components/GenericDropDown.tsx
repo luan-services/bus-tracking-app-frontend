@@ -99,16 +99,16 @@ export const GenericDropdown = ({ options = [], value = null, onChange, placehol
 	return (
 		<div ref={dropdownRef} className="w-full relative">
 			<button type="button" onClick={() => handleToggleDropdown()} disabled={disabled}
-				className={`w-full flex justify-between items-center px-2 py-2 border-1 ${isOpen ? direction === 'down' ? "border-blue-500 border-b-gray-200" : "border-blue-500 border-t-gray-200" : "border-gray-400"} rounded-xs text-sm cursor-pointer disabled:cursor-not-allowed disabled:bg-gray-100 focus:outline-none`}>
+				className={`w-full flex justify-between items-center px-2 py-2 border-1 ${isOpen ? direction === 'down' ? "border-green-500 border-b-gray-200" : "border-green-500 border-t-gray-200" : "border-gray-400"} rounded-xs text-sm cursor-pointer disabled:cursor-not-allowed disabled:bg-gray-100 focus:outline-none`}>
 				<span className="truncate text-gray-700">{displayValue}</span>
 				<ChevronDown className="text-gray-500" size={20} strokeWidth={2.5} />
 			</button>
 
 			{isOpen && 
-				<div className={`absolute w-full max-h-50 overflow-auto p-2 border-1 bg-white border-blue-500 text-sm shadow-b-lg z-[1000] focus:outline-none ${direction === 'down' ? 'top-full border-t-0 rounded-b-xs shadow-[0_4px_14px_0_rgb(0,0,0,0.1)]' : 'bottom-full border-b-0 rounded-t-xs shadow-[0_-4px_14px_0_rgb(0,0,0,0.1)]'}`}>
+				<div className={`absolute w-full max-h-50 overflow-auto p-2 border-1 bg-white border-green-500 text-sm shadow-b-lg z-[1000] focus:outline-none ${direction === 'down' ? 'top-full border-t-0 rounded-b-xs shadow-[0_4px_14px_0_rgb(0,0,0,0.1)]' : 'bottom-full border-b-0 rounded-t-xs shadow-[0_-4px_14px_0_rgb(0,0,0,0.1)]'}`}>
 					{options.length > 0 ? 
 						options.map((option) => (
-							<div key={option._id} onClick={() => handleOptionClick(option)} className=" transition-colors cursor-pointer rounded-md relative py-2 px-2 text-gray-700 hover:bg-indigo-100">
+							<div key={option._id} onClick={() => handleOptionClick(option)} className=" transition-colors cursor-pointer rounded-md relative py-2 px-2 text-gray-700 hover:bg-green-100">
 								{option ? option.optionText : ''}
 							</div>
 						)) : <div className="py-2 px-4 text-gray-500">Nenhuma opção disponível</div>
