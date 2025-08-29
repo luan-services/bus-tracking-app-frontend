@@ -28,7 +28,7 @@ interface StopsMapProps {
     stops: Stop[];
 }
 
-// --- leaflet Icon Fix  ---
+// esse é um trecho de código padrão usado para consertar um problema comum quando se usa Leaflet com ferramentas de build como Webpack (usado pelo Next.js). Ele garante que os ícones de marcador padrão do Leaflet apareçam corretamente, apontando para uma URL online em vez de tentar encontrar os arquivos localmente de forma errada.
 if (typeof window !== 'undefined') {
     delete (L.Icon.Default.prototype as any)._getIconUrl;
     L.Icon.Default.mergeOptions({
@@ -62,26 +62,32 @@ export const StopMap = ({ stops }: StopsMapProps) => {
     const mapRef = useRef<L.Map | null>(null);
     const mapContainerRef = useRef<HTMLDivElement>(null);
     
-
-    const [userLocation, setUserLocation] = useState<L.LatLng | null>(null);
+    // useState para o botão de travar tela (true ou false) no usuário
     const [isFollowingUser, setIsFollowingUser] = useState(false);
-    const userMarkerRef = useRef<L.CircleMarker | null>(null);
 
-    const [userHeading, setUserHeading] = useState<number | null>(null);
-    const headingConeRef = useRef<L.Polygon | null>(null);
+    // useState para definir a posição lat lng do usuário
+    const [userLocation, setUserLocation] = useState<L.LatLng | null>(null); 
+    
+    // também é necessário criar refs para a posição do usuário no mapa, já que é uma posição que vai estar
+    // constantemente mudando (não é fixa igual as paradas pré-carregadas.)
+    const userMarkerRef = useRef<L.CircleMarker | null>(null); // ref para a bolinha do usuário
+    // useState para direção que ele está olhando
+    const [userHeading, setUserHeading] = useState<number | null>(null); 
+    const headingConeRef = useRef<L.Polygon | null>(null); // ref para o 'cone'
 
-    // MODIFIED: Effect to get and watch the user's GPS location and heading
-    useEffect(() => {
-        if (typeof window !== 'undefined' && 'geolocation' in navigator) {
-            const watcher = navigator.geolocation.watchPosition(
-                (position) => {
+    
+    useEffect(() => { // esse primeiro useEffect serve para pegar a posição atual do usuário e dispor no mapa
+        
+        if (typeof window !== 'undefined' && 'geolocation' in navigator) { // verifica se o navegador suporta geolocalização
+            
+            const watcher = navigator.geolocation.watchPosition((position) => { // inicia o watchposition, a cada atualização de posição essa função vai rodar
                     const { latitude, longitude, heading } = position.coords;
                     const newLatLng = new L.LatLng(latitude, longitude);
                     
-                    setUserLocation(newLatLng);
+                    setUserLocation(newLatLng); // seta o state da localização
                     
-                    // Set the heading state if it's a valid number, otherwise set to null
-                    if (typeof heading === 'number' && !isNaN(heading)) {
+                    
+                    if (typeof heading === 'number' && !isNaN(heading)) { // se a posição que o usuário está apontando é valida, seta também
                         setUserHeading(heading);
                     } else {
                         setUserHeading(null);
@@ -90,20 +96,17 @@ export const StopMap = ({ stops }: StopsMapProps) => {
                 (error) => {
                     console.error("Geolocation error:", error.message);
                 },
-                {
-                    enableHighAccuracy: true,
-                    timeout: 10000,
-                    maximumAge: 0,
-                }
+                { enableHighAccuracy: true, timeout: 10000, maximumAge: 0,}
             );
 
-            return () => {
+            return () => { // função de limpeza, remove o watchPosition quando sai da página
                 navigator.geolocation.clearWatch(watcher);
             };
         }
-    }, []);
 
-    // Effect for map initialization and controls (no changes here)
+    }, []); // não tem nenhuma dependência, o useEffect nunca será reiniciado
+
+    
     useEffect(() => {
         if (mapContainerRef.current && !mapRef.current) {
             const map = L.map(mapContainerRef.current, { scrollWheelZoom: false }).setView([-23.006, -44.318], 13);
