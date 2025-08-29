@@ -40,15 +40,33 @@ if (typeof window !== 'undefined') {
 
 
 export const StopMap = ({ stops }: StopsMapProps) => {
+
+    const router = useRouter(); // router p redirecionar ao clicar nos links das paradas
+
+    /* parte complexa: para renderizar um mapa no react, não podemos fazer isso com divs comuns e const, 
+    pois qualquer re-renderização iria reiniciar esses elementos, precisamos de um componente
+    que persiste entre renderizações. O useState apesar de persistir também não é uma opção aqui, pois
+    não precisamos alternar nada no objeto, apenas precisamos guardar uma referência à ele, mudar coisas
+    no mapa poderia causar re-renderizações e bugá-lo caso fosse salvo em um useState, as mudanças no
+    mapa são feitas diretamente pelas funções do leaflet.
+    
+    então qual é a melhor opção? o useRef, que é como uma caixinha, feito para guardar referencias à 
+    elementos, valores, instancias, que não vão ser perdidos à cada nova renderização e que NÃO CAUSAM 
+    re-renderizações se seus valores são mudados.*/
+
+    /* precisamos de básicamentes dois refs: um que vai guardar uma div qualquer que vai ser o espaço onde
+    o mapa vai ser colocado, e um que vai guardar a instância do mapa (um objeto mapa) própriamente dito
+    
+    mapRef guardará a instancia do mapa criado
+    mapContainerRef guardara o 'endereço' da div onde o mapa vai ser 'desenhado'    */
     const mapRef = useRef<L.Map | null>(null);
     const mapContainerRef = useRef<HTMLDivElement>(null);
-    const router = useRouter();
+    
 
     const [userLocation, setUserLocation] = useState<L.LatLng | null>(null);
     const [isFollowingUser, setIsFollowingUser] = useState(false);
     const userMarkerRef = useRef<L.CircleMarker | null>(null);
 
-    // MODIFIED: State and Ref for the heading cone
     const [userHeading, setUserHeading] = useState<number | null>(null);
     const headingConeRef = useRef<L.Polygon | null>(null);
 
