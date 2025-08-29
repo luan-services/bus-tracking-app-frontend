@@ -60,7 +60,8 @@ export const StopMap = ({ stops }: StopsMapProps) => {
     mapRef guardará a instancia do mapa criado
     mapContainerRef guardara o 'endereço' da div onde o mapa vai ser 'desenhado'    */
     const mapRef = useRef<L.Map | null>(null);
-    const mapContainerRef = useRef<HTMLDivElement>(null);
+    const mapContainerRef = useRef<HTMLDivElement>(null); // !!!!!!!!!! Para passa a div pra cá, basta colocar
+    // a prop ref={mapContainerRef} no elemento div desejado
     
     // useState para o botão de travar tela (true ou false) no usuário
     const [isFollowingUser, setIsFollowingUser] = useState(false);
@@ -104,21 +105,29 @@ export const StopMap = ({ stops }: StopsMapProps) => {
             };
         }
 
-    }, []); // não tem nenhuma dependência, o useEffect nunca será reiniciado
+    }, []); // não tem nenhuma dependência, o useEffect só rodará uma vez
 
     
-    useEffect(() => {
-        if (mapContainerRef.current && !mapRef.current) {
+    useEffect(() => { // inicializa o mapa e os marcadores de paradas
+        if (mapContainerRef.current && !mapRef.current) { // se não existe nenhum mapa
+
+            // desenha o mapa vazio na div que está na ref mapContainerRef 
             const map = L.map(mapContainerRef.current, { scrollWheelZoom: false }).setView([-23.006, -44.318], 13);
 
+            // adiciona o texto do canto inferior direito do mapa
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                 attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
             }).addTo(map);
             
+            // PARTE IMPORTANTE: aqui que usamos o mapRef para guardar a instância do mapa, sempre que quisermos
+            // mudar algo no mapa, mexeremos nesse ref
             mapRef.current = map;
             
-            // --- Bus Stop Markers with Icons ---
+            // gera um icone de ônibus do lucide e transforma em string pura
             const busIconHtml = renderToString(<Bus size={18} color="#4f46e5" />);
+
+            // cria um icone pro leaflet usando L.divIcon
+            // html = html do icone, className = classes a adicionar.
             const busIcon = L.divIcon({
                 html: `<div class="bg-white rounded-full p-1 shadow-md">${busIconHtml}</div>`,
                 className: '',
@@ -126,13 +135,19 @@ export const StopMap = ({ stops }: StopsMapProps) => {
                 iconAnchor: [13, 13],
             });
 
+            // para cada stop do pai
             stops.forEach(stop => {
+
+                // cria um elemento marker, que basicamente é um ponto no mapa, e usa o icone criado anteriormente
+                // pra ser a 'imagem' do ponto
                 const marker = L.marker([stop.location.coordinates[1], stop.location.coordinates[0]], {
                     icon: busIcon
-                }).addTo(map);
+                }).addTo(map); // adiciona ao map
 
+                // tudo isso é o conteudo do popup que vai abrir ao clicar no mapa
                 let popupContent = `<div class="font-sans"><b>${stop.name}</b><hr class="my-1">`;
-                if (stop.lines.length > 0) {
+
+                if (stop.lines.length > 0) { // se existem linhas nessa parada adiciona cada uma das linhas como uma lista
                     popupContent += `<p class="text-xs text-gray-600 mb-1">Linhas que passam aqui:</p><ul class="list-none p-0 m-0">`;
                     stop.lines.forEach(line => {
                         const linkId = `line-link-${line._id}-${stop._id}`;
@@ -144,14 +159,16 @@ export const StopMap = ({ stops }: StopsMapProps) => {
                 }
                 popupContent += `</div>`;
                 
+                // coloca o popup no marcador em questão
                 marker.bindPopup(popupContent);
 
+                // adiciona um listener para quando o popupa brir
                 marker.on('popupopen', () => {
                     stop.lines.forEach(line => {
                         const linkId = `line-link-${line._id}-${stop._id}`;
-                        const linkElement = document.getElementById(linkId);
+                        const linkElement = document.getElementById(linkId); // pega o elemento pelo id
                         if (linkElement) {
-                            linkElement.onclick = (e) => {
+                            linkElement.onclick = (e) => { // adiciona um onclick nele p enviar pro url necessário
                                 e.preventDefault();
                                 router.push(`/lines/${line._id}`);
                             };
@@ -160,7 +177,7 @@ export const StopMap = ({ stops }: StopsMapProps) => {
                 });
             });
 
-            // Custom control to follow user's location
+            // controle custom (botão) para seguir a localização do usuário no mapa
             const FollowUserControl = L.Control.extend({
                 onAdd: function() {
                     const button = L.DomUtil.create('button', 'leaflet-bar leaflet-control leaflet-control-custom follow-user-button');
@@ -170,8 +187,8 @@ export const StopMap = ({ stops }: StopsMapProps) => {
                     
                     L.DomEvent.disableClickPropagation(button);
                     L.DomEvent.on(button, 'click', () => {
-                        setIsFollowingUser(prev => !prev);
-                        if (!isFollowingUser && userLocation) {
+                        setIsFollowingUser(prev => !prev); // diz que está seguindo o usuarip
+                        if (!isFollowingUser && userLocation) { // trava uma vez a localização na posição atual dele
                            map.setView(userLocation, 16, { animate: true });
                         }
                     });
@@ -180,16 +197,18 @@ export const StopMap = ({ stops }: StopsMapProps) => {
                 }
             });
 
+            // adiciona o botão ao mapa
             new FollowUserControl({ position: 'topleft' }).addTo(map);
 
+            // adiciona um listener para o mapa, ao arrastá-lo desativa a tela travada no usuário
             map.on('dragstart', () => {
                 setIsFollowingUser(false);
             });
         }
     }, [stops, router, isFollowingUser, userLocation]);
 
-    // Effect to update the follow button's style based on state (no changes)
-    useEffect(() => {
+    
+    useEffect(() => { // efeito simples para mudar a cor do botão de travar tela caso esteja ou não seguindo usuário
         const button = document.querySelector('.follow-user-button') as HTMLElement;
         if (button) {
             button.style.backgroundColor = isFollowingUser ? '#e0e7ff' : '#ffffff';
