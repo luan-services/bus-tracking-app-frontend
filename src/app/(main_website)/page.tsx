@@ -9,8 +9,9 @@ import Link from "next/link";
 interface Line {
     _id: string;
     name: string;
+    price?: string;
     lineNumber: string;
-    stops: StopData[]; // Assumimos que a linha tem uma lista de paradas
+    stops: StopData[];
 }
 
 interface StopData {
@@ -52,27 +53,30 @@ async function getLinesAndProcessStops(): Promise<{ lines: Line[], stops: Proces
         const stopsMap = new Map<string, ProcessedStop>(); // cria um map pras paradas
 
         for (const line of lines) {
-            // Informações da linha que queremos associar à parada
-            const lineInfo = {
+            
+            const lineInfo = { // cria um objeto line info com as informações necessárias 
                 _id: line._id,
                 name: line.name,
                 lineNumber: line.lineNumber
             };
 
-            for (const stop of line.stops) {
-                // Se a parada ainda não está no nosso mapa, a adicionamos
-                if (!stopsMap.has(stop.name)) {
-                    // MUDANÇA 2: Usamos 'stop.name' como a chave para adicionar a nova parada.
+            for (const stop of line.stops) { // pra cada parada da linha atual
+                const stopExist = stopsMap.get(stop.name); // verifica se a parada já esta no mapa, se não, retorna undefined
+
+                if (stopExist) {
+                    
+                    stopExist.lines.push(lineInfo); // se já existe, adiciona a linha atual àquela parada
+                } else {
+                    // Se não existe, cria a parada e já adiciona a primeira linha
                     stopsMap.set(stop.name, {
-                        _id: stop._id, // Guardamos o ID da primeira vez que vemos essa parada
+                        _id: stop._id,
                         name: stop.name,
                         location: stop.location,
-                        lines: [] 
+                        lines: [lineInfo] // Inicia o array com a linha atual
                     });
                 }
-                 // Adiciona a linha atual à lista de linhas daquela parada
-                stopsMap.get(stop.name)!.lines.push(lineInfo);
             }
+
         }
 
         // Converte os valores do mapa de volta para um array

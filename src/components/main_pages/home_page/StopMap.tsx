@@ -6,9 +6,8 @@ import { renderToString } from 'react-dom/server';
 import { useRouter } from 'next/navigation';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
-import { LocateFixed, Bus } from 'lucide-react'; // MODIFIED: Imported Bus icon
+import { LocateFixed, Bus } from 'lucide-react'; 
 
-// --- Type Definitions (no changes) ---
 interface LineInfo {
     _id: string;
     lineNumber: string;
@@ -29,7 +28,7 @@ interface StopsMapProps {
     stops: Stop[];
 }
 
-// --- Leaflet Icon Fix (no changes) ---
+// --- leaflet Icon Fix  ---
 if (typeof window !== 'undefined') {
     delete (L.Icon.Default.prototype as any)._getIconUrl;
     L.Icon.Default.mergeOptions({
